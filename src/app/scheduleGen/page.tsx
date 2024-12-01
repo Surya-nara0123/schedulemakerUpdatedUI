@@ -132,12 +132,16 @@ function format_timetables(
 }
 
 export default function Page() {
-  const [mode, setMode] = useState("professor");
+  const [mode, setMode] = useState("student");
   const [isGenerated, setIsGenerated] = useState(false);
   const [prof, setProf] = useState("");
   const [timetableData, setTimetableData] = useState<{ [key: string]: any[] }>(
     {}
   );
+  let selectCount = 0;
+  const [selectedElements, setSelectedElements] = useState<
+    Array<Array<number>>
+  >([]);
   const [file1, setFile1] = useState(null);
   const [file2, setFile2] = useState(null);
   const [file3, setFile3] = useState(null);
@@ -149,6 +153,7 @@ export default function Page() {
   const [timetableLabs, setTimetableLabs] = useState({});
   const [currentSection, setCurrentSection] = useState("AIDS Section A");
   const [currentClass, setCurrentClass] = useState("2nd Year");
+  const [isSwapMode, setIsSwapMode] = useState(true);
   const handleFileChange = (e: any, setFile: Function) => {
     setFile(e.target.files[0]);
   };
@@ -529,6 +534,96 @@ export default function Page() {
       console.error("Error updating timetable:", error);
     }
   };
+
+  const handleSwapSelect = (index: number, index1: number) => {
+    // get count of elements selected using getElementsByClassName
+    // if count is 2, then swap the elements
+    // else, add the element to the selected elements
+    const element = document.getElementById(`${index}${index1 + 1}`);
+    if (isSwapMode) {
+      if (element?.className.includes("#3d4758")) {
+        // console.log(selectedElements);
+        if (
+          timetableData[currentClass + " B_Tech " + currentSection][index][
+            index1
+          ] === "Break" ||
+          timetableData[currentClass + " B_Tech " + currentSection][index][
+            index1
+          ] === "Lunch" ||
+          timetableData[currentClass + " B_Tech " + currentSection][index][
+            index1
+          ].includes("LAB")
+        ) {
+          return;
+        }
+        element.className = element.className.replace("#3d4758", "#282828");
+        if (selectedElements.length >= 2) {
+          for (let i = 0; i < selectedElements.length; i++) {
+            const element1 = document.getElementById(
+              `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
+            );
+            element1!.className = element1!.className.replace(
+              "#282828",
+              "#3d4758"
+            );
+          }
+          setSelectedElements([[index, index1]]);
+        } else {
+          setSelectedElements([...selectedElements, [index, index1]]);
+        }
+      } else {
+        element!.className = element!.className.replace("#282828", "#3d4758");
+        setSelectedElements(
+          selectedElements.filter((el) => el[0] !== index || el[1] !== index1)
+        );
+      }
+    } else {
+      if (element?.className.includes("#3d4758")) {
+        // console.log(selectedElements);
+        if (
+          timetableData[currentClass + " B_Tech " + currentSection][index][
+            index1
+          ] === "Break" ||
+          timetableData[currentClass + " B_Tech " + currentSection][index][
+            index1
+          ] === "Lunch" ||
+          timetableData[currentClass + " B_Tech " + currentSection][index][
+            index1
+          ].includes("LAB")
+        ) {
+          return;
+        }
+        element.className = element.className.replace("#3d4758", "#282828");
+        if (selectedElements.length >= 1) {
+          for (let i = 0; i < selectedElements.length; i++) {
+            const element1 = document.getElementById(
+              `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
+            );
+            element1!.className = element1!.className.replace(
+              "#282828",
+              "#3d4758"
+            );
+          }
+          setSelectedElements([[index, index1]]);
+        } else {
+          setSelectedElements([...selectedElements, [index, index1]]);
+        }
+      } else {
+        element!.className = element!.className.replace("#282828", "#3d4758");
+        setSelectedElements(
+          selectedElements.filter((el) => el[0] !== index || el[1] !== index1)
+        );
+      }
+    }
+  };
+
+  const handleSwap = (indexa: number, index1a: number, indexb:number, index1b:number) => {
+    let temp = timetableData[currentClass + " B_Tech " + currentSection][indexa][index1a];
+    timetableData[currentClass + " B_Tech " + currentSection][indexa][index1a] = timetableData[currentClass + " B_Tech " + currentSection][indexb][index1b];
+    timetableData[currentClass + " B_Tech " + currentSection][indexb][index1b] = temp;
+    // setSelectedElements([]);
+
+  }
   return (
     <main className="pl-[100px] pt-[100px] font-semibold">
       <h1 className="text-2xl mb-2 font-black">Schedule Generator</h1>
@@ -578,8 +673,29 @@ export default function Page() {
       >
         Upload Timetable
       </button>
-      <button className="bg-[#3d4758] p-3 mt-3 ml-2 mb-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]">
+      <button
+        className="bg-[#3d4758] p-3 mt-3 ml-2 mb-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+        onClick={(e) => genPDFall()}
+      >
         Download All CSV
+      </button>
+      <button
+        className="bg-[#3d4758] p-3 mt-3 ml-2 mb-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+        onClick={(e) => {
+          setIsSwapMode(!isSwapMode);
+          for (let i = 0; i < selectedElements.length; i++) {
+            const element1 = document.getElementById(
+              `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
+            );
+            element1!.className = element1!.className.replace(
+              "#282828",
+              "#3d4758"
+            );
+          }
+          setSelectedElements([]);
+        }}
+      >
+        {isSwapMode ? "Swap Mode" : "Lock Mode"}
       </button>
       <div className="bg-white h-[3px] w-1/2"></div>
 
@@ -777,18 +893,20 @@ export default function Page() {
           {timetableData[currentClass + " B_Tech " + currentSection]?.map(
             (row: any, index: number) => {
               return (
-                <div className="flex gap-1 mb-1">
+                <div className="flex gap-1 mb-1 select-none">
                   <div
-                    key={index}
+                    key={(index + 1) * 100}
                     className="bg-[#1d2738] w-[113px] h-[70px] border-black border-2 flex items-center justify-center"
                   >
                     {days[index]}
                   </div>
                   <div className="flex gap-1" key={index}>
-                    {row.map((col: string, index: number) => {
+                    {row.map((col: string, index1: number) => {
                       return (
                         <div
-                          key={index}
+                          key={`${index}${index1 + 1}`}
+                          id={`${index}${index1 + 1}`}
+                          onClick={() => handleSwapSelect(index, index1)}
                           className="bg-[#3d4758] w-[112.5px] h-[70px] border-black border-2 flex flex-col items-center justify-center text-xs font-semibold text-center"
                         >
                           {col}
@@ -802,8 +920,33 @@ export default function Page() {
           )}
         </div>
         <div className="w-full flex p-3">
-          <button className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]">
-            Fix
+          {isSwapMode ? (
+            <button
+              onClick={(e) => {
+                if (selectedElements.length === 2) {
+                  console.log(selectedElements);
+                  handleSwap(
+                    selectedElements[0][0],
+                    selectedElements[0][1],
+                    selectedElements[1][0],
+                    selectedElements[1][1]
+                  );
+                }
+              }}
+              className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+            >
+              Swap
+            </button>
+          ) : (
+            <button
+              onClick={(e) => {}}
+              className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+            >
+              Lock Slot
+            </button>
+          )}
+          <button className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]">
+            Freeze
           </button>
           <button
             onClick={() => {
