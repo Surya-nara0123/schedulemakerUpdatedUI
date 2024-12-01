@@ -5,6 +5,9 @@ import Papa from "papaparse";
 import { saveAs } from "file-saver";
 
 type timetableData = Array<Array<Array<string>>>;
+type classTimeTable = {
+  [key: string]: [string | string[]][];
+}
 
 const timings = [
   "days",
@@ -22,6 +25,33 @@ const timings = [
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
+function isFreeProfessor(timetable_professors: any, proff: string, day: number, slot: number, clas: string) {
+  console.log(proff, day, slot, clas);
+  if (timetable_professors[proff][day][slot] === "") {
+      let clas_count = 0
+      let period_count = 0;
+      for (let i = 0; i < slot; i++) {
+          if (typeof timetable_professors[proff][day][i] === typeof "Lunch") {
+              continue;
+          }
+          if (timetable_professors[proff][day][i][1] === clas) {
+              clas_count += 1;
+          }
+          period_count += 1;
+      }
+      return clas_count < 3 && period_count < 6;
+  }
+  return false
+}
+function adjustIndex(index: number) {
+  if (index > 8) {
+    index -= 1;
+  }
+  if (index > 3) {
+    index -= 1;
+  }
+  return index;
+}
 function format_timetables(
   timetable_classes: any,
   timetable_professors: any,
@@ -150,6 +180,8 @@ export default function Page() {
   const [lockedClasses, setLockedClasses] = useState([]);
   const [timetableClasses, setTimetableClasses] = useState({});
   const [timetableProfessors, setTimetableProfessors] = useState({});
+  const [proffToShort, setProffShorts] = useState({});
+  const [proffsToYear, setProffsYear] = useState({});
   const [timetableLabs, setTimetableLabs] = useState({});
   const [currentSection, setCurrentSection] = useState("AIDS Section A");
   const [currentClass, setCurrentClass] = useState("2nd Year");
@@ -365,8 +397,11 @@ export default function Page() {
       return;
     }
     setTimetableProfessors(JSON.parse(JSON.stringify(tables[1])));
+    console.log(timetableProfessors);
     setTimetableClasses(JSON.parse(JSON.stringify(tables[0])));
     setTimetableLabs(JSON.parse(JSON.stringify(tables[3])));
+    setProffShorts(JSON.parse(JSON.stringify(proffs_names_to_short)));
+    setProffsYear(JSON.parse(JSON.stringify(tables[4])));
     format_timetables(
       tables[0],
       tables[1],
@@ -382,7 +417,7 @@ export default function Page() {
 
     setProfData(b);
     setTimetableData(a);
-    console.log(timetableData["1st Year B_Tech AIDS Section A"]);
+    console.log(timetableData);
 
     setIsGenerated(true);
   };
@@ -618,11 +653,43 @@ export default function Page() {
   };
 
   const handleSwap = (indexa: number, index1a: number, indexb:number, index1b:number) => {
-    let temp = timetableData[currentClass + " B_Tech " + currentSection][indexa][index1a];
-    timetableData[currentClass + " B_Tech " + currentSection][indexa][index1a] = timetableData[currentClass + " B_Tech " + currentSection][indexb][index1b];
-    timetableData[currentClass + " B_Tech " + currentSection][indexb][index1b] = temp;
-    // setSelectedElements([]);
+    index1a = adjustIndex(index1a);
+    index1b = adjustIndex(index1b);
 
+    let classtt = JSON.parse(JSON.stringify(timetableClasses));
+    let profftt = JSON.parse(JSON.stringify(timetableProfessors));
+    let currClass = currentClass + " B_Tech " + currentSection;
+    let proff1 = classtt[currClass][indexa][index1a][1];
+    let proff2 = classtt[currClass][indexb][index1b][1];
+
+    if (proff1 == proff2 && proff1 == "self_proff") {
+      console.log("Nice Joke");
+      return;
+    }
+    if (!isFreeProfessor(timetableProfessors, proff1, indexb, index1b, currClass) && proff1 != proff2) {
+      console.log(proff1 + " is not free");
+      return;
+    }
+    if (!isFreeProfessor(timetableProfessors, proff2, indexa, index1a, currClass) && proff1 != proff2) {
+      console.log(proff2 + " is not free");
+      return;
+    }
+    
+    let temp1 = JSON.parse(JSON.stringify(classtt[currClass][indexa][index1a]));
+    let temp2 = JSON.parse(JSON.stringify(classtt[currClass][indexb][index1b]));
+    let ptemp1 = JSON.parse(JSON.stringify(profftt[proff1][indexa][index1a]));
+    let ptemp2 = JSON.parse(JSON.stringify(profftt[proff2][indexb][index1b]));
+
+    classtt[currClass][indexa][index1a] = temp2;
+    classtt[currClass][indexb][index1b] = temp1;
+    profftt[proff1][indexa][index1a] = '';
+    profftt[proff2][indexb][index1b] = '';
+    profftt[proff1][indexb][index1b] = ptemp1;
+    profftt[proff2][indexa][index1a] = ptemp2;
+    setTimetableClasses(JSON.parse(JSON.stringify(classtt)));
+    setTimetableProfessors(JSON.parse(JSON.stringify(profftt)));
+    format_timetables(classtt, profftt, JSON.parse(JSON.stringify(timetableLabs)), proffsToYear, proffToShort);
+    setTimetableData(classtt);
   }
   return (
     <main className="pl-[100px] pt-[100px] font-semibold">

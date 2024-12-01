@@ -42,7 +42,6 @@ function is_free_professor(timetable_professors, proff, day, slot, clas) {
     return false
 }
 
-
 //Assumes Lab names start with CS, ECE, PHY etc. Uses that to return a list of labs for that course which are free for slots between slot1 and slot2 on that day 
 function free_labs(timetable_labs, course_code, day, slot1, slot2) {
     const usable = [];
