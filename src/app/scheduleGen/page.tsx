@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import { generatePDF } from "./print";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
+import { X } from "lucide-react";
 
 type timetableData = Array<Array<Array<string>>>;
 type classTimeTable = {
   [key: string]: [string | string[]][];
-}
+};
 
 const timings = [
   "days",
@@ -25,23 +26,29 @@ const timings = [
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-function isFreeProfessor(timetable_professors: any, proff: string, day: number, slot: number, clas: string) {
+function isFreeProfessor(
+  timetable_professors: any,
+  proff: string,
+  day: number,
+  slot: number,
+  clas: string
+) {
   console.log(proff, day, slot, clas);
   if (timetable_professors[proff][day][slot] === "") {
-      let clas_count = 0
-      let period_count = 0;
-      for (let i = 0; i < slot; i++) {
-          if (typeof timetable_professors[proff][day][i] === typeof "Lunch") {
-              continue;
-          }
-          if (timetable_professors[proff][day][i][1] === clas) {
-              clas_count += 1;
-          }
-          period_count += 1;
+    let clas_count = 0;
+    let period_count = 0;
+    for (let i = 0; i < slot; i++) {
+      if (typeof timetable_professors[proff][day][i] === typeof "Lunch") {
+        continue;
       }
-      return clas_count < 3 && period_count < 6;
+      if (timetable_professors[proff][day][i][1] === clas) {
+        clas_count += 1;
+      }
+      period_count += 1;
+    }
+    return clas_count < 3 && period_count < 6;
   }
-  return false
+  return false;
 }
 function adjustIndex(index: number) {
   if (index > 8) {
@@ -175,9 +182,9 @@ export default function Page() {
   const [file1, setFile1] = useState(null);
   const [file2, setFile2] = useState(null);
   const [file3, setFile3] = useState(null);
-  const [parameter, setParameter] = useState([]);
-  const [profData, setProfData] = useState([]);
-  const [lockedClasses, setLockedClasses] = useState([]);
+  const [parameter, setParameter] = useState<Array<any>>([]);
+  const [profData, setProfData] = useState<{ [key: string]: any[] }>({});
+  const [lockedClasses, setLockedClasses] = useState<Array<String>>([]);
   const [timetableClasses, setTimetableClasses] = useState({});
   const [timetableProfessors, setTimetableProfessors] = useState({});
   const [proffToShort, setProffShorts] = useState({});
@@ -186,6 +193,9 @@ export default function Page() {
   const [currentSection, setCurrentSection] = useState("AIDS Section A");
   const [currentClass, setCurrentClass] = useState("2nd Year");
   const [isSwapMode, setIsSwapMode] = useState(true);
+  const [classCourses, setClassCourses] = useState<{ [key: string]: any[] }>(
+    {}
+  );
   const handleFileChange = (e: any, setFile: Function) => {
     setFile(e.target.files[0]);
   };
@@ -349,13 +359,15 @@ export default function Page() {
 
     const processFiles = [file1, file2, file3];
     const results = await parseCSVFiles(processFiles);
-    // console.log(results)
+    console.log(results);
 
     if (!results) {
       return;
     }
 
     const { class_courses, professors, proffs_names_to_short, labs } = results;
+
+    setClassCourses(class_courses);
 
     //class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable is syntax
 
@@ -434,6 +446,8 @@ export default function Page() {
     if (!results) {
       return;
     }
+
+    console.log(results);
 
     const { class_courses, professors, proffs_names_to_short, labs } = results;
 
@@ -570,89 +584,96 @@ export default function Page() {
     }
   };
 
-  const handleSwapSelect = (index: number, index1: number) => {
+  const handleSwapNLockSelect = (index: number, index1: number) => {
     // get count of elements selected using getElementsByClassName
     // if count is 2, then swap the elements
     // else, add the element to the selected elements
-    const element = document.getElementById(`${index}${index1 + 1}`);
-    if (isSwapMode) {
-      if (element?.className.includes("#3d4758")) {
-        // console.log(selectedElements);
-        if (
-          timetableData[currentClass + " B_Tech " + currentSection][index][
-            index1
-          ] === "Break" ||
-          timetableData[currentClass + " B_Tech " + currentSection][index][
-            index1
-          ] === "Lunch" ||
-          timetableData[currentClass + " B_Tech " + currentSection][index][
-            index1
-          ].includes("LAB")
-        ) {
-          return;
-        }
-        element.className = element.className.replace("#3d4758", "#282828");
-        if (selectedElements.length >= 2) {
-          for (let i = 0; i < selectedElements.length; i++) {
-            const element1 = document.getElementById(
-              `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
-            );
-            element1!.className = element1!.className.replace(
-              "#282828",
-              "#3d4758"
-            );
+    if (mode == "student") {
+      const element = document.getElementById(`${index}${index1 + 1}`);
+      if (isSwapMode) {
+        if (element?.className.includes("#3d4758")) {
+          // console.log(selectedElements);
+          if (
+            timetableData[currentClass + " B_Tech " + currentSection][index][
+              index1
+            ] === "Break" ||
+            timetableData[currentClass + " B_Tech " + currentSection][index][
+              index1
+            ] === "Lunch" ||
+            timetableData[currentClass + " B_Tech " + currentSection][index][
+              index1
+            ].includes("LAB")
+          ) {
+            return;
           }
-          setSelectedElements([[index, index1]]);
+          element.className = element.className.replace("#3d4758", "#ffffff");
+          if (selectedElements.length >= 2) {
+            for (let i = 0; i < selectedElements.length; i++) {
+              const element1 = document.getElementById(
+                `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
+              );
+              element1!.className = element1!.className.replace(
+                "#ffffff",
+                "#3d4758"
+              );
+            }
+            setSelectedElements([[index, index1]]);
+          } else {
+            setSelectedElements([...selectedElements, [index, index1]]);
+          }
         } else {
-          setSelectedElements([...selectedElements, [index, index1]]);
+          element!.className = element!.className.replace("#ffffff", "#3d4758");
+          setSelectedElements(
+            selectedElements.filter((el) => el[0] !== index || el[1] !== index1)
+          );
         }
       } else {
-        element!.className = element!.className.replace("#282828", "#3d4758");
-        setSelectedElements(
-          selectedElements.filter((el) => el[0] !== index || el[1] !== index1)
-        );
-      }
-    } else {
-      if (element?.className.includes("#3d4758")) {
-        // console.log(selectedElements);
-        if (
-          timetableData[currentClass + " B_Tech " + currentSection][index][
-            index1
-          ] === "Break" ||
-          timetableData[currentClass + " B_Tech " + currentSection][index][
-            index1
-          ] === "Lunch" ||
-          timetableData[currentClass + " B_Tech " + currentSection][index][
-            index1
-          ].includes("LAB")
-        ) {
-          return;
-        }
-        element.className = element.className.replace("#3d4758", "#282828");
-        if (selectedElements.length >= 1) {
-          for (let i = 0; i < selectedElements.length; i++) {
-            const element1 = document.getElementById(
-              `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
-            );
-            element1!.className = element1!.className.replace(
-              "#282828",
-              "#3d4758"
-            );
+        if (element?.className.includes("#3d4758")) {
+          // console.log(selectedElements);
+          if (
+            timetableData[currentClass + " B_Tech " + currentSection][index][
+              index1
+            ] === "Break" ||
+            timetableData[currentClass + " B_Tech " + currentSection][index][
+              index1
+            ] === "Lunch" ||
+            timetableData[currentClass + " B_Tech " + currentSection][index][
+              index1
+            ].includes("LAB")
+          ) {
+            return;
           }
-          setSelectedElements([[index, index1]]);
+          element.className = element.className.replace("#3d4758", "#ffffff");
+          if (selectedElements.length >= 1) {
+            for (let i = 0; i < selectedElements.length; i++) {
+              const element1 = document.getElementById(
+                `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
+              );
+              element1!.className = element1!.className.replace(
+                "#ffffff",
+                "#3d4758"
+              );
+            }
+            setSelectedElements([[index, index1]]);
+          } else {
+            setSelectedElements([...selectedElements, [index, index1]]);
+          }
         } else {
-          setSelectedElements([...selectedElements, [index, index1]]);
+          element!.className = element!.className.replace("#ffffff", "#3d4758");
+          setSelectedElements(
+            selectedElements.filter((el) => el[0] !== index || el[1] !== index1)
+          );
         }
-      } else {
-        element!.className = element!.className.replace("#282828", "#3d4758");
-        setSelectedElements(
-          selectedElements.filter((el) => el[0] !== index || el[1] !== index1)
-        );
       }
     }
   };
 
-  const handleSwap = (indexa: number, index1a: number, indexb:number, index1b:number) => {
+  const handleSwap = (
+    indexa: number,
+    index1a: number,
+    indexb: number,
+    index1b: number
+  ) => {
     index1a = adjustIndex(index1a);
     index1b = adjustIndex(index1b);
 
@@ -664,17 +685,38 @@ export default function Page() {
 
     if (proff1 == proff2 && proff1 == "self_proff") {
       console.log("Nice Joke");
+      alert("Take this seriously bro 😑");
       return;
     }
-    if (!isFreeProfessor(timetableProfessors, proff1, indexb, index1b, currClass) && proff1 != proff2) {
+    if (
+      !isFreeProfessor(
+        timetableProfessors,
+        proff1,
+        indexb,
+        index1b,
+        currClass
+      ) &&
+      proff1 != proff2
+    ) {
       console.log(proff1 + " is not free");
+      alert(proff1 + " is not free");
       return;
     }
-    if (!isFreeProfessor(timetableProfessors, proff2, indexa, index1a, currClass) && proff1 != proff2) {
+    if (
+      !isFreeProfessor(
+        timetableProfessors,
+        proff2,
+        indexa,
+        index1a,
+        currClass
+      ) &&
+      proff1 != proff2
+    ) {
       console.log(proff2 + " is not free");
+      alert(proff2 + " is not free");
       return;
     }
-    
+
     let temp1 = JSON.parse(JSON.stringify(classtt[currClass][indexa][index1a]));
     let temp2 = JSON.parse(JSON.stringify(classtt[currClass][indexb][index1b]));
     let ptemp1 = JSON.parse(JSON.stringify(profftt[proff1][indexa][index1a]));
@@ -682,15 +724,21 @@ export default function Page() {
 
     classtt[currClass][indexa][index1a] = temp2;
     classtt[currClass][indexb][index1b] = temp1;
-    profftt[proff1][indexa][index1a] = '';
-    profftt[proff2][indexb][index1b] = '';
+    profftt[proff1][indexa][index1a] = "";
+    profftt[proff2][indexb][index1b] = "";
     profftt[proff1][indexb][index1b] = ptemp1;
     profftt[proff2][indexa][index1a] = ptemp2;
     setTimetableClasses(JSON.parse(JSON.stringify(classtt)));
     setTimetableProfessors(JSON.parse(JSON.stringify(profftt)));
-    format_timetables(classtt, profftt, JSON.parse(JSON.stringify(timetableLabs)), proffsToYear, proffToShort);
+    format_timetables(
+      classtt,
+      profftt,
+      JSON.parse(JSON.stringify(timetableLabs)),
+      proffsToYear,
+      proffToShort
+    );
     setTimetableData(classtt);
-  }
+  };
   return (
     <main className="pl-[100px] pt-[100px] font-semibold">
       <h1 className="text-2xl mb-2 font-black">Schedule Generator</h1>
@@ -755,7 +803,7 @@ export default function Page() {
               `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
             );
             element1!.className = element1!.className.replace(
-              "#282828",
+              "#ffffff",
               "#3d4758"
             );
           }
@@ -765,6 +813,46 @@ export default function Page() {
         {isSwapMode ? "Swap Mode" : "Lock Mode"}
       </button>
       <div className="bg-white h-[3px] w-1/2"></div>
+
+      {/* Display the parameters */}
+      {parameter.length > 0 && (
+        <>
+          <h1 className="text-2xl mt-4 font-black">Parameters</h1>
+          <div className="bg-white h-[3px] w-1/2"></div>
+          <div className="mt-4 grid grid-cols-3 w-[1300px] grid-flow-dense">
+            {parameter.map((param, index) => (
+              <div className="m-3 w-[404px] bg-[#2d3748] flex items-center select-none">
+                <div key={index} className="p-3 w-96">
+                  <div className="font-bold">{param[0]}</div>
+                  <div className="flex gap-2">
+                    <div>{param[1]}</div>
+                    <div>{param[2]}</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div>{days[param[3]]}</div>
+                    <div>
+                      {param[4] + 1}
+                      <sup>
+                        {param[4] == 0 ? "st" : param[4] == 1 ? "nd" : "rd"}
+                      </sup>{" "}
+                      period
+                    </div>
+                  </div>
+                </div>
+                <X
+                  onClick={() => {
+                    let temp = [...parameter];
+                    temp.splice(index, 1);
+                    setParameter(temp);
+                  }}
+                  className="h-full active:bg-black"
+                ></X>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white h-[3px] w-1/2"></div>
+        </>
+      )}
 
       <div className="flex mt-12 gap-1 select-none  ">
         {mode === "student" ? (
@@ -788,6 +876,17 @@ export default function Page() {
         ) : (
           <div
             onClick={() => {
+              for (let i = 0; i < selectedElements.length; i++) {
+                const element1 = document.getElementById(
+                  `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
+                );
+                element1!.className = element1!.className.replace(
+                  "#ffffff",
+                  "#3d4758"
+                );
+              }
+              setSelectedElements([]);
+
               setMode("professor");
             }}
             className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-black border-2"
@@ -919,22 +1018,22 @@ export default function Page() {
           </div>
         </>
       ) : (
-        <div className="flex mt-6 gap-[1px] w-[1300px] overflow-scroll">
-          {Object.keys(profData).map((prof: any, index: number) => {
+        <div className="flex mt-6 gap-[1px] w-[1300px] overflow-y-hidden overflow-x-auto overflow-scroll whitespace-nowrap scroll-smooth">
+          {Object.keys(profData).map((prof1: any, index: number) => {
             return (
               <div className="flex gap-1 select-none  ">
-                {currentSection === prof ? (
-                  <div className="flex font-bold items-center justify-center bg-[#2d3748] w-[140px] h-[50px] border-white border-2">
-                    {prof}
+                {prof === prof1 ? (
+                  <div className="flex font-bold items-center justify-center px-4 bg-[#2d3748] min-w-[140px] h-[50px] border-white border-2">
+                    {prof1}
                   </div>
                 ) : (
                   <div
                     onClick={() => {
-                      setProf(prof);
+                      setProf(prof1);
                     }}
-                    className="flex font-bold items-center justify-center bg-[#2d3748] w-[140px] h-[50px] border-black border-2"
+                    className="flex font-bold items-center justify-center px-4 bg-[#2d3748] min-w-[140px] h-[50px] border-black border-2"
                   >
-                    {prof}
+                    {prof1}
                   </div>
                 )}
               </div>
@@ -943,22 +1042,178 @@ export default function Page() {
         </div>
       )}
 
-      <div className="bg-[#2d3748] w-[1300px] overflow-visible">
-        <div className="flex mt-12 gap-1 select-none p-3">
-          {timings.map((timing, index) => {
-            return (
-              <div
-                key={index}
-                className="bg-[#1d2738] w-[113px] h-[50px] border-black border-2 flex items-center justify-center"
+      {mode == "student" ? (
+        <div className="bg-[#2d3748] w-[1300px] overflow-visible">
+          <div className="flex mt-12 gap-1 select-none p-3">
+            {timings.map((timing, index) => {
+              return (
+                <div
+                  key={index}
+                  className="bg-[#1d2738] w-[113px] h-[50px] border-black border-2 flex items-center justify-center"
+                >
+                  {timing}
+                </div>
+              );
+            })}
+          </div>
+          <div className="px-3 gap-3">
+            {timetableData[currentClass + " B_Tech " + currentSection]?.map(
+              (row: any, index: number) => {
+                return (
+                  <div className="flex gap-1 mb-1 select-none">
+                    <div
+                      key={(index + 1) * 100}
+                      className="bg-[#1d2738] w-[113px] h-[70px] border-black border-2 flex items-center justify-center"
+                    >
+                      {days[index]}
+                    </div>
+                    <div className="flex gap-1" key={index}>
+                      {row.map((col: string, index1: number) => {
+                        return (
+                          <div
+                            key={`${index}${index1 + 1}`}
+                            id={`${index}${index1 + 1}`}
+                            onClick={() => handleSwapNLockSelect(index, index1)}
+                            className="bg-[#3d4758] w-[112.5px] h-[70px] border-black border-2 flex flex-col items-center justify-center text-xs font-semibold text-center"
+                          >
+                            {col}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+            )}
+          </div>
+          <div className="w-full flex p-3">
+            {isSwapMode ? (
+              <button
+                onClick={(e) => {
+                  if (selectedElements.length === 2) {
+                    console.log(selectedElements);
+                    handleSwap(
+                      selectedElements[0][0],
+                      selectedElements[0][1],
+                      selectedElements[1][0],
+                      selectedElements[1][1]
+                    );
+                  }
+                }}
+                className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
               >
-                {timing}
-              </div>
-            );
-          })}
+                Swap
+              </button>
+            ) : (
+              <button
+                onClick={(e) => {
+                  if (selectedElements.length != 1) return;
+                  const courseCode =
+                    timetableData[currentClass + " B_Tech " + currentSection][
+                      selectedElements[0][0]
+                    ][selectedElements[0][1]].split(" ")[0];
+                  const prof1 = classCourses[
+                    currentClass + " B_Tech " + currentSection
+                  ].find((el: any) => el[0] === courseCode);
+                  console.log(prof1);
+                  const element = [
+                    currentClass + " B_Tech " + currentSection,
+                    courseCode,
+                    courseCode == "Self-Learning" ? "Self-Learning" : prof1[3],
+                    selectedElements[0][0],
+                    selectedElements[0][1],
+                  ];
+                  console.log(element);
+                  if (selectedElements.length === 1) {
+                    const checkExist = () => {
+                      for (let i = 0; i < parameter.length; i++) {
+                        if (parameter[i].toString() == element.toString()) {
+                          return true;
+                        }
+                      }
+                      return false;
+                    };
+                    if (!checkExist()) {
+                      setParameter([...parameter, element]);
+                    }
+                    console.log(parameter);
+                  }
+                }}
+                className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              >
+                Lock Slot
+              </button>
+            )}
+            {!lockedClasses.includes(
+              currentClass + " B_Tech " + currentSection
+            ) ? (
+              <button
+                onClick={() => {
+                  if (
+                    !lockedClasses.includes(
+                      currentClass + " B_Tech " + currentSection
+                    )
+                  ) {
+                    setLockedClasses(() => [
+                      ...lockedClasses,
+                      currentClass + " B_Tech " + currentSection,
+                    ]);
+                  }
+                  console.log(lockedClasses);
+                }}
+                className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              >
+                Freeze
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  if (
+                    lockedClasses.includes(
+                      currentClass + " B_Tech " + currentSection
+                    )
+                  ) {
+                    setLockedClasses(() => {
+                      return lockedClasses.filter((el) => {
+                        return (
+                          el !== currentClass + " B_Tech " + currentSection
+                        );
+                      });
+                    });
+                  }
+                  console.log(lockedClasses);
+                }}
+                className="ml-2 bg-[#282828] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              >
+                Unfreeze
+              </button>
+            )}
+            <button
+              onClick={() => {
+                genCSV(currentClass + " B_Tech " + currentSection);
+              }}
+              className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+            >
+              Download CSV
+            </button>
+          </div>
         </div>
-        <div className="px-3 gap-3">
-          {timetableData[currentClass + " B_Tech " + currentSection]?.map(
-            (row: any, index: number) => {
+      ) : (
+        <div className="bg-[#2d3748] w-[1300px] overflow-visible">
+          <div className="flex mt-12 gap-1 select-none p-3">
+            {timings.map((timing, index) => {
+              return (
+                <div
+                  key={index}
+                  className="bg-[#1d2738] w-[113px] h-[50px] border-black border-2 flex items-center justify-center"
+                >
+                  {timing}
+                </div>
+              );
+            })}
+          </div>
+          <div className="px-3 gap-3">
+            {profData[prof]?.map((row: any, index: number) => {
               return (
                 <div className="flex gap-1 mb-1 select-none">
                   <div
@@ -973,58 +1228,142 @@ export default function Page() {
                         <div
                           key={`${index}${index1 + 1}`}
                           id={`${index}${index1 + 1}`}
-                          onClick={() => handleSwapSelect(index, index1)}
+                          onClick={() => {
+                            handleSwapNLockSelect(index, index1);
+                            console.log(col);
+                          }}
                           className="bg-[#3d4758] w-[112.5px] h-[70px] border-black border-2 flex flex-col items-center justify-center text-xs font-semibold text-center"
                         >
-                          {col}
+                          {col.split(" ").length > 3
+                            ? col
+                                .split(" ")
+                                .map((el: string, index: number) => {
+                                  if (index != 0 && el != "T") {
+                                    return el+" ";
+                                  }
+                                })
+                            : col}
                         </div>
                       );
                     })}
                   </div>
                 </div>
               );
-            }
-          )}
-        </div>
-        <div className="w-full flex p-3">
-          {isSwapMode ? (
-            <button
-              onClick={(e) => {
-                if (selectedElements.length === 2) {
-                  console.log(selectedElements);
-                  handleSwap(
+            })}
+          </div>
+          <div className="w-full flex p-3">
+            {isSwapMode ? (
+              <button
+                onClick={(e) => {
+                  if (selectedElements.length === 2) {
+                    console.log(selectedElements);
+                    handleSwap(
+                      selectedElements[0][0],
+                      selectedElements[0][1],
+                      selectedElements[1][0],
+                      selectedElements[1][1]
+                    );
+                  }
+                }}
+                className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              >
+                Swap
+              </button>
+            ) : (
+              <button
+                onClick={(e) => {
+                  if (selectedElements.length != 1) return;
+                  const courseCode =
+                    timetableData[currentClass + " B_Tech " + currentSection][
+                      selectedElements[0][0]
+                    ][selectedElements[0][1]].split(" ")[0];
+                  const prof1 = classCourses[
+                    currentClass + " B_Tech " + currentSection
+                  ].find((el: any) => el[0] === courseCode);
+                  console.log(prof1);
+                  const element = [
+                    currentClass + " B_Tech " + currentSection,
+                    courseCode,
+                    courseCode == "Self-Learning" ? "Self-Learning" : prof1[3],
                     selectedElements[0][0],
                     selectedElements[0][1],
-                    selectedElements[1][0],
-                    selectedElements[1][1]
-                  );
-                }
-              }}
-              className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
-            >
-              Swap
-            </button>
-          ) : (
+                  ];
+                  console.log(element);
+                  if (selectedElements.length === 1) {
+                    const checkExist = () => {
+                      for (let i = 0; i < parameter.length; i++) {
+                        if (parameter[i].toString() == element.toString()) {
+                          return true;
+                        }
+                      }
+                      return false;
+                    };
+                    if (!checkExist()) {
+                      setParameter([...parameter, element]);
+                    }
+                    console.log(parameter);
+                  }
+                }}
+                className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              >
+                Lock Slot
+              </button>
+            )}
+            {!lockedClasses.includes(
+              currentClass + " B_Tech " + currentSection
+            ) ? (
+              <button
+                onClick={() => {
+                  if (
+                    !lockedClasses.includes(
+                      currentClass + " B_Tech " + currentSection
+                    )
+                  ) {
+                    setLockedClasses(() => [
+                      ...lockedClasses,
+                      currentClass + " B_Tech " + currentSection,
+                    ]);
+                  }
+                  console.log(lockedClasses);
+                }}
+                className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              >
+                Freeze
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  if (
+                    lockedClasses.includes(
+                      currentClass + " B_Tech " + currentSection
+                    )
+                  ) {
+                    setLockedClasses(() => {
+                      return lockedClasses.filter((el) => {
+                        return (
+                          el !== currentClass + " B_Tech " + currentSection
+                        );
+                      });
+                    });
+                  }
+                  console.log(lockedClasses);
+                }}
+                className="ml-2 bg-[#282828] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              >
+                Unfreeze
+              </button>
+            )}
             <button
-              onClick={(e) => {}}
-              className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              onClick={() => {
+                genCSV(currentClass + " B_Tech " + currentSection);
+              }}
+              className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
             >
-              Lock Slot
+              Download CSV
             </button>
-          )}
-          <button className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]">
-            Freeze
-          </button>
-          <button
-            onClick={() => {
-              genCSV(currentClass + " B_Tech " + currentSection);
-            }}
-            className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
-          >
-            Download CSV
-          </button>
+          </div>
         </div>
-      </div>
+      )}
     </main>
   );
 }
