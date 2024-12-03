@@ -312,7 +312,7 @@ function class_swap(timetable_classes, clas, day, slot) {
 }
 
 // Most of the time all classes are not assigned so we do some swapping to assign them. This swaps left over classes with self learnings.
-function theory_update_1(theory_classes, timetable_classes, timetable_professors, locked_classes) {
+function theory_update_1(theory_classes, timetable_classes, timetable_professors) {
     for (let clas of Object.keys(theory_classes)) {
         if (theory_classes[clas].length === 0) {
             continue;
@@ -630,15 +630,17 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
         }
     }
 
-    let temp = JSON.parse(JSON.stringify(initial_lectures))
+    let temp = JSON.parse(JSON.stringify(initial_lectures));
 
     for (let lecture of temp) {
-        let clas, course_code, proff, day, slot = lecture;
+        let [clas, course_code, proff, day, slot] = lecture;
         if (locked_classes.includes(clas)) {
             continue;
         }
+        console.log("Sadads");
         for (let course of classes_to_courses_temp[clas]) {
             if (course[0] == course_code && course[3] == proff && course[2] == "T" && timetable_classes_ini[clas][day][slot] == "" && is_free_professor(timetable_professors_ini, proff, day, slot, clas)) {
+                console.log("ehuiriue");
                 timetable_classes_ini[clas][day][slot] = [course_code, proff]
                 timetable_professors_ini[proff][day][slot] = [course_code, clas]
                 initial_lectures.splice(initial_lectures.indexOf(lecture), 1);

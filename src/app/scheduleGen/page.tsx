@@ -370,7 +370,7 @@ export default function Page() {
     setClassCourses(class_courses);
 
     //class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable is syntax
-
+    setParameter([["2nd Year B_Tech AIDS Section A", "CS2009", "Dr.Debajyoti Biswas", 0,1]]);
     console.log([
       class_courses,
       professors,
