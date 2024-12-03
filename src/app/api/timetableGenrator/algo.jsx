@@ -6,7 +6,15 @@ Math.seedrandom = function (seed) {
         return x - Math.floor(x);
     };
 };
-
+function adjustIndex(index) {
+    if (index > 8) {
+      index -= 1;
+    }
+    if (index > 3) {
+      index -= 1;
+    }
+    return index;
+  }
 function make_random() {
     const currentTimeNs = Date.now() * 1000000;
     Math.seedrandom(currentTimeNs);
@@ -576,7 +584,37 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
         }
     }
 
+    let temp = JSON.parse(JSON.stringify(initial_lectures));
+
     let classes_to_courses_temp = JSON.parse(JSON.stringify(classes_to_courses));
+
+    for (let lecture of temp) {
+        console.log(lecture);
+        let [clas, course_code, proff, day, slot] = lecture;
+        slot = adjustIndex(slot);
+        if (locked_classes.includes(clas)) {
+            continue;
+        }
+        console.log("Sadads");
+        for (let course of classes_to_courses_temp[clas]) {
+            console.log(course);
+            console.log(JSON.stringify(timetable_classes_ini[clas][day][slot]));
+            console.log(course[3], '-', proff, '-');
+            console.log(course[0] == course_code, course[3] == proff, course[2] == "T", timetable_classes_ini[clas][day][slot] == "")
+            if (course[0] == course_code && course[3] == proff && course[2] == "T" && timetable_classes_ini[clas][day][slot] == "" && is_free_professor(timetable_professors_ini, proff, day, slot, clas)) {
+                console.log("ehuiriue");
+                timetable_classes_ini[clas][day][slot] = [course_code, proff]
+                if (proff != "self_proff") {
+                    timetable_professors_ini[proff][day][slot] = [course_code, clas]
+                }
+                initial_lectures.splice(initial_lectures.indexOf(lecture), 1);
+                course[1] -= 1
+                if (course[1] == 0) {
+                    classes_to_courses_temp[clas].splice(classes_to_courses_temp[clas].indexOf(course), 1);
+                }
+            }
+        }
+    }
 
     for (let i of initial_proffs) {
         let proff = i[0];
@@ -625,28 +663,6 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
                         proff_courses.splice(proff_courses.indexOf(course), 1);
                         break;
                     }
-                }
-            }
-        }
-    }
-
-    let temp = JSON.parse(JSON.stringify(initial_lectures));
-
-    for (let lecture of temp) {
-        let [clas, course_code, proff, day, slot] = lecture;
-        if (locked_classes.includes(clas)) {
-            continue;
-        }
-        console.log("Sadads");
-        for (let course of classes_to_courses_temp[clas]) {
-            if (course[0] == course_code && course[3] == proff && course[2] == "T" && timetable_classes_ini[clas][day][slot] == "" && is_free_professor(timetable_professors_ini, proff, day, slot, clas)) {
-                console.log("ehuiriue");
-                timetable_classes_ini[clas][day][slot] = [course_code, proff]
-                timetable_professors_ini[proff][day][slot] = [course_code, clas]
-                initial_lectures.splice(initial_lectures.indexOf(lecture), 1);
-                course[1] -= 1
-                if (course[1] == 0) {
-                    classes_to_courses_temp[clas].splice(classes_to_courses_temp[clas].indexOf(course), 1);
                 }
             }
         }
