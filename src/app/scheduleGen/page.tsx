@@ -1101,10 +1101,33 @@ export default function Page() {
                   const courseCode =
                     timetableData[currentClass + " B_Tech " + currentSection][
                       selectedElements[0][0]
-                    ][selectedElements[0][1]].split(" ")[0];
-                  const prof1 = classCourses[
-                    currentClass + " B_Tech " + currentSection
-                  ].find((el: any) => el[0] === courseCode);
+                    ][selectedElements[0][1]].split(" ")[1] == "T"
+                      ? timetableData[
+                          currentClass + " B_Tech " + currentSection
+                        ][selectedElements[0][0]][selectedElements[0][1]].split(
+                          " "
+                        )[0] + " " +
+                        timetableData[
+                          currentClass + " B_Tech " + currentSection
+                        ][selectedElements[0][0]][selectedElements[0][1]].split(
+                          " "
+                        )[1]
+                      : timetableData[
+                          currentClass + " B_Tech " + currentSection
+                        ][selectedElements[0][0]][selectedElements[0][1]].split(
+                          " "
+                        )[0];
+                        console.log(courseCode)
+                  let prof1
+                  if (courseCode.split(" ").length == 1) {
+                    prof1 = classCourses[
+                      currentClass + " B_Tech " + currentSection
+                    ].find((el: any) => el[0] === courseCode);
+                  } else {
+                    prof1 = classCourses[
+                      currentClass + " B_Tech " + currentSection
+                    ].find((el: any) => el[0] === courseCode.split(" ")[0]);
+                  }
                   console.log(prof1);
                   const element = [
                     currentClass + " B_Tech " + currentSection,
@@ -1229,7 +1252,7 @@ export default function Page() {
                                 .split(" ")
                                 .map((el: string, index: number) => {
                                   if (index != 0 && el != "T") {
-                                    return el+" ";
+                                    return el + " ";
                                   }
                                 })
                             : col}
