@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { generatePDF } from "./print";
+// import { generatePDF } from "./print";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
 import { X } from "lucide-react";
@@ -467,15 +467,6 @@ export default function Page() {
     }
     // console.log(proffDetails);
     return proffDetails;
-  };
-
-  const genPDF = async (classTitle: string) => {
-    let temp: { [key: string]: any } = {};
-    let a = await convertDetails(classTitle);
-    temp[classTitle] = timetableData[classTitle] || [];
-    const pdf = await generatePDF(temp, a);
-    const blob = new Blob([pdf], { type: "application/pdf" });
-    saveAs(blob, classTitle + ".pdf");
   };
 
   const genCSV = async (classTitle: string) => {
@@ -1118,7 +1109,7 @@ export default function Page() {
                   const element = [
                     currentClass + " B_Tech " + currentSection,
                     courseCode,
-                    courseCode == "Self-Learning" ? "Self-Learning" : prof1[3],
+                    courseCode == "Self-Learning" ? "self_proff" : prof1[3],
                     selectedElements[0][0],
                     selectedElements[0][1],
                   ];

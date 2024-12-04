@@ -601,8 +601,8 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
             console.log(JSON.stringify(timetable_classes_ini[clas][day][slot]));
             console.log(course[3], '-', proff, '-');
             console.log(course[0] == course_code, course[3] == proff, course[2] == "T", timetable_classes_ini[clas][day][slot] == "")
-            if (course[0] == course_code && course[3] == proff && course[2] == "T" && timetable_classes_ini[clas][day][slot] == "" && is_free_professor(timetable_professors_ini, proff, day, slot, clas)) {
-                console.log("ehuiriue");
+            if (course[0] == course_code && course[3] == proff && timetable_classes_ini[clas][day][slot] == "" && is_free_professor(timetable_professors_ini, proff, day, slot, clas)) {
+                // console.log("ehuiriue");
                 timetable_classes_ini[clas][day][slot] = [course_code, proff]
                 if (proff != "self_proff") {
                     timetable_professors_ini[proff][day][slot] = [course_code, clas]
