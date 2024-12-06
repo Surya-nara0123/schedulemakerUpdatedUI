@@ -167,6 +167,56 @@ function format_timetables(
     }
   }
 }
+function free_labs(timetable_labs: any, course_code:string, day: number, slot1: number, slot2: number) {
+  const usable = [];
+
+  for (const lab of Object.keys(timetable_labs)) {
+      if (lab.startsWith(course_code.slice(0, 2))) {
+          usable.push(lab);
+      }
+  }
+
+  const temp = [...usable];
+  let possibles = [];
+  temp.sort();
+  for (let i = 0; i < temp.length; i+=2) {
+    let j = slot1;
+    for (; j <= slot2; j++) {
+      if (timetable_labs[temp[i]][day][slot1] != "") break;
+      if (timetable_labs[temp[i+1]][day][slot1] != "") break;
+    }
+    if (j == slot2+1) possibles.push([temp[i], temp[i+1]])
+  }
+
+  return possibles;
+}
+function allocateProfessors(timetable_professors: any, proffs: any, day: number, slot1: number, slot2: number, clas:string) {
+  const results: any[][] = [];
+  const numPeriods = slot2-slot1+1;
+  const allocation = Array(numPeriods).fill(-1);
+
+  function backtrack(period: number) {
+    if (period === numPeriods) {
+      results.push([...allocation]);
+      return;
+    }
+    for (let p = 0; p < numPeriods; p++) {
+      if (isFreeProfessor(timetable_professors, proffs[p], day, slot1+period, clas)) {
+        if (allocation.includes(p)) continue;
+        allocation[period] = p;
+        backtrack(period+1);
+        allocation[period] = -1;
+      }
+    }
+  }
+
+  backtrack(0);
+  return results;
+}
+function getRandomElement(list: Array<any>) {
+  const randomIndex = Math.floor(Math.random() * list.length);
+  return list[randomIndex];
+}
 
 export default function Page() {
   const [mode, setMode] = useState("student");
@@ -731,6 +781,59 @@ export default function Page() {
     );
     setTimetableData(classtt);
   };
+  // swapArra format: [course, proff, day, start, end, lab2, lab2]
+  // swapArrb format:  [[course, proff, day, slot], [course, proff, day, slot], [course, proff, day, slot]...]
+  const handleLabSwap = () =>  {
+    if (swapArra[3] - swapArra[4] != swapArrb.length) return;
+    let proffs_array: any[] = [swapArrb[0][1]];
+    for (let i = 1; i < swapArrb.length; i++) {
+      if (swapArrb[i][3] != swapArrb[i-1][3]+1) return;
+      proffs_array.push(swapArrb[i][1]);
+    }
+    const [labCourse, labProff, day, slot1, end1, initialLab1, initialLab2] = swapArra;
+    const clas = currentClass;
+    const numPeriods = swapArrb.length;
+    const slot2 = swapArrb[0][3];
+    const possibleProffAllocs = allocateProfessors(timetableProfessors, proffs_array, day, slot1, slot2, clas);
+    if (possibleProffAllocs.length == 0) {
+      console.log("No possble configuration of theory classes proffesors possible to allocate classes");
+      return;
+    }
+    for (let slot = slot2; slot < slot2+numPeriods; slot++) {
+      if (!isFreeProfessor(timetableProfessors, labProff, day, slot, clas)) {      
+        console.log("Professor: ", labProff, " is not Free!");
+        return;
+      }
+    }
+    const freeLabs = free_labs(timetableLabs, labCourse, day, slot1, slot1 + numPeriods-1);
+    if (freeLabs.length == 0) {
+      console.log("No Free Labs");
+      return;
+    }
+    const chosenAlloc = getRandomElement(possibleProffAllocs);
+    const [chosenLab1, chosenLab2] = getRandomElement(freeLabs);
+    let timetable_lab = JSON.parse(JSON.stringify(timetableLabs));
+    let timetable_classes = JSON.parse(JSON.stringify(timetableClasses));
+    let timetable_professors = JSON.parse(JSON.stringify(timetableProfessors));
+    for (let i = 0; i < numPeriods; i++) {
+      timetable_lab[initialLab1][day][slot1+i] = "";
+      timetable_lab[initialLab2][day][slot1+i] = "";
+      timetable_lab[chosenLab1][day][slot2+i] = [labCourse, clas, labProff];
+      timetable_lab[chosenLab2][day][slot2+i] = [labCourse, clas, labProff];
+      let pos = chosenAlloc[i];
+      timetable_classes[clas][day][slot1+i] = [swapArrb[pos][0], swapArrb[pos][1]];
+      timetable_classes[clas][day][slot2+i] = [labCourse, labProff, chosenLab1, chosenLab2];
+      timetable_professors[labProff][day][slot1+i] = "";
+      timetable_professors[labProff][day][slot2+i] = [labCourse, clas, chosenLab1, chosenLab2];
+      timetable_professors[swapArrb[pos][1]][day][slot1+i] = [swapArrb[pos][0], clas];
+      timetable_professors[swapArrb[pos][1]][day][slot2+i] = "";
+    }
+    setTimetableClasses(timetable_classes);
+    setTimetableLabs(timetable_lab);
+    setTimetableProfessors(timetable_professors);
+    format_timetables(timetable_classes, timetable_professors, timetable_lab, proffsToYear, proffToShort);
+    setTimetableData(timetable_classes);
+  }
   return (
     <main className="pl-[100px] pt-[100px] font-semibold">
       <h1 className="text-2xl mb-2 font-black">Schedule Generator</h1>
