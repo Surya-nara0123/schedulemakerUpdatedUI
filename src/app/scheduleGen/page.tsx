@@ -193,6 +193,8 @@ export default function Page() {
   const [currentSection, setCurrentSection] = useState("AIDS Section A");
   const [currentClass, setCurrentClass] = useState("2nd Year");
   const [isSwapMode, setIsSwapMode] = useState(true);
+  const [swapArra, setSwapArra] = useState([]);
+  const [swapArrb, setSwapArrb] = useState([]);
   const [classCourses, setClassCourses] = useState<{ [key: string]: any[] }>(
     {}
   );
@@ -1097,7 +1099,7 @@ export default function Page() {
             ) : (
               <button
                 onClick={(e) => {
-                  if (selectedElements.length != 1) return;
+                  if (selectedElements.length === 0) return;
                   const courseCode =
                     timetableData[currentClass + " B_Tech " + currentSection][
                       selectedElements[0][0]

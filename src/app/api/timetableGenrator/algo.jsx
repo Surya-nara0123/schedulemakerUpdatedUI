@@ -346,16 +346,21 @@ function theory_update_1(theory_classes, timetable_classes, timetable_professors
                     class_swap(timetable_classes, clas, day, slot);
                     let choice = possibles[make_random() % possibles.length];
                     timetable_classes[clas][day][slot] = [choice[0], choice[3]];
-                    timetable_professors[choice[3]][day][slot] = [choice[0], clas];
-                    for (let course of theory_classes[clas]) {
+                    timetable_professors[choice[3]][day][slot] = [choice[0], clas];let i = 0;
+                    while (i < theory_classes[clas].length) {
+                        let course = theory_classes[clas][i];
                         if (course[0] == choice[0]) {
                             course[1] -= 1;
                             if (course[1] === 0) {
-                                theory_classes[clas].splice(theory_classes[clas].indexOf(course), 1);
+                                theory_classes[clas].splice(i, 1);
+                            } else {
+                                i++;
                             }
                             break;
+                        } else {
+                            i++;
                         }
-                    }
+                    }                    
                 }
             }
         }
@@ -426,13 +431,19 @@ function theory_update_2(theory_classes, all_theory_classes, timetable_classes, 
                     timetable_professors[choice[0][3]][day][slot] = [choice[0][0], clas]
                     timetable_professors[choice[0][3]][choice[2]][choice[3]] = ""
                     timetable_professors[choice[1][3]][day][slot] = [choice[1][0], clas]
-                    for (let course of theory_classes[clas]) {
-                        if (course[0] == choice[1][0]) {
+                    let i = 0;
+                    while (i < theory_classes[clas].length) {
+                        let course = theory_classes[clas][i];
+                        if (course[0] == choice[0]) {
                             course[1] -= 1;
                             if (course[1] === 0) {
-                                theory_classes[clas].splice(theory_classes[clas].indexOf(course), 1)
+                                theory_classes[clas].splice(i, 1); 
+                            } else {
+                                i++;
                             }
-                            break
+                            break;
+                        } else {
+                            i++;
                         }
                     }
                 }
@@ -585,35 +596,64 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
     }
 
     let temp = JSON.parse(JSON.stringify(initial_lectures));
+    temp.push(["2nd Year B_Tech AIDS Section A", "CS2805", "Dr.Debajyoti Biswas", 0, 0, 2, "CSELAB17", "CSELAB13"]);
 
     let classes_to_courses_temp = JSON.parse(JSON.stringify(classes_to_courses));
 
     for (let lecture of temp) {
         console.log(lecture);
-        let [clas, course_code, proff, day, slot] = lecture;
-        slot = adjustIndex(slot);
-        if (locked_classes.includes(clas)) {
-            continue;
-        }
-        console.log("Sadads");
-        for (let course of classes_to_courses_temp[clas]) {
-            console.log(course);
-            console.log(JSON.stringify(timetable_classes_ini[clas][day][slot]));
-            console.log(course[3], '-', proff, '-');
-            console.log(course[0] == course_code, course[3] == proff, course[2] == "T", timetable_classes_ini[clas][day][slot] == "")
-            if (course[0] == course_code && course[3] == proff && timetable_classes_ini[clas][day][slot] == "" && is_free_professor(timetable_professors_ini, proff, day, slot, clas)) {
-                // console.log("ehuiriue");
-                timetable_classes_ini[clas][day][slot] = [course_code, proff]
-                if (proff != "self_proff") {
-                    timetable_professors_ini[proff][day][slot] = [course_code, clas]
+        if (lecture.length == 5) {            
+            let [clas, course_code, proff, day, slot] = lecture;
+            slot = adjustIndex(slot);
+            if (locked_classes.includes(clas)) {
+                continue;
+            }
+            let i = 0;
+            while (i < classes_to_courses_temp[clas].length) {
+                let course = classes_to_courses_temp[clas][i];
+                if (course[0] == course_code && course[3] == proff && timetable_classes_ini[clas][day][slot] == "" && is_free_professor(timetable_professors_ini, proff, day, slot, clas)) {
+                    timetable_classes_ini[clas][day][slot] = [course_code, proff]
+                    if (proff != "self_proff") {
+                        timetable_professors_ini[proff][day][slot] = [course_code, clas]
+                    }
+                    initial_lectures.splice(initial_lectures.indexOf(lecture), 1);
+                    course[1] -= 1
+                    if (course[1] == 0) {
+                        classes_to_courses_temp[clas].splice(classes_to_courses_temp[clas].indexOf(course), 1);
+                    } else {
+                        i++;
+                    }
+                } else {
+                    i++;
                 }
-                initial_lectures.splice(initial_lectures.indexOf(lecture), 1);
-                course[1] -= 1
-                if (course[1] == 0) {
+            }
+        } else if (lecture.length == 8) {
+            let [clas, course_code, proff, day, slot1, slot2, lab1, lab2] = lecture;
+            let j = 0;
+            while (j < classes_to_courses_temp[clas].length) {
+                let course = classes_to_courses_temp[clas][j];
+                console.log(course);
+                console.log(course[0], course[3]);
+                if (course[0] == course_code && course[3] == proff) {
+                    let i = slot1;
+                    console.log(timetable_labs_ini[lab1][day][i], timetable_labs_ini[lab2][day][i], is_free_professor(timetable_professors_ini, proff, day, i, clas), timetable_classes_ini[clas][day][i])
+                    for (; i <= slot2; i++) {
+                        if (timetable_labs_ini[lab1][day][i] != "" || timetable_labs_ini[lab2][day][i] != "" || !is_free_professor(timetable_professors_ini, proff, day, i, clas) || timetable_classes_ini[clas][day][i] != "") break;
+                    }
+                    if (i != slot2+1) continue;
+                    for (i = slot1; i <= slot2; i++) {
+                        timetable_classes_ini[clas][day][i] = [course_code, proff, lab1, lab2];
+                        timetable_professors_ini[proff][day][i] = [course_code, clas, lab1, lab2];
+                        timetable_labs_ini[lab1][day][i] = [course_code, clas, proff];
+                        timetable_labs_ini[lab2][day][i] = [course_code, clas, proff];
+                    }
                     classes_to_courses_temp[clas].splice(classes_to_courses_temp[clas].indexOf(course), 1);
+                } else {
+                    j++;
                 }
             }
         }
+        console.log("SAdas");
     }
 
     for (let i of initial_proffs) {
@@ -628,7 +668,7 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
         }
         let proff_courses = [];
         for (let clas of Object.keys(classes_to_courses)) {
-            for (let course of classes_to_courses_temp[clas]) {
+            for (let course of [...classes_to_courses_temp[clas]]) {
                 if (course[3] === proff) {
                     proff_courses.push([clas, course]);
                 }
@@ -648,21 +688,33 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
             let choice = possible[make_random() % possible.length];
             timetable_classes_ini[choice[0]][period[0]][period[1]] = [choice[1][0], proff];
             timetable_professors_ini[proff][period[0]][period[1]] = [choice[1][0], choice[0]];
-            for (let course of classes_to_courses_temp[choice[0]]) {
+            let i = 0;
+            while (i < classes_to_courses_temp[choice[0]].length) {
+                let course = classes_to_courses_temp[choice[0]][i];
                 if (course[0] == choice[1][0]) {
                     course[1] -= 1;
                     if (course[1] == 0) {
                         classes_to_courses_temp[choice[0]].splice(classes_to_courses_temp[choice[0]].indexOf(course), 1);
                         break;
+                    } else {
+                        i++;
                     }
+                } else {
+                    i++;
                 }
             }
-            for (let course of proff_courses) {
+            i = 0;
+            while (i < proff_courses.length) {
+                let course = proff_courses[i];
                 if (course[0] == choice[0]) {
                     if (course[1][1] == 0) {
                         proff_courses.splice(proff_courses.indexOf(course), 1);
                         break;
+                    } else {
+                        i++;
                     }
+                } else {
+                    i++;
                 }
             }
         }
