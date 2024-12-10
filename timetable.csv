@@ -1,0 +1,541 @@
+0,1,2,3,4,5,6,7,8,9
+1st Year B_Tech AIDS Section A
+PHY101 PTN ,Self-Learning,Break,MTH101 VGP ,ECE101 T ANY ,Lunch,Self-Learning,PHY101 PTN ,Break,PHY102 T RJS 
+ECE101 T ANY ,Self-Learning,Break,Self-Learning,ENG101 CMP ,Lunch,PHY101 PTN ,ENG101 CMP ,Break,MTH101 VGP 
+Self-Learning,ENG101 CMP ,Break,Self-Learning,CSE101 PDV ,Lunch,PHY102 CSE102 RJS PWR PHYLAB1 CSELAB3 ,PHY102 CSE102 RJS PWR PHYLAB1 CSELAB3 ,Break,PHY102 CSE102 RJS PWR PHYLAB1 CSELAB3 
+ENV101 VSL ,CSE102 T PWR ,Break,MTH101 VGP ,MTH101 VGP ,Lunch,ENV101 VSL ,Self-Learning,Break,CSE101 PDV 
+ECE101 ANY ECELAB1 ,ECE101 ANY ECELAB1 ,Break,CSE101 PDV ,Self-Learning,Lunch,PHY102 CSE102 RJS PWR PHYLAB1 CSELAB12 ,PHY102 CSE102 RJS PWR PHYLAB1 CSELAB12 ,Break,PHY102 CSE102 RJS PWR PHYLAB1 CSELAB12 
+1st Year B_Tech AIDS Section B
+ECE101 T ANY ,PHY102 T RJS ,Break,ENG101 CMP ,MTH101 DVD ,Lunch,CSE101 SMW ,Self-Learning,Break,Self-Learning
+PHY101 PTN ,ENV101 VSL ,Break,ENV101 VSL ,Self-Learning,Lunch,Self-Learning,Self-Learning,Break,ENG101 CMP 
+CSE101 SMW ,PHY102 CSE102 RJS SMW PHYLAB1 CSELAB19 ,Break,PHY102 CSE102 RJS SMW PHYLAB1 CSELAB19 ,PHY102 CSE102 RJS SMW PHYLAB1 CSELAB19 ,Lunch,ENG101 CMP ,Self-Learning,Break,PHY101 PTN 
+CSE101 SMW ,PHY102 CSE102 RJS SMW PHYLAB1 CSELAB8 ,Break,PHY102 CSE102 RJS SMW PHYLAB1 CSELAB8 ,PHY102 CSE102 RJS SMW PHYLAB1 CSELAB8 ,Lunch,PHY101 PTN ,ECE101 ANY ECELAB1 ,Break,ECE101 ANY ECELAB1 
+Self-Learning,CSE102 T SMW ,Break,ECE101 T ANY ,MTH101 DVD ,Lunch,MTH101 DVD ,MTH101 DVD ,Break,Self-Learning
+1st Year B_Tech AIDS Section C
+PHY102 CSE102 SDT SMW PHYLAB1 CSELAB11 ,PHY102 CSE102 SDT SMW PHYLAB1 CSELAB11 ,Break,PHY102 CSE102 SDT SMW PHYLAB1 CSELAB11 ,ENG101 NBD ,Lunch,Self-Learning,ENV101 VSL ,Break,Self-Learning
+CSE101 SMW ,PHY102 CSE102 SDT SMW PHYLAB1 CSELAB17 ,Break,PHY102 CSE102 SDT SMW PHYLAB1 CSELAB17 ,PHY102 CSE102 SDT SMW PHYLAB1 CSELAB17 ,Lunch,Self-Learning,Self-Learning,Break,ENV101 VSL 
+ENG101 NBD ,ECE101 T ANY ,Break,PHY102 T SDT ,MTH101 DVD ,Lunch,Self-Learning,Self-Learning,Break,Self-Learning
+PHY101 SDT ,ECE101 T ANY ,Break,ECE101 ANY ECELAB1 ,ECE101 ANY ECELAB1 ,Lunch,MTH101 DVD ,PHY101 SDT ,Break,PHY101 SDT 
+MTH101 DVD ,MTH101 DVD ,Break,ENG101 NBD ,Self-Learning,Lunch,CSE101 SMW ,CSE102 T SMW ,Break,CSE101 SMW 
+1st Year B_Tech IoT Section A
+ECE104 VSM ECELAB1 ,ECE104 VSM ECELAB1 ,Break,ECE104 VSM ECELAB1 ,Self-Learning,Lunch,Self-Learning,Self-Learning,Break,PHY103 SMW 
+ENV101 VSL ,ENG101 NBD ,Break,ECE104 T VSM ,MTH101 PRN ,Lunch,CSE102 T DYL ,Self-Learning,Break,MTH101 PRN 
+MTH101 PRN ,ENG101 NBD ,Break,Self-Learning,Self-Learning,Lunch,PHY103 SMW ,Self-Learning,Break,ECE103 VSM 
+ECE103 VSM ,CSE101 DYL ,Break,ENV101 VSL ,CSE101 DYL ,Lunch,ECE103 VSM ,Self-Learning,Break,PHY103 SMW 
+ENG101 NBD ,Self-Learning,Break,CSE101 DYL ,Self-Learning,Lunch,CSE102 DYL CSELAB5 CSELAB8 ,CSE102 DYL CSELAB5 CSELAB8 ,Break,CSE102 DYL CSELAB5 CSELAB8 
+1st Year B_Tech IoT Section B
+CSE102 PWR CSELAB19 CSELAB14 ,CSE102 PWR CSELAB19 CSELAB14 ,Break,CSE102 PWR CSELAB19 CSELAB14 ,Self-Learning,Lunch,ECE104 VSM ECELAB1 ,ECE104 VSM ECELAB1 ,Break,ECE104 VSM ECELAB1 
+ECE104 T VSM ,Self-Learning,Break,Self-Learning,MTH101 DVD ,Lunch,Self-Learning,ENV101 VSL ,Break,ENG101 NBD 
+CSE102 T PWR ,Self-Learning,Break,CSE101 PWR ,ECE103 VSM ,Lunch,ECE103 VSM ,Self-Learning,Break,Self-Learning
+MTH101 DVD ,Self-Learning,Break,MTH101 DVD ,CSE101 PWR ,Lunch,PHY103 SMW ,ENV101 VSL ,Break,Self-Learning
+ECE103 VSM ,CSE101 PWR ,Break,PHY103 SMW ,PHY103 SMW ,Lunch,Self-Learning,ENG101 NBD ,Break,ENG101 NBD 
+1st Year B_Tech Cyber Security
+ECE101 T DYL ,CSE101 ANY ,Break,ECE101 T DYL ,PHY102 T SDT ,Lunch,PHY102 CSE102 SDT ANY PHYLAB1 CSELAB19 ,PHY102 CSE102 SDT ANY PHYLAB1 CSELAB19 ,Break,PHY102 CSE102 SDT ANY PHYLAB1 CSELAB19 
+ECE101 DYL ECELAB1 ,ECE101 DYL ECELAB1 ,Break,CSE201 PWR ,Self-Learning,Lunch,PHY102 CSE102 SDT ANY PHYLAB1 CSELAB4 ,PHY102 CSE102 SDT ANY PHYLAB1 CSELAB4 ,Break,PHY102 CSE102 SDT ANY PHYLAB1 CSELAB4 
+PHY101 SDT ,PHY101 SDT ,Break,MTH101 VGP ,Self-Learning,Lunch,Self-Learning,MTH101 VGP ,Break,MTH101 VGP 
+CSE102 T ANY ,ENG101 CMP ,Break,CSE201 PWR ,PHY101 SDT ,Lunch,CSE101 ANY ,Self-Learning,Break,MTH101 VGP 
+CSE201 PWR ,ENG101 CMP ,Break,CSE201 PWR ,CSE101 ANY ,Lunch,ENG101 CMP ,Self-Learning,Break,Self-Learning
+2nd Year B_Tech AIDS Section A
+CSE203 PDV CSELAB15 CSELAB10 ,CSE203 PDV CSELAB15 CSELAB10 ,Self-Learning,Break,CSE206 T KSY ,CSE204 SNT ,Lunch,CSE203 T PDV ,Break,PSY201 NGR 
+Self-Learning,Self-Learning,CSE203 T PDV ,Break,CSE203 T PDV ,Self-Learning,Lunch,CSE202 KSY ,Break,CSE205 SDK 
+CSE207 SDK CSELAB11 CSELAB9 ,CSE207 SDK CSELAB11 CSELAB9 ,CSE207 SDK CSELAB11 CSELAB9 ,Break,Self-Learning,MTH201 MRN ,Lunch,Self-Learning,Break,Self-Learning
+CSE206 KSY CSELAB1 CSELAB9 ,CSE206 KSY CSELAB1 CSELAB9 ,CSE206 KSY CSELAB1 CSELAB9 ,Break,PSY201 NGR ,Self-Learning,Lunch,CSE207 T SDK ,Break,CSE204 SNT 
+CSE205 SDK ,CSE204 SNT ,MTH201 MRN ,Break,CSE202 KSY ,CSE202 KSY ,Lunch,MTH201 MRN ,Break,MTH201 MRN 
+2nd Year B_Tech AIDS Section B
+CSE202 KSY ,CSE207 SDK CSELAB3 CSELAB9 ,CSE207 SDK CSELAB3 CSELAB9 ,Break,CSE207 SDK CSELAB3 CSELAB9 ,Self-Learning,Lunch,CSE202 KSY ,Break,Self-Learning
+MTH201 VMB ,Self-Learning,Self-Learning,Break,CSE202 KSY ,CSE204 SNT ,Lunch,CSE203 PDV CSELAB11 CSELAB6 ,Break,CSE203 PDV CSELAB11 CSELAB6 
+PSY201 NGR ,CSE206 T KSY ,CSE206 KSY CSELAB15 CSELAB6 ,Break,CSE206 KSY CSELAB15 CSELAB6 ,CSE206 KSY CSELAB15 CSELAB6 ,Lunch,Self-Learning,Break,CSE205 SDK 
+PSY201 NGR ,CSE203 T PDV ,CSE203 T PDV ,Break,CSE203 T PDV ,CSE204 SNT ,Lunch,CSE204 SNT ,Break,CSE205 SDK 
+Self-Learning,CSE207 T SDK ,Self-Learning,Break,MTH201 VMB ,MTH201 VMB ,Lunch,MTH201 VMB ,Break,Self-Learning
+2nd Year B_Tech AIDS Section C
+PSY201 NGR ,CSE202 KSY ,Self-Learning,Break,PSY201 NGR ,MTH201 VMB ,Lunch,Self-Learning,Break,CSE203 T PDV 
+CSE206 KSY CSELAB10 CSELAB19 ,CSE206 KSY CSELAB10 CSELAB19 ,CSE206 KSY CSELAB10 CSELAB19 ,Break,MTH201 VMB ,Self-Learning,Lunch,Self-Learning,Break,Self-Learning
+CSE204 SNT ,CSE203 PDV CSELAB10 CSELAB4 ,CSE203 PDV CSELAB10 CSELAB4 ,Break,CSE204 SNT ,Self-Learning,Lunch,MTH201 VMB ,Break,MTH201 VMB 
+CSE203 T PDV ,CSE205 SDK ,CSE207 SDK CSELAB10 CSELAB11 ,Break,CSE207 SDK CSELAB10 CSELAB11 ,CSE207 SDK CSELAB10 CSELAB11 ,Lunch,CSE203 T PDV ,Break,Self-Learning
+CSE206 T KSY ,CSE202 KSY ,CSE207 T SDK ,Break,CSE204 SNT ,CSE205 SDK ,Lunch,CSE202 KSY ,Break,Self-Learning
+2nd Year B_Tech IoT Section A
+MTH201 VMB ,Self-Learning,CSE210 T VRM ,Break,Self-Learning,Self-Learning,Lunch,CSE211 VDS ,Break,MTH201 VMB 
+Self-Learning,Self-Learning,CSE206 VDS CSELAB12 CSELAB15 ,Break,CSE206 VDS CSELAB12 CSELAB15 ,CSE206 VDS CSELAB12 CSELAB15 ,Lunch,CSE212 PDB ,Break,Self-Learning
+CSE210 VRM CSELAB18 CSELAB8 ,CSE210 VRM CSELAB18 CSELAB8 ,CSE210 VRM CSELAB18 CSELAB8 ,Break,MTH201 VMB ,Self-Learning,Lunch,Self-Learning,Break,CSE212 PDB 
+CSE206 T VDS ,Self-Learning,MTH201 VMB ,Break,CSE211 VDS ,CSE202 ASP ,Lunch,Self-Learning,Break,Self-Learning
+CSE202 ASP ,CSE202 ASP ,CSE212 PDB ,Break,CSE208 VRM ,CSE208 VRM ,Lunch,CSE211 VDS ,Break,CSE208 VRM 
+2nd Year B_Tech IoT Section B
+Self-Learning,Self-Learning,Self-Learning,Break,MTH201 MRN ,CSE211 VDS ,Lunch,MTH201 MRN ,Break,CSE206 T VDS 
+Self-Learning,CSE210 VRM CSELAB4 CSELAB13 ,CSE210 VRM CSELAB4 CSELAB13 ,Break,CSE210 VRM CSELAB4 CSELAB13 ,Self-Learning,Lunch,MTH201 MRN ,Break,CSE212 PDB 
+Self-Learning,CSE202 ASP ,CSE202 ASP ,Break,Self-Learning,Self-Learning,Lunch,CSE211 VDS ,Break,CSE211 VDS 
+CSE202 ASP ,Self-Learning,Self-Learning,Break,CSE212 PDB ,CSE208 VRM ,Lunch,CSE210 T VRM ,Break,CSE212 PDB 
+MTH201 MRN ,CSE208 VRM ,CSE206 VDS CSELAB12 CSELAB17 ,Break,CSE206 VDS CSELAB12 CSELAB17 ,CSE206 VDS CSELAB12 CSELAB17 ,Lunch,CSE208 VRM ,Break,Self-Learning
+2nd Year B_Tech Cyber Security
+CSE210 T DVS ,CSE206 ASP CSELAB4 CSELAB18 ,CSE206 ASP CSELAB4 CSELAB18 ,Break,CSE206 ASP CSELAB4 CSELAB18 ,CSE208 DVS ,Lunch,Self-Learning,Break,CSE208 DVS 
+Self-Learning,Self-Learning,Self-Learning,Break,CSE202 ASP ,CSE203 T STN ,Lunch,PSY201 NGR ,Break,MTH201 SJT 
+Self-Learning,CSE209 DVY ,CSE208 DVS ,Break,CSE209 DVY ,CSE206 T ASP ,Lunch,CSE203 T STN ,Break,MTH201 SJT 
+Self-Learning,MTH201 SJT ,Self-Learning,Break,CSE203 STN CSELAB14 CSELAB9 ,CSE203 STN CSELAB14 CSELAB9 ,Lunch,CSE202 ASP ,Break,Self-Learning
+PSY201 NGR ,CSE210 DVS CSELAB16 CSELAB6 ,CSE210 DVS CSELAB16 CSELAB6 ,Break,CSE210 DVS CSELAB16 CSELAB6 ,CSE202 ASP ,Lunch,CSE203 T STN ,Break,Self-Learning
+3rd Year B_Tech AIDS Section A
+Self-Learning,Self-Learning,CSE307 SDR CSELAB12 CSELAB15 ,Break,CSE307 SDR CSELAB12 CSELAB15 ,CSE307 SDR CSELAB12 CSELAB15 ,Lunch,CSE302 SDY CSELAB1 CSELAB18 ,Break,CSE302 SDY CSELAB1 CSELAB18 
+CSE301 SDV ,Self-Learning,CSE306 SDV CSELAB11 CSELAB14 ,Break,CSE306 SDV CSELAB11 CSELAB14 ,CSE306 SDV CSELAB11 CSELAB14 ,Lunch,Self-Learning,Break,MTH301 NON 
+CSE304 SDR ,Self-Learning,CSE307 T SDR ,Break,CSE302 T SDY ,MTH301 NON ,Lunch,CSE301 SDV ,Break,CSE302 T SDY 
+CSE302 T SDY ,PSY301 SDN ,CSE303 SDS ,Break,CSE301 SDV ,Self-Learning,Lunch,CSE306 T SDV ,Break,PSY301 SDN 
+CSE304 SDR ,Self-Learning,MTH301 NON ,Break,MTH301 NON ,Self-Learning,Lunch,CSE303 SDS ,Break,CSE303 SDS 
+3rd Year B_Tech AIDS Section B
+CSE303 SDS ,CSE302 T SDY ,CSE301 SDV ,Break,MTH301 NON ,CSE303 SDS ,Lunch,CSE301 SDV ,Break,CSE301 SDV 
+CSE307 SDR CSELAB9 CSELAB3 ,CSE307 SDR CSELAB9 CSELAB3 ,CSE307 SDR CSELAB9 CSELAB3 ,Break,PSY301 SDN ,MTH301 NON ,Lunch,MTH301 NON ,Break,CSE306 T SDV 
+CSE302 SDY CSELAB14 CSELAB13 ,CSE302 SDY CSELAB14 CSELAB13 ,Self-Learning,Break,Self-Learning,CSE304 SDR ,Lunch,CSE302 T SDY ,Break,CSE303 SDS 
+PSY301 SDN ,Self-Learning,CSE304 SDR ,Break,CSE307 T SDR ,Self-Learning,Lunch,Self-Learning,Break,MTH301 NON 
+CSE306 SDV CSELAB18 CSELAB5 ,CSE306 SDV CSELAB18 CSELAB5 ,CSE306 SDV CSELAB18 CSELAB5 ,Break,CSE302 T SDY ,Self-Learning,Lunch,Self-Learning,Break,Self-Learning
+3rd Year B_Tech IoT Section A
+CSE310 T HEL ,MTH301 NON ,CSE306 SDM CSELAB10 CSELAB17 ,Break,CSE306 SDM CSELAB10 CSELAB17 ,CSE306 SDM CSELAB10 CSELAB17 ,Lunch,CSE313 WEL ,Break,Self-Learning
+Self-Learning,Self-Learning,Self-Learning,Break,CSE312 SDP ,CSE312 SDP ,Lunch,CSE313 WEL ,Break,CSE312 SDP 
+Self-Learning,Self-Learning,CSE313 WEL ,Break,Self-Learning,CSE306 T SDM ,Lunch,CSE308 HEL ,Break,MTH301 NON 
+CSE311 SDM ,CSE310 HEL CSELAB16 CSELAB5 ,CSE310 HEL CSELAB16 CSELAB5 ,Break,CSE310 HEL CSELAB16 CSELAB5 ,Self-Learning,Lunch,Self-Learning,Break,Self-Learning
+MTH301 NON ,CSE311 SDM ,CSE308 HEL ,Break,CSE308 HEL ,MTH301 NON ,Lunch,CSE311 SDM ,Break,Self-Learning
+3rd Year B_Tech IoT Section B
+CSE312 SDP ,Self-Learning,CSE310 HEL CSELAB1 CSELAB13 ,Break,CSE310 HEL CSELAB1 CSELAB13 ,CSE310 HEL CSELAB1 CSELAB13 ,Lunch,Self-Learning,Break,Self-Learning
+MTH301 NON ,CSE310 T HEL ,CSE306 T SDM ,Break,Self-Learning,Self-Learning,Lunch,Self-Learning,Break,CSE311 SDM 
+Self-Learning,Self-Learning,CSE311 SDM ,Break,CSE308 HEL ,CSE313 WEL ,Lunch,CSE311 SDM ,Break,Self-Learning
+CSE312 SDP ,Self-Learning,CSE312 SDP ,Break,CSE313 WEL ,MTH301 NON ,Lunch,CSE313 WEL ,Break,CSE308 HEL 
+CSE308 HEL ,Self-Learning,CSE306 SDM CSELAB14 CSELAB10 ,Break,CSE306 SDM CSELAB14 CSELAB10 ,CSE306 SDM CSELAB14 CSELAB10 ,Lunch,MTH301 NON ,Break,MTH301 NON 
+3rd Year B_Tech Cyber Security
+Self-Learning,Self-Learning,Self-Learning,Break,CSE303 PYQ CSELAB16 CSELAB6 ,CSE303 PYQ CSELAB16 CSELAB6 ,Lunch,CSE312 SDP ,Break,PSY301 SDN 
+CSE306 SDP CSELAB1 CSELAB7 ,CSE306 SDP CSELAB1 CSELAB7 ,CSE306 SDP CSELAB1 CSELAB7 ,Break,Self-Learning,Self-Learning,Lunch,CSE308 XYZ ,Break,CSE308 XYZ 
+CSE310 XYZ CSELAB16 CSELAB1 ,CSE310 XYZ CSELAB16 CSELAB1 ,CSE310 XYZ CSELAB16 CSELAB1 ,Break,Self-Learning,Self-Learning,Lunch,CSE303 T PYQ ,Break,Self-Learning
+CSE308 XYZ ,CSE306 T SDP ,Self-Learning,Break,PSY301 SDN ,CSE309 LMN ,Lunch,MTH301 ABC ,Break,CSE312 SDP 
+CSE309 LMN ,CSE312 SDP ,CSE303 T PYQ ,Break,CSE303 T PYQ ,CSE310 T XYZ ,Lunch,MTH301 ABC ,Break,MTH301 ABC 
+4th Year B_Tech AIDS Section A
+Self-Learning,Self-Learning,Self-Learning,Break,CSE402 UVW CSELAB19 CSELAB11 ,CSE402 UVW CSELAB19 CSELAB11 ,Lunch,CSE403 OPQ ,Break,CSE403 OPQ 
+Self-Learning,PSY401 FGH ,CSE406 JKL CSELAB18 CSELAB5 ,Break,CSE406 JKL CSELAB18 CSELAB5 ,CSE406 JKL CSELAB18 CSELAB5 ,Lunch,CSE404 STU ,Break,Self-Learning
+Self-Learning,CSE403 OPQ ,Self-Learning,Break,CSE401 JKL ,CSE407 T STU ,Lunch,CSE401 JKL ,Break,CSE404 STU 
+Self-Learning,PSY401 FGH ,CSE407 STU CSELAB3 CSELAB12 ,Break,CSE407 STU CSELAB3 CSELAB12 ,CSE407 STU CSELAB3 CSELAB12 ,Lunch,CSE401 JKL ,Break,MTH401 DEF 
+MTH401 DEF ,MTH401 DEF ,CSE402 T UVW ,Break,CSE402 T UVW ,CSE402 T UVW ,Lunch,MTH401 DEF ,Break,CSE406 T JKL 
+4th Year B_Tech AIDS Section B
+Self-Learning,CSE407 STU CSELAB7 CSELAB8 ,CSE407 STU CSELAB7 CSELAB8 ,Break,CSE407 STU CSELAB7 CSELAB8 ,Self-Learning,Lunch,Self-Learning,Break,CSE401 JKL 
+CSE402 UVW CSELAB12 CSELAB15 ,CSE402 UVW CSELAB12 CSELAB15 ,Self-Learning,Break,Self-Learning,CSE403 OPQ ,Lunch,CSE401 JKL ,Break,CSE401 JKL 
+CSE406 JKL CSELAB3 CSELAB7 ,CSE406 JKL CSELAB3 CSELAB7 ,CSE406 JKL CSELAB3 CSELAB7 ,Break,Self-Learning,CSE403 OPQ ,Lunch,CSE407 T STU ,Break,PSY401 FGH 
+Self-Learning,CSE406 T JKL ,CSE403 OPQ ,Break,Self-Learning,MTH401 DEF ,Lunch,CSE404 STU ,Break,CSE402 T UVW 
+CSE402 T UVW ,CSE402 T UVW ,MTH401 DEF ,Break,CSE404 STU ,MTH401 DEF ,Lunch,PSY401 FGH ,Break,MTH401 DEF 
+4th Year B_Tech IoT Section A
+Self-Learning,Self-Learning,Self-Learning,Break,CSE406 T HIJ ,CSE408 ABE ,Lunch,CSE412 ABD ,Break,CSE410 T ABE 
+Self-Learning,Self-Learning,Self-Learning,Break,MTH401 DEF ,CSE412 ABD ,Lunch,CSE413 ABF ,Break,MTH401 DEF 
+CSE410 ABE CSELAB2 CSELAB12 ,CSE410 ABE CSELAB2 CSELAB12 ,CSE410 ABE CSELAB2 CSELAB12 ,Break,Self-Learning,MTH401 DEF ,Lunch,CSE412 ABD ,Break,Self-Learning
+CSE411 HIJ ,MTH401 DEF ,Self-Learning,Break,CSE411 HIJ ,CSE411 HIJ ,Lunch,Self-Learning,Break,CSE413 ABF 
+CSE406 HIJ CSELAB11 CSELAB4 ,CSE406 HIJ CSELAB11 CSELAB4 ,CSE406 HIJ CSELAB11 CSELAB4 ,Break,CSE413 ABF ,Self-Learning,Lunch,CSE408 ABE ,Break,CSE408 ABE 
+4th Year B_Tech IoT Section B
+CSE406 HIJ CSELAB5 CSELAB2 ,CSE406 HIJ CSELAB5 CSELAB2 ,CSE406 HIJ CSELAB5 CSELAB2 ,Break,MTH401 DEF ,MTH401 DEF ,Lunch,Self-Learning,Break,Self-Learning
+Self-Learning,CSE411 HIJ ,Self-Learning,Break,Self-Learning,CSE408 ABE ,Lunch,CSE408 ABE ,Break,CSE406 T HIJ 
+CSE412 ABD ,MTH401 DEF ,CSE412 ABD ,Break,Self-Learning,CSE408 ABE ,Lunch,Self-Learning,Break,Self-Learning
+Self-Learning,CSE410 ABE CSELAB13 CSELAB19 ,CSE410 ABE CSELAB13 CSELAB19 ,Break,CSE410 ABE CSELAB13 CSELAB19 ,Self-Learning,Lunch,MTH401 DEF ,Break,CSE411 HIJ 
+CSE412 ABD ,CSE410 T ABE ,CSE413 ABF ,Break,CSE411 HIJ ,CSE413 ABF ,Lunch,CSE413 ABF ,Break,Self-Learning
+4th Year B_Tech Cyber Security
+MTH401 ABG ,Self-Learning,Self-Learning,Break,MTH401 ABG ,Self-Learning,Lunch,CSE409 ABJ ,Break,CSE403 T ABI 
+CSE403 ABI CSELAB2 CSELAB16 ,CSE403 ABI CSELAB2 CSELAB16 ,MTH401 ABG ,Break,CSE412 ABD ,Self-Learning,Lunch,Self-Learning,Break,CSE403 T ABI 
+CSE410 ABH CSELAB5 CSELAB17 ,CSE410 ABH CSELAB5 CSELAB17 ,CSE410 ABH CSELAB5 CSELAB17 ,Break,Self-Learning,CSE409 ABJ ,Lunch,CSE403 T ABI ,Break,Self-Learning
+CSE406 ABD CSELAB2 CSELAB15 ,CSE406 ABD CSELAB2 CSELAB15 ,CSE406 ABD CSELAB2 CSELAB15 ,Break,PSY401 FGH ,PSY401 FGH ,Lunch,Self-Learning,Break,CSE408 ABH 
+Self-Learning,CSE410 T ABH ,CSE406 T ABD ,Break,CSE408 ABH ,CSE412 ABD ,Lunch,CSE412 ABD ,Break,CSE408 ABH 
+0,1,2,3,4,5,6,7,8,9
+Proff0
+,,Break,ENG101 1st Year B_Tech AIDS Section B ,,Lunch,,,Break,
+,,Break,,ENG101 1st Year B_Tech AIDS Section A ,Lunch,,ENG101 1st Year B_Tech AIDS Section A ,Break,ENG101 1st Year B_Tech AIDS Section B 
+,ENG101 1st Year B_Tech AIDS Section A ,Break,,,Lunch,ENG101 1st Year B_Tech AIDS Section B ,,Break,
+,ENG101 1st Year B_Tech Cyber Security ,Break,,,Lunch,,,Break,
+,ENG101 1st Year B_Tech Cyber Security ,Break,,,Lunch,ENG101 1st Year B_Tech Cyber Security ,,Break,
+Proff1
+,,Break,MTH101 1st Year B_Tech AIDS Section A ,,Lunch,,,Break,
+,,Break,,,Lunch,,,Break,MTH101 1st Year B_Tech AIDS Section A 
+,,Break,MTH101 1st Year B_Tech Cyber Security ,,Lunch,,MTH101 1st Year B_Tech Cyber Security ,Break,MTH101 1st Year B_Tech Cyber Security 
+,,Break,MTH101 1st Year B_Tech AIDS Section A ,MTH101 1st Year B_Tech AIDS Section A ,Lunch,,,Break,MTH101 1st Year B_Tech Cyber Security 
+,,Break,,,Lunch,,,Break,
+Proff2
+PHY101 1st Year B_Tech AIDS Section A ,,Break,,,Lunch,,PHY101 1st Year B_Tech AIDS Section A ,Break,
+PHY101 1st Year B_Tech AIDS Section B ,,Break,,,Lunch,PHY101 1st Year B_Tech AIDS Section A ,,Break,
+,,Break,,,Lunch,,,Break,PHY101 1st Year B_Tech AIDS Section B 
+,,Break,,,Lunch,PHY101 1st Year B_Tech AIDS Section B ,,Break,
+,,Break,,,Lunch,,,Break,
+Proff3
+,,Break,,,Lunch,,ENV101 1st Year B_Tech AIDS Section C ,Break,
+ENV101 1st Year B_Tech IoT Section A ,ENV101 1st Year B_Tech AIDS Section B ,Break,ENV101 1st Year B_Tech AIDS Section B ,,Lunch,,ENV101 1st Year B_Tech IoT Section B ,Break,ENV101 1st Year B_Tech AIDS Section C 
+,,Break,,,Lunch,,,Break,
+ENV101 1st Year B_Tech AIDS Section A ,,Break,ENV101 1st Year B_Tech IoT Section A ,,Lunch,ENV101 1st Year B_Tech AIDS Section A ,ENV101 1st Year B_Tech IoT Section B ,Break,
+,,Break,,,Lunch,,,Break,
+Proff4
+CSE203 2nd Year B_Tech AIDS Section A CSELAB15 CSELAB10 ,CSE203 2nd Year B_Tech AIDS Section A CSELAB15 CSELAB10 ,Break,,,Lunch,Lunch,CSE203 T 2nd Year B_Tech AIDS Section A ,Break,CSE203 T 2nd Year B_Tech AIDS Section C 
+,,CSE203 T 2nd Year B_Tech AIDS Section A ,Break,CSE203 T 2nd Year B_Tech AIDS Section A ,Lunch,Lunch,CSE203 2nd Year B_Tech AIDS Section B CSELAB11 CSELAB6 ,Break,CSE203 2nd Year B_Tech AIDS Section B CSELAB11 CSELAB6 
+,CSE203 2nd Year B_Tech AIDS Section C CSELAB10 CSELAB4 ,CSE203 2nd Year B_Tech AIDS Section C CSELAB10 CSELAB4 ,Break,CSE101 1st Year B_Tech AIDS Section A ,Lunch,Lunch,,Break,
+CSE203 T 2nd Year B_Tech AIDS Section C ,CSE203 T 2nd Year B_Tech AIDS Section B ,CSE203 T 2nd Year B_Tech AIDS Section B ,Break,CSE203 T 2nd Year B_Tech AIDS Section B ,Lunch,Lunch,CSE203 T 2nd Year B_Tech AIDS Section C ,Break,CSE101 1st Year B_Tech AIDS Section A 
+,,Break,CSE101 1st Year B_Tech AIDS Section A ,,Lunch,Lunch,,Break,
+Proff5
+ECE101 T 1st Year B_Tech AIDS Section B ,CSE101 1st Year B_Tech Cyber Security ,Break,,ECE101 T 1st Year B_Tech AIDS Section A ,Lunch,CSE102 1st Year B_Tech Cyber Security CSELAB19 ,CSE102 1st Year B_Tech Cyber Security CSELAB19 ,Break,CSE102 1st Year B_Tech Cyber Security CSELAB19 
+ECE101 T 1st Year B_Tech AIDS Section A ,,Break,,,Lunch,CSE102 1st Year B_Tech Cyber Security CSELAB4 ,CSE102 1st Year B_Tech Cyber Security CSELAB4 ,Break,CSE102 1st Year B_Tech Cyber Security CSELAB4 
+,ECE101 T 1st Year B_Tech AIDS Section C ,Break,,,Lunch,,,Break,
+CSE102 T 1st Year B_Tech Cyber Security ,ECE101 T 1st Year B_Tech AIDS Section C ,Break,ECE101 1st Year B_Tech AIDS Section C ECELAB1 ,ECE101 1st Year B_Tech AIDS Section C ECELAB1 ,Lunch,CSE101 1st Year B_Tech Cyber Security ,ECE101 1st Year B_Tech AIDS Section B ECELAB1 ,Break,ECE101 1st Year B_Tech AIDS Section B ECELAB1 
+ECE101 1st Year B_Tech AIDS Section A ECELAB1 ,ECE101 1st Year B_Tech AIDS Section A ECELAB1 ,Break,ECE101 T 1st Year B_Tech AIDS Section B ,CSE101 1st Year B_Tech Cyber Security ,Lunch,,,Break,
+Proff6
+CSE102 1st Year B_Tech IoT Section B CSELAB19 CSELAB14 ,CSE102 1st Year B_Tech IoT Section B CSELAB19 CSELAB14 ,Break,CSE102 1st Year B_Tech IoT Section B CSELAB19 CSELAB14 ,,Lunch,,,Break,
+,,Break,CSE201 1st Year B_Tech Cyber Security ,,Lunch,,,Break,
+CSE102 T 1st Year B_Tech IoT Section B ,,Break,CSE101 1st Year B_Tech IoT Section B ,,Lunch,CSE102 1st Year B_Tech AIDS Section A CSELAB3 ,CSE102 1st Year B_Tech AIDS Section A CSELAB3 ,Break,CSE102 1st Year B_Tech AIDS Section A CSELAB3 
+,CSE102 T 1st Year B_Tech AIDS Section A ,Break,CSE201 1st Year B_Tech Cyber Security ,CSE101 1st Year B_Tech IoT Section B ,Lunch,,,Break,
+CSE201 1st Year B_Tech Cyber Security ,CSE101 1st Year B_Tech IoT Section B ,Break,CSE201 1st Year B_Tech Cyber Security ,,Lunch,CSE102 1st Year B_Tech AIDS Section A CSELAB12 ,CSE102 1st Year B_Tech AIDS Section A CSELAB12 ,Break,CSE102 1st Year B_Tech AIDS Section A CSELAB12 
+Proff7
+,PHY102 T 1st Year B_Tech AIDS Section B ,Break,,,Lunch,,,Break,PHY102 T 1st Year B_Tech AIDS Section A 
+,,Break,,,Lunch,,,Break,
+,PHY102 1st Year B_Tech AIDS Section B PHYLAB1 ,Break,PHY102 1st Year B_Tech AIDS Section B PHYLAB1 ,PHY102 1st Year B_Tech AIDS Section B PHYLAB1 ,Lunch,PHY102 1st Year B_Tech AIDS Section A PHYLAB1 ,PHY102 1st Year B_Tech AIDS Section A PHYLAB1 ,Break,PHY102 1st Year B_Tech AIDS Section A PHYLAB1 
+,PHY102 1st Year B_Tech AIDS Section B PHYLAB1 ,Break,PHY102 1st Year B_Tech AIDS Section B PHYLAB1 ,PHY102 1st Year B_Tech AIDS Section B PHYLAB1 ,Lunch,,,Break,
+,,Break,,,Lunch,PHY102 1st Year B_Tech AIDS Section A PHYLAB1 ,PHY102 1st Year B_Tech AIDS Section A PHYLAB1 ,Break,PHY102 1st Year B_Tech AIDS Section A PHYLAB1 
+Proff8
+,,Break,,MTH101 1st Year B_Tech AIDS Section B ,Lunch,,,Break,
+,,Break,,MTH101 1st Year B_Tech IoT Section B ,Lunch,,,Break,
+,,Break,,MTH101 1st Year B_Tech AIDS Section C ,Lunch,,,Break,
+MTH101 1st Year B_Tech IoT Section B ,,Break,MTH101 1st Year B_Tech IoT Section B ,,Lunch,MTH101 1st Year B_Tech AIDS Section C ,,Break,
+MTH101 1st Year B_Tech AIDS Section C ,MTH101 1st Year B_Tech AIDS Section C ,Break,,MTH101 1st Year B_Tech AIDS Section B ,Lunch,MTH101 1st Year B_Tech AIDS Section B ,MTH101 1st Year B_Tech AIDS Section B ,Break,
+Proff9
+CSE102 1st Year B_Tech AIDS Section C CSELAB11 ,CSE102 1st Year B_Tech AIDS Section C CSELAB11 ,Break,CSE102 1st Year B_Tech AIDS Section C CSELAB11 ,,Lunch,CSE101 1st Year B_Tech AIDS Section B ,,Break,PHY103 1st Year B_Tech IoT Section A 
+CSE101 1st Year B_Tech AIDS Section C ,CSE102 1st Year B_Tech AIDS Section C CSELAB17 ,Break,CSE102 1st Year B_Tech AIDS Section C CSELAB17 ,CSE102 1st Year B_Tech AIDS Section C CSELAB17 ,Lunch,,,Break,
+CSE101 1st Year B_Tech AIDS Section B ,CSE102 1st Year B_Tech AIDS Section B CSELAB19 ,Break,CSE102 1st Year B_Tech AIDS Section B CSELAB19 ,CSE102 1st Year B_Tech AIDS Section B CSELAB19 ,Lunch,PHY103 1st Year B_Tech IoT Section A ,,Break,
+CSE101 1st Year B_Tech AIDS Section B ,CSE102 1st Year B_Tech AIDS Section B CSELAB8 ,Break,CSE102 1st Year B_Tech AIDS Section B CSELAB8 ,CSE102 1st Year B_Tech AIDS Section B CSELAB8 ,Lunch,PHY103 1st Year B_Tech IoT Section B ,,Break,PHY103 1st Year B_Tech IoT Section A 
+,CSE102 T 1st Year B_Tech AIDS Section B ,Break,PHY103 1st Year B_Tech IoT Section B ,PHY103 1st Year B_Tech IoT Section B ,Lunch,CSE101 1st Year B_Tech AIDS Section C ,CSE102 T 1st Year B_Tech AIDS Section C ,Break,CSE101 1st Year B_Tech AIDS Section C 
+Proff10
+,,Break,,ENG101 1st Year B_Tech AIDS Section C ,Lunch,,,Break,
+,ENG101 1st Year B_Tech IoT Section A ,Break,,,Lunch,,,Break,ENG101 1st Year B_Tech IoT Section B 
+ENG101 1st Year B_Tech AIDS Section C ,ENG101 1st Year B_Tech IoT Section A ,Break,,,Lunch,,,Break,
+,,Break,,,Lunch,,,Break,
+ENG101 1st Year B_Tech IoT Section A ,,Break,ENG101 1st Year B_Tech AIDS Section C ,,Lunch,,ENG101 1st Year B_Tech IoT Section B ,Break,ENG101 1st Year B_Tech IoT Section B 
+Proff11
+,,Break,,,Lunch,,,Break,
+,,Break,,MTH101 1st Year B_Tech IoT Section A ,Lunch,,,Break,MTH101 1st Year B_Tech IoT Section A 
+MTH101 1st Year B_Tech IoT Section A ,,Break,,,Lunch,,,Break,
+,,Break,,,Lunch,,,Break,
+,,Break,,,Lunch,,,Break,
+Proff12
+ECE101 T 1st Year B_Tech Cyber Security ,,Break,ECE101 T 1st Year B_Tech Cyber Security ,,Lunch,,,Break,
+ECE101 1st Year B_Tech Cyber Security ECELAB1 ,ECE101 1st Year B_Tech Cyber Security ECELAB1 ,Break,,,Lunch,CSE102 T 1st Year B_Tech IoT Section A ,,Break,
+,,Break,,,Lunch,,,Break,
+,CSE101 1st Year B_Tech IoT Section A ,Break,,CSE101 1st Year B_Tech IoT Section A ,Lunch,,,Break,
+,,Break,CSE101 1st Year B_Tech IoT Section A ,,Lunch,CSE102 1st Year B_Tech IoT Section A CSELAB5 CSELAB8 ,CSE102 1st Year B_Tech IoT Section A CSELAB5 CSELAB8 ,Break,CSE102 1st Year B_Tech IoT Section A CSELAB5 CSELAB8 
+Proff13
+ECE104 1st Year B_Tech IoT Section A ECELAB1 ,ECE104 1st Year B_Tech IoT Section A ECELAB1 ,Break,ECE104 1st Year B_Tech IoT Section A ECELAB1 ,,Lunch,ECE104 1st Year B_Tech IoT Section B ECELAB1 ,ECE104 1st Year B_Tech IoT Section B ECELAB1 ,Break,ECE104 1st Year B_Tech IoT Section B ECELAB1 
+ECE104 T 1st Year B_Tech IoT Section B ,,Break,ECE104 T 1st Year B_Tech IoT Section A ,,Lunch,,,Break,
+,,Break,,ECE103 1st Year B_Tech IoT Section B ,Lunch,ECE103 1st Year B_Tech IoT Section B ,,Break,ECE103 1st Year B_Tech IoT Section A 
+ECE103 1st Year B_Tech IoT Section A ,,Break,,,Lunch,ECE103 1st Year B_Tech IoT Section A ,,Break,
+ECE103 1st Year B_Tech IoT Section B ,,Break,,,Lunch,,,Break,
+Proff14
+PHY102 1st Year B_Tech AIDS Section C PHYLAB1 ,PHY102 1st Year B_Tech AIDS Section C PHYLAB1 ,Break,PHY102 1st Year B_Tech AIDS Section C PHYLAB1 ,PHY102 T 1st Year B_Tech Cyber Security ,Lunch,PHY102 1st Year B_Tech Cyber Security PHYLAB1 ,PHY102 1st Year B_Tech Cyber Security PHYLAB1 ,Break,PHY102 1st Year B_Tech Cyber Security PHYLAB1 
+,PHY102 1st Year B_Tech AIDS Section C PHYLAB1 ,Break,PHY102 1st Year B_Tech AIDS Section C PHYLAB1 ,PHY102 1st Year B_Tech AIDS Section C PHYLAB1 ,Lunch,PHY102 1st Year B_Tech Cyber Security PHYLAB1 ,PHY102 1st Year B_Tech Cyber Security PHYLAB1 ,Break,PHY102 1st Year B_Tech Cyber Security PHYLAB1 
+PHY101 1st Year B_Tech Cyber Security ,PHY101 1st Year B_Tech Cyber Security ,Break,PHY102 T 1st Year B_Tech AIDS Section C ,,Lunch,,,Break,
+PHY101 1st Year B_Tech AIDS Section C ,,Break,,PHY101 1st Year B_Tech Cyber Security ,Lunch,,PHY101 1st Year B_Tech AIDS Section C ,Break,PHY101 1st Year B_Tech AIDS Section C 
+,,Break,,,Lunch,,,Break,
+Proff15
+,,,Break,MTH201 2nd Year B_Tech IoT Section B ,,Lunch,MTH201 2nd Year B_Tech IoT Section B ,Break,
+,,,Break,,,Lunch,MTH201 2nd Year B_Tech IoT Section B ,Break,
+,,,Break,,MTH201 2nd Year B_Tech AIDS Section A ,Lunch,,Break,
+,,,Break,,,Lunch,,Break,
+MTH201 2nd Year B_Tech IoT Section B ,,MTH201 2nd Year B_Tech AIDS Section A ,Break,,,Lunch,MTH201 2nd Year B_Tech AIDS Section A ,Break,MTH201 2nd Year B_Tech AIDS Section A 
+Proff16
+CSE202 2nd Year B_Tech AIDS Section B ,CSE202 2nd Year B_Tech AIDS Section C ,,Break,CSE206 T 2nd Year B_Tech AIDS Section A ,,Lunch,CSE202 2nd Year B_Tech AIDS Section B ,Break,
+CSE206 2nd Year B_Tech AIDS Section C CSELAB10 CSELAB19 ,CSE206 2nd Year B_Tech AIDS Section C CSELAB10 CSELAB19 ,CSE206 2nd Year B_Tech AIDS Section C CSELAB10 CSELAB19 ,Break,CSE202 2nd Year B_Tech AIDS Section B ,,Lunch,CSE202 2nd Year B_Tech AIDS Section A ,Break,
+,CSE206 T 2nd Year B_Tech AIDS Section B ,CSE206 2nd Year B_Tech AIDS Section B CSELAB15 CSELAB6 ,Break,CSE206 2nd Year B_Tech AIDS Section B CSELAB15 CSELAB6 ,CSE206 2nd Year B_Tech AIDS Section B CSELAB15 CSELAB6 ,Lunch,,Break,
+CSE206 2nd Year B_Tech AIDS Section A CSELAB1 CSELAB9 ,CSE206 2nd Year B_Tech AIDS Section A CSELAB1 CSELAB9 ,CSE206 2nd Year B_Tech AIDS Section A CSELAB1 CSELAB9 ,Break,,,Lunch,,Break,
+CSE206 T 2nd Year B_Tech AIDS Section C ,CSE202 2nd Year B_Tech AIDS Section C ,,Break,CSE202 2nd Year B_Tech AIDS Section A ,CSE202 2nd Year B_Tech AIDS Section A ,Lunch,CSE202 2nd Year B_Tech AIDS Section C ,Break,
+Proff17
+,,,Break,,CSE204 2nd Year B_Tech AIDS Section A ,Lunch,,Break,
+,,,Break,,CSE204 2nd Year B_Tech AIDS Section B ,Lunch,,Break,
+CSE204 2nd Year B_Tech AIDS Section C ,,,Break,CSE204 2nd Year B_Tech AIDS Section C ,,Lunch,,Break,
+,,,Break,,CSE204 2nd Year B_Tech AIDS Section B ,Lunch,CSE204 2nd Year B_Tech AIDS Section B ,Break,CSE204 2nd Year B_Tech AIDS Section A 
+,CSE204 2nd Year B_Tech AIDS Section A ,,Break,CSE204 2nd Year B_Tech AIDS Section C ,,Lunch,,Break,
+Proff18
+,CSE207 2nd Year B_Tech AIDS Section B CSELAB3 CSELAB9 ,CSE207 2nd Year B_Tech AIDS Section B CSELAB3 CSELAB9 ,Break,CSE207 2nd Year B_Tech AIDS Section B CSELAB3 CSELAB9 ,,Lunch,,Break,
+,,,Break,,,Lunch,,Break,CSE205 2nd Year B_Tech AIDS Section A 
+CSE207 2nd Year B_Tech AIDS Section A CSELAB11 CSELAB9 ,CSE207 2nd Year B_Tech AIDS Section A CSELAB11 CSELAB9 ,CSE207 2nd Year B_Tech AIDS Section A CSELAB11 CSELAB9 ,Break,,,Lunch,,Break,CSE205 2nd Year B_Tech AIDS Section B 
+,CSE205 2nd Year B_Tech AIDS Section C ,CSE207 2nd Year B_Tech AIDS Section C CSELAB10 CSELAB11 ,Break,CSE207 2nd Year B_Tech AIDS Section C CSELAB10 CSELAB11 ,CSE207 2nd Year B_Tech AIDS Section C CSELAB10 CSELAB11 ,Lunch,CSE207 T 2nd Year B_Tech AIDS Section A ,Break,CSE205 2nd Year B_Tech AIDS Section B 
+CSE205 2nd Year B_Tech AIDS Section A ,CSE207 T 2nd Year B_Tech AIDS Section B ,CSE207 T 2nd Year B_Tech AIDS Section C ,Break,,CSE205 2nd Year B_Tech AIDS Section C ,Lunch,,Break,
+Proff19
+PSY201 2nd Year B_Tech AIDS Section C ,,,Break,PSY201 2nd Year B_Tech AIDS Section C ,,Lunch,,Break,PSY201 2nd Year B_Tech AIDS Section A 
+,,,Break,,,Lunch,PSY201 2nd Year B_Tech Cyber Security ,Break,
+PSY201 2nd Year B_Tech AIDS Section B ,,,Break,,,Lunch,,Break,
+PSY201 2nd Year B_Tech AIDS Section B ,,,Break,PSY201 2nd Year B_Tech AIDS Section A ,,Lunch,,Break,
+PSY201 2nd Year B_Tech Cyber Security ,,,Break,,,Lunch,,Break,
+Proff20
+MTH201 2nd Year B_Tech IoT Section A ,,,Break,,MTH201 2nd Year B_Tech AIDS Section C ,Lunch,,Break,MTH201 2nd Year B_Tech IoT Section A 
+MTH201 2nd Year B_Tech AIDS Section B ,,,Break,MTH201 2nd Year B_Tech AIDS Section C ,,Lunch,,Break,
+,,,Break,MTH201 2nd Year B_Tech IoT Section A ,,Lunch,MTH201 2nd Year B_Tech AIDS Section C ,Break,MTH201 2nd Year B_Tech AIDS Section C 
+,,MTH201 2nd Year B_Tech IoT Section A ,Break,,,Lunch,,Break,
+,,,Break,MTH201 2nd Year B_Tech AIDS Section B ,MTH201 2nd Year B_Tech AIDS Section B ,Lunch,MTH201 2nd Year B_Tech AIDS Section B ,Break,
+Proff21
+,,,Break,,CSE211 2nd Year B_Tech IoT Section B ,Lunch,CSE211 2nd Year B_Tech IoT Section A ,Break,CSE206 T 2nd Year B_Tech IoT Section B 
+,,CSE206 2nd Year B_Tech IoT Section A CSELAB12 CSELAB15 ,Break,CSE206 2nd Year B_Tech IoT Section A CSELAB12 CSELAB15 ,CSE206 2nd Year B_Tech IoT Section A CSELAB12 CSELAB15 ,Lunch,,Break,
+,,,Break,,,Lunch,CSE211 2nd Year B_Tech IoT Section B ,Break,CSE211 2nd Year B_Tech IoT Section B 
+CSE206 T 2nd Year B_Tech IoT Section A ,,,Break,CSE211 2nd Year B_Tech IoT Section A ,,Lunch,,Break,
+,,CSE206 2nd Year B_Tech IoT Section B CSELAB12 CSELAB17 ,Break,CSE206 2nd Year B_Tech IoT Section B CSELAB12 CSELAB17 ,CSE206 2nd Year B_Tech IoT Section B CSELAB12 CSELAB17 ,Lunch,CSE211 2nd Year B_Tech IoT Section A ,Break,
+Proff22
+,CSE206 2nd Year B_Tech Cyber Security CSELAB4 CSELAB18 ,CSE206 2nd Year B_Tech Cyber Security CSELAB4 CSELAB18 ,Break,CSE206 2nd Year B_Tech Cyber Security CSELAB4 CSELAB18 ,,Lunch,,Break,
+,,,Break,CSE202 2nd Year B_Tech Cyber Security ,,Lunch,,Break,
+,CSE202 2nd Year B_Tech IoT Section B ,CSE202 2nd Year B_Tech IoT Section B ,Break,,CSE206 T 2nd Year B_Tech Cyber Security ,Lunch,,Break,
+CSE202 2nd Year B_Tech IoT Section B ,,,Break,,CSE202 2nd Year B_Tech IoT Section A ,Lunch,CSE202 2nd Year B_Tech Cyber Security ,Break,
+CSE202 2nd Year B_Tech IoT Section A ,CSE202 2nd Year B_Tech IoT Section A ,,Break,,CSE202 2nd Year B_Tech Cyber Security ,Lunch,,Break,
+Proff23
+,,CSE210 T 2nd Year B_Tech IoT Section A ,Break,,,Lunch,,Break,
+,CSE210 2nd Year B_Tech IoT Section B CSELAB4 CSELAB13 ,CSE210 2nd Year B_Tech IoT Section B CSELAB4 CSELAB13 ,Break,CSE210 2nd Year B_Tech IoT Section B CSELAB4 CSELAB13 ,,Lunch,,Break,
+CSE210 2nd Year B_Tech IoT Section A CSELAB18 CSELAB8 ,CSE210 2nd Year B_Tech IoT Section A CSELAB18 CSELAB8 ,CSE210 2nd Year B_Tech IoT Section A CSELAB18 CSELAB8 ,Break,,,Lunch,,Break,
+,,,Break,,CSE208 2nd Year B_Tech IoT Section B ,Lunch,CSE210 T 2nd Year B_Tech IoT Section B ,Break,
+,CSE208 2nd Year B_Tech IoT Section B ,,Break,CSE208 2nd Year B_Tech IoT Section A ,CSE208 2nd Year B_Tech IoT Section A ,Lunch,CSE208 2nd Year B_Tech IoT Section B ,Break,CSE208 2nd Year B_Tech IoT Section A 
+Proff24
+,,,Break,,,Lunch,,Break,
+,,,Break,,,Lunch,CSE212 2nd Year B_Tech IoT Section A ,Break,CSE212 2nd Year B_Tech IoT Section B 
+,,,Break,,,Lunch,,Break,CSE212 2nd Year B_Tech IoT Section A 
+,,,Break,CSE212 2nd Year B_Tech IoT Section B ,,Lunch,,Break,CSE212 2nd Year B_Tech IoT Section B 
+,,CSE212 2nd Year B_Tech IoT Section A ,Break,,,Lunch,,Break,
+Proff25
+,,,Break,,,Lunch,,Break,
+,,,Break,,,Lunch,,Break,MTH201 2nd Year B_Tech Cyber Security 
+,,,Break,,,Lunch,,Break,MTH201 2nd Year B_Tech Cyber Security 
+,MTH201 2nd Year B_Tech Cyber Security ,,Break,,,Lunch,,Break,
+,,,Break,,,Lunch,,Break,
+Proff26
+,,,Break,,,Lunch,,Break,
+,,,Break,,CSE203 T 2nd Year B_Tech Cyber Security ,Lunch,,Break,
+,,,Break,,,Lunch,CSE203 T 2nd Year B_Tech Cyber Security ,Break,
+,,,Break,CSE203 2nd Year B_Tech Cyber Security CSELAB14 CSELAB9 ,CSE203 2nd Year B_Tech Cyber Security CSELAB14 CSELAB9 ,Lunch,,Break,
+,,,Break,,,Lunch,CSE203 T 2nd Year B_Tech Cyber Security ,Break,
+Proff27
+CSE210 T 2nd Year B_Tech Cyber Security ,,,Break,,CSE208 2nd Year B_Tech Cyber Security ,Lunch,,Break,CSE208 2nd Year B_Tech Cyber Security 
+,,,Break,,,Lunch,,Break,
+,,CSE208 2nd Year B_Tech Cyber Security ,Break,,,Lunch,,Break,
+,,,Break,,,Lunch,,Break,
+,CSE210 2nd Year B_Tech Cyber Security CSELAB16 CSELAB6 ,CSE210 2nd Year B_Tech Cyber Security CSELAB16 CSELAB6 ,Break,CSE210 2nd Year B_Tech Cyber Security CSELAB16 CSELAB6 ,,Lunch,,Break,
+Proff28
+,,,Break,,,Lunch,,Break,
+,,,Break,,,Lunch,,Break,
+,CSE209 2nd Year B_Tech Cyber Security ,,Break,CSE209 2nd Year B_Tech Cyber Security ,,Lunch,,Break,
+,,,Break,,,Lunch,,Break,
+,,,Break,,,Lunch,,Break,
+Proff29
+,MTH301 3rd Year B_Tech IoT Section A ,Break,,MTH301 3rd Year B_Tech AIDS Section B ,,Lunch,,Break,
+MTH301 3rd Year B_Tech IoT Section B ,,Break,,,MTH301 3rd Year B_Tech AIDS Section B ,Lunch,MTH301 3rd Year B_Tech AIDS Section B ,Break,MTH301 3rd Year B_Tech AIDS Section A 
+,,Break,,,MTH301 3rd Year B_Tech AIDS Section A ,Lunch,,Break,MTH301 3rd Year B_Tech IoT Section A 
+,,Break,,,MTH301 3rd Year B_Tech IoT Section B ,Lunch,,Break,MTH301 3rd Year B_Tech AIDS Section B 
+MTH301 3rd Year B_Tech IoT Section A ,,MTH301 3rd Year B_Tech AIDS Section A ,Break,MTH301 3rd Year B_Tech AIDS Section A ,MTH301 3rd Year B_Tech IoT Section A ,Lunch,MTH301 3rd Year B_Tech IoT Section B ,Break,MTH301 3rd Year B_Tech IoT Section B 
+Proff30
+,,CSE301 3rd Year B_Tech AIDS Section B ,Break,,,Lunch,CSE301 3rd Year B_Tech AIDS Section B ,Break,CSE301 3rd Year B_Tech AIDS Section B 
+CSE301 3rd Year B_Tech AIDS Section A ,,CSE306 3rd Year B_Tech AIDS Section A CSELAB11 CSELAB14 ,Break,CSE306 3rd Year B_Tech AIDS Section A CSELAB11 CSELAB14 ,CSE306 3rd Year B_Tech AIDS Section A CSELAB11 CSELAB14 ,Lunch,,Break,CSE306 T 3rd Year B_Tech AIDS Section B 
+,,Break,,,,Lunch,CSE301 3rd Year B_Tech AIDS Section A ,Break,
+,,Break,,CSE301 3rd Year B_Tech AIDS Section A ,,Lunch,CSE306 T 3rd Year B_Tech AIDS Section A ,Break,
+CSE306 3rd Year B_Tech AIDS Section B CSELAB18 CSELAB5 ,CSE306 3rd Year B_Tech AIDS Section B CSELAB18 CSELAB5 ,CSE306 3rd Year B_Tech AIDS Section B CSELAB18 CSELAB5 ,Break,,,Lunch,,Break,
+Proff31
+,CSE302 T 3rd Year B_Tech AIDS Section B ,Break,,,,Lunch,CSE302 3rd Year B_Tech AIDS Section A CSELAB1 CSELAB18 ,Break,CSE302 3rd Year B_Tech AIDS Section A CSELAB1 CSELAB18 
+,,Break,,,,Lunch,,Break,
+CSE302 3rd Year B_Tech AIDS Section B CSELAB14 CSELAB13 ,CSE302 3rd Year B_Tech AIDS Section B CSELAB14 CSELAB13 ,Break,,CSE302 T 3rd Year B_Tech AIDS Section A ,,Lunch,CSE302 T 3rd Year B_Tech AIDS Section B ,Break,CSE302 T 3rd Year B_Tech AIDS Section A 
+CSE302 T 3rd Year B_Tech AIDS Section A ,,Break,,,,Lunch,,Break,
+,,Break,,CSE302 T 3rd Year B_Tech AIDS Section B ,,Lunch,,Break,
+Proff32
+CSE303 3rd Year B_Tech AIDS Section B ,,Break,,,CSE303 3rd Year B_Tech AIDS Section B ,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,CSE303 3rd Year B_Tech AIDS Section B 
+,,CSE303 3rd Year B_Tech AIDS Section A ,Break,,,Lunch,,Break,
+,,Break,,,,Lunch,CSE303 3rd Year B_Tech AIDS Section A ,Break,CSE303 3rd Year B_Tech AIDS Section A 
+Proff33
+,,CSE307 3rd Year B_Tech AIDS Section A CSELAB12 CSELAB15 ,Break,CSE307 3rd Year B_Tech AIDS Section A CSELAB12 CSELAB15 ,CSE307 3rd Year B_Tech AIDS Section A CSELAB12 CSELAB15 ,Lunch,,Break,
+CSE307 3rd Year B_Tech AIDS Section B CSELAB9 CSELAB3 ,CSE307 3rd Year B_Tech AIDS Section B CSELAB9 CSELAB3 ,CSE307 3rd Year B_Tech AIDS Section B CSELAB9 CSELAB3 ,Break,,,Lunch,,Break,
+CSE304 3rd Year B_Tech AIDS Section A ,,CSE307 T 3rd Year B_Tech AIDS Section A ,Break,,CSE304 3rd Year B_Tech AIDS Section B ,Lunch,,Break,
+,,CSE304 3rd Year B_Tech AIDS Section B ,Break,CSE307 T 3rd Year B_Tech AIDS Section B ,,Lunch,,Break,
+CSE304 3rd Year B_Tech AIDS Section A ,,Break,,,,Lunch,,Break,
+Proff34
+,,Break,,,,Lunch,,Break,PSY301 3rd Year B_Tech Cyber Security 
+,,Break,,PSY301 3rd Year B_Tech AIDS Section B ,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+PSY301 3rd Year B_Tech AIDS Section B ,PSY301 3rd Year B_Tech AIDS Section A ,Break,,PSY301 3rd Year B_Tech Cyber Security ,,Lunch,,Break,PSY301 3rd Year B_Tech AIDS Section A 
+,,Break,,,,Lunch,,Break,
+Proff35
+,,CSE306 3rd Year B_Tech IoT Section A CSELAB10 CSELAB17 ,Break,CSE306 3rd Year B_Tech IoT Section A CSELAB10 CSELAB17 ,CSE306 3rd Year B_Tech IoT Section A CSELAB10 CSELAB17 ,Lunch,,Break,
+,,CSE306 T 3rd Year B_Tech IoT Section B ,Break,,,Lunch,,Break,CSE311 3rd Year B_Tech IoT Section B 
+,,CSE311 3rd Year B_Tech IoT Section B ,Break,,CSE306 T 3rd Year B_Tech IoT Section A ,Lunch,CSE311 3rd Year B_Tech IoT Section B ,Break,
+CSE311 3rd Year B_Tech IoT Section A ,,Break,,,,Lunch,,Break,
+,CSE311 3rd Year B_Tech IoT Section A ,CSE306 3rd Year B_Tech IoT Section B CSELAB14 CSELAB10 ,Break,CSE306 3rd Year B_Tech IoT Section B CSELAB14 CSELAB10 ,CSE306 3rd Year B_Tech IoT Section B CSELAB14 CSELAB10 ,Lunch,CSE311 3rd Year B_Tech IoT Section A ,Break,
+Proff36
+CSE312 3rd Year B_Tech IoT Section B ,,Break,,,,Lunch,CSE312 3rd Year B_Tech Cyber Security ,Break,
+CSE306 3rd Year B_Tech Cyber Security CSELAB1 CSELAB7 ,CSE306 3rd Year B_Tech Cyber Security CSELAB1 CSELAB7 ,CSE306 3rd Year B_Tech Cyber Security CSELAB1 CSELAB7 ,Break,CSE312 3rd Year B_Tech IoT Section A ,CSE312 3rd Year B_Tech IoT Section A ,Lunch,,Break,CSE312 3rd Year B_Tech IoT Section A 
+,,Break,,,,Lunch,,Break,
+CSE312 3rd Year B_Tech IoT Section B ,CSE306 T 3rd Year B_Tech Cyber Security ,CSE312 3rd Year B_Tech IoT Section B ,Break,,,Lunch,,Break,CSE312 3rd Year B_Tech Cyber Security 
+,CSE312 3rd Year B_Tech Cyber Security ,Break,,,,Lunch,,Break,
+Proff37
+CSE310 T 3rd Year B_Tech IoT Section A ,,CSE310 3rd Year B_Tech IoT Section B CSELAB1 CSELAB13 ,Break,CSE310 3rd Year B_Tech IoT Section B CSELAB1 CSELAB13 ,CSE310 3rd Year B_Tech IoT Section B CSELAB1 CSELAB13 ,Lunch,,Break,
+,CSE310 T 3rd Year B_Tech IoT Section B ,Break,,,,Lunch,,Break,
+,,Break,,CSE308 3rd Year B_Tech IoT Section B ,,Lunch,CSE308 3rd Year B_Tech IoT Section A ,Break,
+,CSE310 3rd Year B_Tech IoT Section A CSELAB16 CSELAB5 ,CSE310 3rd Year B_Tech IoT Section A CSELAB16 CSELAB5 ,Break,CSE310 3rd Year B_Tech IoT Section A CSELAB16 CSELAB5 ,,Lunch,,Break,CSE308 3rd Year B_Tech IoT Section B 
+CSE308 3rd Year B_Tech IoT Section B ,,CSE308 3rd Year B_Tech IoT Section A ,Break,CSE308 3rd Year B_Tech IoT Section A ,,Lunch,,Break,
+Proff38
+,,Break,,,,Lunch,CSE313 3rd Year B_Tech IoT Section A ,Break,
+,,Break,,,,Lunch,CSE313 3rd Year B_Tech IoT Section A ,Break,
+,,CSE313 3rd Year B_Tech IoT Section A ,Break,,CSE313 3rd Year B_Tech IoT Section B ,Lunch,,Break,
+,,Break,,CSE313 3rd Year B_Tech IoT Section B ,,Lunch,CSE313 3rd Year B_Tech IoT Section B ,Break,
+,,Break,,,,Lunch,,Break,
+Proff39
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,MTH301 3rd Year B_Tech Cyber Security ,Break,
+,,Break,,,,Lunch,MTH301 3rd Year B_Tech Cyber Security ,Break,MTH301 3rd Year B_Tech Cyber Security 
+Proff40
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,CSE308 3rd Year B_Tech Cyber Security ,Break,CSE308 3rd Year B_Tech Cyber Security 
+CSE310 3rd Year B_Tech Cyber Security CSELAB16 CSELAB1 ,CSE310 3rd Year B_Tech Cyber Security CSELAB16 CSELAB1 ,CSE310 3rd Year B_Tech Cyber Security CSELAB16 CSELAB1 ,Break,,,Lunch,,Break,
+CSE308 3rd Year B_Tech Cyber Security ,,Break,,,,Lunch,,Break,
+,,Break,,,CSE310 T 3rd Year B_Tech Cyber Security ,Lunch,,Break,
+Proff41
+,,Break,,CSE303 3rd Year B_Tech Cyber Security CSELAB16 CSELAB6 ,CSE303 3rd Year B_Tech Cyber Security CSELAB16 CSELAB6 ,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,CSE303 T 3rd Year B_Tech Cyber Security ,Break,
+,,Break,,,,Lunch,,Break,
+,,CSE303 T 3rd Year B_Tech Cyber Security ,Break,CSE303 T 3rd Year B_Tech Cyber Security ,,Lunch,,Break,
+Proff42
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,CSE309 3rd Year B_Tech Cyber Security ,Lunch,,Break,
+CSE309 3rd Year B_Tech Cyber Security ,,Break,,,,Lunch,,Break,
+Proff43
+,,Break,,MTH401 4th Year B_Tech IoT Section B ,MTH401 4th Year B_Tech IoT Section B ,Lunch,,Break,
+,,Break,,MTH401 4th Year B_Tech IoT Section A ,,Lunch,,Break,MTH401 4th Year B_Tech IoT Section A 
+,MTH401 4th Year B_Tech IoT Section B ,Break,,,MTH401 4th Year B_Tech IoT Section A ,Lunch,,Break,
+,MTH401 4th Year B_Tech IoT Section A ,Break,,,MTH401 4th Year B_Tech AIDS Section B ,Lunch,MTH401 4th Year B_Tech IoT Section B ,Break,MTH401 4th Year B_Tech AIDS Section A 
+MTH401 4th Year B_Tech AIDS Section A ,MTH401 4th Year B_Tech AIDS Section A ,MTH401 4th Year B_Tech AIDS Section B ,Break,,MTH401 4th Year B_Tech AIDS Section B ,Lunch,MTH401 4th Year B_Tech AIDS Section A ,Break,MTH401 4th Year B_Tech AIDS Section B 
+Proff44
+,,Break,,,,Lunch,,Break,CSE401 4th Year B_Tech AIDS Section B 
+,,CSE406 4th Year B_Tech AIDS Section A CSELAB18 CSELAB5 ,Break,CSE406 4th Year B_Tech AIDS Section A CSELAB18 CSELAB5 ,CSE406 4th Year B_Tech AIDS Section A CSELAB18 CSELAB5 ,Lunch,CSE401 4th Year B_Tech AIDS Section B ,Break,CSE401 4th Year B_Tech AIDS Section B 
+CSE406 4th Year B_Tech AIDS Section B CSELAB3 CSELAB7 ,CSE406 4th Year B_Tech AIDS Section B CSELAB3 CSELAB7 ,CSE406 4th Year B_Tech AIDS Section B CSELAB3 CSELAB7 ,Break,CSE401 4th Year B_Tech AIDS Section A ,,Lunch,CSE401 4th Year B_Tech AIDS Section A ,Break,
+,CSE406 T 4th Year B_Tech AIDS Section B ,Break,,,,Lunch,CSE401 4th Year B_Tech AIDS Section A ,Break,
+,,Break,,,,Lunch,,Break,CSE406 T 4th Year B_Tech AIDS Section A 
+Proff45
+,,Break,,CSE402 4th Year B_Tech AIDS Section A CSELAB19 CSELAB11 ,CSE402 4th Year B_Tech AIDS Section A CSELAB19 CSELAB11 ,Lunch,,Break,
+CSE402 4th Year B_Tech AIDS Section B CSELAB12 CSELAB15 ,CSE402 4th Year B_Tech AIDS Section B CSELAB12 CSELAB15 ,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,CSE402 T 4th Year B_Tech AIDS Section B 
+CSE402 T 4th Year B_Tech AIDS Section B ,CSE402 T 4th Year B_Tech AIDS Section B ,CSE402 T 4th Year B_Tech AIDS Section A ,Break,CSE402 T 4th Year B_Tech AIDS Section A ,CSE402 T 4th Year B_Tech AIDS Section A ,Lunch,,Break,
+Proff46
+,,Break,,,,Lunch,CSE403 4th Year B_Tech AIDS Section A ,Break,CSE403 4th Year B_Tech AIDS Section A 
+,,Break,,,CSE403 4th Year B_Tech AIDS Section B ,Lunch,,Break,
+,CSE403 4th Year B_Tech AIDS Section A ,Break,,,CSE403 4th Year B_Tech AIDS Section B ,Lunch,,Break,
+,,CSE403 4th Year B_Tech AIDS Section B ,Break,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+Proff47
+,CSE407 4th Year B_Tech AIDS Section B CSELAB7 CSELAB8 ,CSE407 4th Year B_Tech AIDS Section B CSELAB7 CSELAB8 ,Break,CSE407 4th Year B_Tech AIDS Section B CSELAB7 CSELAB8 ,,Lunch,,Break,
+,,Break,,,,Lunch,CSE404 4th Year B_Tech AIDS Section A ,Break,
+,,Break,,,CSE407 T 4th Year B_Tech AIDS Section A ,Lunch,CSE407 T 4th Year B_Tech AIDS Section B ,Break,CSE404 4th Year B_Tech AIDS Section A 
+,,CSE407 4th Year B_Tech AIDS Section A CSELAB3 CSELAB12 ,Break,CSE407 4th Year B_Tech AIDS Section A CSELAB3 CSELAB12 ,CSE407 4th Year B_Tech AIDS Section A CSELAB3 CSELAB12 ,Lunch,CSE404 4th Year B_Tech AIDS Section B ,Break,
+,,Break,,CSE404 4th Year B_Tech AIDS Section B ,,Lunch,,Break,
+Proff48
+,,Break,,,,Lunch,,Break,
+,PSY401 4th Year B_Tech AIDS Section A ,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,PSY401 4th Year B_Tech AIDS Section B 
+,PSY401 4th Year B_Tech AIDS Section A ,Break,,PSY401 4th Year B_Tech Cyber Security ,PSY401 4th Year B_Tech Cyber Security ,Lunch,,Break,
+,,Break,,,,Lunch,PSY401 4th Year B_Tech AIDS Section B ,Break,
+Proff49
+CSE406 4th Year B_Tech IoT Section B CSELAB5 CSELAB2 ,CSE406 4th Year B_Tech IoT Section B CSELAB5 CSELAB2 ,CSE406 4th Year B_Tech IoT Section B CSELAB5 CSELAB2 ,Break,CSE406 T 4th Year B_Tech IoT Section A ,,Lunch,,Break,
+,CSE411 4th Year B_Tech IoT Section B ,Break,,,,Lunch,,Break,CSE406 T 4th Year B_Tech IoT Section B 
+,,Break,,,,Lunch,,Break,
+CSE411 4th Year B_Tech IoT Section A ,,Break,,CSE411 4th Year B_Tech IoT Section A ,CSE411 4th Year B_Tech IoT Section A ,Lunch,,Break,CSE411 4th Year B_Tech IoT Section B 
+CSE406 4th Year B_Tech IoT Section A CSELAB11 CSELAB4 ,CSE406 4th Year B_Tech IoT Section A CSELAB11 CSELAB4 ,CSE406 4th Year B_Tech IoT Section A CSELAB11 CSELAB4 ,Break,CSE411 4th Year B_Tech IoT Section B ,,Lunch,,Break,
+Proff50
+,,Break,,,,Lunch,CSE412 4th Year B_Tech IoT Section A ,Break,
+,,Break,,CSE412 4th Year B_Tech Cyber Security ,CSE412 4th Year B_Tech IoT Section A ,Lunch,,Break,
+CSE412 4th Year B_Tech IoT Section B ,,CSE412 4th Year B_Tech IoT Section B ,Break,,,Lunch,CSE412 4th Year B_Tech IoT Section A ,Break,
+CSE406 4th Year B_Tech Cyber Security CSELAB2 CSELAB15 ,CSE406 4th Year B_Tech Cyber Security CSELAB2 CSELAB15 ,CSE406 4th Year B_Tech Cyber Security CSELAB2 CSELAB15 ,Break,,,Lunch,,Break,
+CSE412 4th Year B_Tech IoT Section B ,,CSE406 T 4th Year B_Tech Cyber Security ,Break,,CSE412 4th Year B_Tech Cyber Security ,Lunch,CSE412 4th Year B_Tech Cyber Security ,Break,
+Proff51
+,,Break,,,CSE408 4th Year B_Tech IoT Section A ,Lunch,,Break,CSE410 T 4th Year B_Tech IoT Section A 
+,,Break,,,CSE408 4th Year B_Tech IoT Section B ,Lunch,CSE408 4th Year B_Tech IoT Section B ,Break,
+CSE410 4th Year B_Tech IoT Section A CSELAB2 CSELAB12 ,CSE410 4th Year B_Tech IoT Section A CSELAB2 CSELAB12 ,CSE410 4th Year B_Tech IoT Section A CSELAB2 CSELAB12 ,Break,,CSE408 4th Year B_Tech IoT Section B ,Lunch,,Break,
+,CSE410 4th Year B_Tech IoT Section B CSELAB13 CSELAB19 ,CSE410 4th Year B_Tech IoT Section B CSELAB13 CSELAB19 ,Break,CSE410 4th Year B_Tech IoT Section B CSELAB13 CSELAB19 ,,Lunch,,Break,
+,CSE410 T 4th Year B_Tech IoT Section B ,Break,,,,Lunch,CSE408 4th Year B_Tech IoT Section A ,Break,CSE408 4th Year B_Tech IoT Section A 
+Proff52
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,CSE413 4th Year B_Tech IoT Section A ,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,CSE413 4th Year B_Tech IoT Section A 
+,,CSE413 4th Year B_Tech IoT Section B ,Break,CSE413 4th Year B_Tech IoT Section A ,CSE413 4th Year B_Tech IoT Section B ,Lunch,CSE413 4th Year B_Tech IoT Section B ,Break,
+Proff53
+MTH401 4th Year B_Tech Cyber Security ,,Break,,MTH401 4th Year B_Tech Cyber Security ,,Lunch,,Break,
+,,MTH401 4th Year B_Tech Cyber Security ,Break,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+Proff54
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+CSE410 4th Year B_Tech Cyber Security CSELAB5 CSELAB17 ,CSE410 4th Year B_Tech Cyber Security CSELAB5 CSELAB17 ,CSE410 4th Year B_Tech Cyber Security CSELAB5 CSELAB17 ,Break,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,CSE408 4th Year B_Tech Cyber Security 
+,CSE410 T 4th Year B_Tech Cyber Security ,Break,,CSE408 4th Year B_Tech Cyber Security ,,Lunch,,Break,CSE408 4th Year B_Tech Cyber Security 
+Proff55
+,,Break,,,,Lunch,,Break,CSE403 T 4th Year B_Tech Cyber Security 
+CSE403 4th Year B_Tech Cyber Security CSELAB2 CSELAB16 ,CSE403 4th Year B_Tech Cyber Security CSELAB2 CSELAB16 ,Break,,,,Lunch,,Break,CSE403 T 4th Year B_Tech Cyber Security 
+,,Break,,,,Lunch,CSE403 T 4th Year B_Tech Cyber Security ,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+Proff56
+,,Break,,,,Lunch,CSE409 4th Year B_Tech Cyber Security ,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,CSE409 4th Year B_Tech Cyber Security ,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+,,Break,,,,Lunch,,Break,
+self_proff
+,,Break,,,,,,Break,
+,,Break,,,,,,Break,
+,,Break,,,,,,Break,
+,,Break,,,,,,Break,
+,,Break,,,,,,Break,
+Professor Year
+Proff0,1
+Proff1,1
+Proff2,1
+Proff3,1
+Proff4,cross
+Proff5,1
+Proff6,1
+Proff7,1
+self_proff,cross
+Proff8,1
+Proff9,1
+Proff10,1
+Proff14,1
+Proff11,1
+Proff12,1
+Proff13,1
+Proff15,2
+Proff16,2
+Proff17,2
+Proff18,2
+Proff19,2
+Proff20,2
+Proff21,2
+Proff22,2
+Proff23,2
+Proff24,2
+Proff25,2
+Proff27,2
+Proff26,2
+Proff28,2
+Proff29,3
+Proff30,3
+Proff31,3
+Proff32,3
+Proff33,3
+Proff34,3
+Proff35,3
+Proff36,3
+Proff37,3
+Proff38,3
+Proff39,3
+Proff40,3
+Proff41,3
+Proff42,3
+Proff43,4
+Proff44,4
+Proff45,4
+Proff46,4
+Proff47,4
+Proff48,4
+Proff49,4
+Proff50,4
+Proff51,4
+Proff52,4
+Proff53,4
+Proff54,4
+Proff55,4
+Proff56,4

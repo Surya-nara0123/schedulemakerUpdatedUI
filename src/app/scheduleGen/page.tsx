@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
 import { X } from "lucide-react";
+import JSZip from "jszip";
 
 type timetableData = Array<Array<Array<string>>>;
 type classTimeTable = {
@@ -167,32 +168,45 @@ function format_timetables(
     }
   }
 }
-function free_labs(timetable_labs: any, course_code:string, day: number, slot1: number, slot2: number) {
+function free_labs(
+  timetable_labs: any,
+  course_code: string,
+  day: number,
+  slot1: number,
+  slot2: number
+) {
   const usable = [];
 
   for (const lab of Object.keys(timetable_labs)) {
-      if (lab.startsWith(course_code.slice(0, 2))) {
-          usable.push(lab);
-      }
+    if (lab.startsWith(course_code.slice(0, 2))) {
+      usable.push(lab);
+    }
   }
 
   const temp = [...usable];
   let possibles = [];
   temp.sort();
-  for (let i = 0; i < temp.length; i+=2) {
+  for (let i = 0; i < temp.length; i += 2) {
     let j = slot1;
     for (; j <= slot2; j++) {
       if (timetable_labs[temp[i]][day][slot1] != "") break;
-      if (timetable_labs[temp[i+1]][day][slot1] != "") break;
+      if (timetable_labs[temp[i + 1]][day][slot1] != "") break;
     }
-    if (j == slot2+1) possibles.push([temp[i], temp[i+1]])
+    if (j == slot2 + 1) possibles.push([temp[i], temp[i + 1]]);
   }
 
   return possibles;
 }
-function allocateProfessors(timetable_professors: any, proffs: any, day: number, slot1: number, slot2: number, clas:string) {
+function allocateProfessors(
+  timetable_professors: any,
+  proffs: any,
+  day: number,
+  slot1: number,
+  slot2: number,
+  clas: string
+) {
   const results: any[][] = [];
-  const numPeriods = slot2-slot1+1;
+  const numPeriods = slot2 - slot1 + 1;
   const allocation = Array(numPeriods).fill(-1);
 
   function backtrack(period: number) {
@@ -201,10 +215,18 @@ function allocateProfessors(timetable_professors: any, proffs: any, day: number,
       return;
     }
     for (let p = 0; p < numPeriods; p++) {
-      if (isFreeProfessor(timetable_professors, proffs[p], day, slot1+period, clas)) {
+      if (
+        isFreeProfessor(
+          timetable_professors,
+          proffs[p],
+          day,
+          slot1 + period,
+          clas
+        )
+      ) {
         if (allocation.includes(p)) continue;
         allocation[period] = p;
-        backtrack(period+1);
+        backtrack(period + 1);
         allocation[period] = -1;
       }
     }
@@ -232,6 +254,8 @@ export default function Page() {
   const [file1, setFile1] = useState(null);
   const [file2, setFile2] = useState(null);
   const [file3, setFile3] = useState(null);
+  const [file4, setFile4] = useState(null);
+  const [result, setResult] = useState(null);
   const [parameter, setParameter] = useState<Array<any>>([]);
   const [profData, setProfData] = useState<{ [key: string]: any[] }>({});
   const [lockedClasses, setLockedClasses] = useState<Array<String>>([]);
@@ -243,11 +267,44 @@ export default function Page() {
   const [currentSection, setCurrentSection] = useState("AIDS Section A");
   const [currentClass, setCurrentClass] = useState("2nd Year");
   const [isSwapMode, setIsSwapMode] = useState(true);
+  const [isSwapLabMode, setIsSwapLabMode] = useState(false);
   const [swapArra, setSwapArra] = useState([]);
   const [swapArrb, setSwapArrb] = useState([]);
   const [classCourses, setClassCourses] = useState<{ [key: string]: any[] }>(
     {}
   );
+
+  const handleLoadSession = async () => {
+    // check if file4 is uploaded
+    if (!(file4 && file1 && file2 && file3)) {
+      alert("Please upload the previous session timetable.");
+      return;
+    }
+    // printOutput(false);
+    console.log("file4", file4);
+
+    // read the json file (file4)
+    // assign classCourses,proffToShort,proffsToYear,timetableLabs,timetableData,timetableClasses,profData,timetableProfessors
+    const reader = new FileReader();
+
+    reader.onload = async (e: any) => {
+      const text = e.target.result;
+      const data = JSON.parse(text);
+      console.log(data);
+
+      setClassCourses(data.classCourses);
+      setProffShorts(data.proffToShort);
+      setProffsYear(data.proffsToYear);
+      setTimetableLabs(data.timetableLabs);
+      setTimetableData(data.timetableData);
+      setTimetableClasses(data.timetableClasses);
+      setProfData(data.profData);
+      setTimetableProfessors(data.timetableProfessors);
+    };
+
+    reader.readAsText(file4);
+  };
+
   const handleFileChange = (e: any, setFile: Function) => {
     setFile(e.target.files[0]);
   };
@@ -459,6 +516,7 @@ export default function Page() {
       );
       return;
     }
+    setResult(tables);
     setTimetableProfessors(JSON.parse(JSON.stringify(tables[1])));
     console.log(timetableProfessors);
     setTimetableClasses(JSON.parse(JSON.stringify(tables[0])));
@@ -550,12 +608,19 @@ export default function Page() {
   };
 
   const genPDFall = async () => {
-    function jsonToCsv(jsonObj: { [x: string]: any }) {
+    function jsonToCsv(
+      jsonObj: { [x: string]: any },
+      josnObj1: { [x: string]: any }
+      // result: { [x: string]: any }[]
+    ) {
       // Extract headers
       const headers = Object.keys(jsonObj[Object.keys(jsonObj)[0]][0]);
+      const headers1 = Object.keys(jsonObj[Object.keys(jsonObj)[0]][0]);
 
       // Create a CSV string
       let csv = headers.join(",") + "\n";
+      // console.log(josnObj1)
+      // console.log(jsonObj)
 
       // Iterate over each section
       for (const section in jsonObj) {
@@ -576,26 +641,75 @@ export default function Page() {
           }
         );
       }
+
+      csv = csv + headers1.join(",") + "\n";
+      for (const section in josnObj1) {
+        csv += section + "\n";
+        josnObj1[section].forEach(
+          (row: ArrayLike<unknown> | { [s: string]: unknown }) => {
+            csv +=
+              Object.values(row)
+                .map((value) => {
+                  // Escape commas and quotes
+                  if (typeof value === "string") {
+                    const value1 = value.replace(/"/g, '""');
+                    if (value1.search(/("|,|\n)/g) >= 0) value = `"${value1}"`;
+                  }
+                  return value;
+                })
+                .join(",") + "\n";
+          }
+        );
+      }
       console.log(csv);
       return csv;
     }
 
-    function downloadCsv(csv: BlobPart, filename: string) {
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      URL.revokeObjectURL(url);
+    function downloadZip(csv: BlobPart, json: object) {
+      const zip = new JSZip();
+
+      // Add the CSV file to the ZIP
+      const csvBlob = new Blob([csv], { type: "text/csv" });
+      zip.file("timetable.csv", csvBlob);
+
+      // Add the JSON file to the ZIP
+      const jsonBlob = new Blob([JSON.stringify(json, null, 2)], {
+        type: "application/json",
+      });
+      zip.file("timetable.json", jsonBlob);
+
+      // Generate the ZIP and download
+      zip.generateAsync({ type: "blob" }).then((content: Blob) => {
+        const url = URL.createObjectURL(content);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "timetable.zip";
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(url);
+      });
     }
 
-    let csv = jsonToCsv(timetableData);
-    downloadCsv(csv, "timetable.csv");
-  };
+    // CSV data
+    const csv = jsonToCsv(timetableData, profData);
 
+    // JSON data
+    const json = {
+      classCourses,
+      proffToShort,
+      proffsToYear,
+      timetableLabs,
+      timetableData,
+      timetableClasses,
+      profData,
+      timetableProfessors,
+    };
+
+    // Download as a ZIP
+    downloadZip(csv, json);
+    // downloadCsv(csv, "timetable.csv");
+  };
   const saveTimeTable = async () => {
     console.log("timetable", timetableData);
     const data = {
@@ -633,41 +747,59 @@ export default function Page() {
     if (mode == "student") {
       const element = document.getElementById(`${index}${index1 + 1}`);
       if (isSwapMode) {
-        if (element?.className.includes("#3d4758")) {
-          // console.log(selectedElements);
-          if (
-            timetableData[currentClass + " B_Tech " + currentSection][index][
-              index1
-            ] === "Break" ||
-            timetableData[currentClass + " B_Tech " + currentSection][index][
-              index1
-            ] === "Lunch" ||
-            timetableData[currentClass + " B_Tech " + currentSection][index][
-              index1
-            ].includes("LAB")
-          ) {
-            return;
-          }
-          element.className = element.className.replace("#3d4758", "#ffffff");
-          if (selectedElements.length >= 2) {
-            for (let i = 0; i < selectedElements.length; i++) {
-              const element1 = document.getElementById(
-                `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
-              );
-              element1!.className = element1!.className.replace(
-                "#ffffff",
-                "#3d4758"
-              );
+        if (!isSwapLabMode) {
+          if (element?.className.includes("#3d4758")) {
+            // console.log(selectedElements);
+            if (
+              timetableData[currentClass + " B_Tech " + currentSection][index][
+                index1
+              ] === "Break" ||
+              timetableData[currentClass + " B_Tech " + currentSection][index][
+                index1
+              ] === "Lunch" ||
+              timetableData[currentClass + " B_Tech " + currentSection][index][
+                index1
+              ].includes("LAB")
+            ) {
+              return;
             }
-            setSelectedElements([[index, index1]]);
+            element.className = element.className.replace("#3d4758", "#ffffff");
+            if (selectedElements.length >= 2) {
+              for (let i = 0; i < selectedElements.length; i++) {
+                const element1 = document.getElementById(
+                  `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
+                );
+                element1!.className = element1!.className.replace(
+                  "#ffffff",
+                  "#3d4758"
+                );
+              }
+              setSelectedElements([[index, index1]]);
+            } else {
+              setSelectedElements([...selectedElements, [index, index1]]);
+            }
           } else {
-            setSelectedElements([...selectedElements, [index, index1]]);
+            element!.className = element!.className.replace(
+              "#ffffff",
+              "#3d4758"
+            );
+            setSelectedElements(
+              selectedElements.filter(
+                (el) => el[0] !== index || el[1] !== index1
+              )
+            );
           }
         } else {
-          element!.className = element!.className.replace("#ffffff", "#3d4758");
-          setSelectedElements(
-            selectedElements.filter((el) => el[0] !== index || el[1] !== index1)
-          );
+          if (element?.className.includes("#3d4758")) {
+            // console.log(selectedElements);
+            if (
+              !timetableData[currentClass + " B_Tech " + currentSection][index][
+                index1
+              ].includes("LAB")
+            ) {
+              return;
+            }
+          }
         }
       } else {
         if (element?.className.includes("#3d4758")) {
@@ -724,6 +856,7 @@ export default function Page() {
     let currClass = currentClass + " B_Tech " + currentSection;
     let proff1 = classtt[currClass][indexa][index1a][1];
     let proff2 = classtt[currClass][indexb][index1b][1];
+    console.log(classtt, proff1, proff2);
 
     if (proff1 == proff2 && proff1 == "self_proff") {
       console.log("Nice Joke");
@@ -783,29 +916,45 @@ export default function Page() {
   };
   // swapArra format: [course, proff, day, start, end, lab2, lab2]
   // swapArrb format:  [[course, proff, day, slot], [course, proff, day, slot], [course, proff, day, slot]...]
-  const handleLabSwap = () =>  {
+  const handleLabSwap = () => {
     if (swapArra[3] - swapArra[4] != swapArrb.length) return;
     let proffs_array: any[] = [swapArrb[0][1]];
     for (let i = 1; i < swapArrb.length; i++) {
-      if (swapArrb[i][3] != swapArrb[i-1][3]+1) return;
+      if (swapArrb[i][3] != swapArrb[i - 1][3] + 1) return;
       proffs_array.push(swapArrb[i][1]);
     }
-    const [labCourse, labProff, day, slot1, end1, initialLab1, initialLab2] = swapArra;
+    const [labCourse, labProff, day, slot1, end1, initialLab1, initialLab2] =
+      swapArra;
     const clas = currentClass;
     const numPeriods = swapArrb.length;
     const slot2 = swapArrb[0][3];
-    const possibleProffAllocs = allocateProfessors(timetableProfessors, proffs_array, day, slot1, slot2, clas);
+    const possibleProffAllocs = allocateProfessors(
+      timetableProfessors,
+      proffs_array,
+      day,
+      slot1,
+      slot2,
+      clas
+    );
     if (possibleProffAllocs.length == 0) {
-      console.log("No possble configuration of theory classes proffesors possible to allocate classes");
+      console.log(
+        "No possble configuration of theory classes proffesors possible to allocate classes"
+      );
       return;
     }
-    for (let slot = slot2; slot < slot2+numPeriods; slot++) {
-      if (!isFreeProfessor(timetableProfessors, labProff, day, slot, clas)) {      
+    for (let slot = slot2; slot < slot2 + numPeriods; slot++) {
+      if (!isFreeProfessor(timetableProfessors, labProff, day, slot, clas)) {
         console.log("Professor: ", labProff, " is not Free!");
         return;
       }
     }
-    const freeLabs = free_labs(timetableLabs, labCourse, day, slot1, slot1 + numPeriods-1);
+    const freeLabs = free_labs(
+      timetableLabs,
+      labCourse,
+      day,
+      slot1,
+      slot1 + numPeriods - 1
+    );
     if (freeLabs.length == 0) {
       console.log("No Free Labs");
       return;
@@ -816,24 +965,46 @@ export default function Page() {
     let timetable_classes = JSON.parse(JSON.stringify(timetableClasses));
     let timetable_professors = JSON.parse(JSON.stringify(timetableProfessors));
     for (let i = 0; i < numPeriods; i++) {
-      timetable_lab[initialLab1][day][slot1+i] = "";
-      timetable_lab[initialLab2][day][slot1+i] = "";
-      timetable_lab[chosenLab1][day][slot2+i] = [labCourse, clas, labProff];
-      timetable_lab[chosenLab2][day][slot2+i] = [labCourse, clas, labProff];
+      timetable_lab[initialLab1][day][slot1 + i] = "";
+      timetable_lab[initialLab2][day][slot1 + i] = "";
+      timetable_lab[chosenLab1][day][slot2 + i] = [labCourse, clas, labProff];
+      timetable_lab[chosenLab2][day][slot2 + i] = [labCourse, clas, labProff];
       let pos = chosenAlloc[i];
-      timetable_classes[clas][day][slot1+i] = [swapArrb[pos][0], swapArrb[pos][1]];
-      timetable_classes[clas][day][slot2+i] = [labCourse, labProff, chosenLab1, chosenLab2];
-      timetable_professors[labProff][day][slot1+i] = "";
-      timetable_professors[labProff][day][slot2+i] = [labCourse, clas, chosenLab1, chosenLab2];
-      timetable_professors[swapArrb[pos][1]][day][slot1+i] = [swapArrb[pos][0], clas];
-      timetable_professors[swapArrb[pos][1]][day][slot2+i] = "";
+      timetable_classes[clas][day][slot1 + i] = [
+        swapArrb[pos][0],
+        swapArrb[pos][1],
+      ];
+      timetable_classes[clas][day][slot2 + i] = [
+        labCourse,
+        labProff,
+        chosenLab1,
+        chosenLab2,
+      ];
+      timetable_professors[labProff][day][slot1 + i] = "";
+      timetable_professors[labProff][day][slot2 + i] = [
+        labCourse,
+        clas,
+        chosenLab1,
+        chosenLab2,
+      ];
+      timetable_professors[swapArrb[pos][1]][day][slot1 + i] = [
+        swapArrb[pos][0],
+        clas,
+      ];
+      timetable_professors[swapArrb[pos][1]][day][slot2 + i] = "";
     }
     setTimetableClasses(timetable_classes);
     setTimetableLabs(timetable_lab);
     setTimetableProfessors(timetable_professors);
-    format_timetables(timetable_classes, timetable_professors, timetable_lab, proffsToYear, proffToShort);
+    format_timetables(
+      timetable_classes,
+      timetable_professors,
+      timetable_lab,
+      proffsToYear,
+      proffToShort
+    );
     setTimetableData(timetable_classes);
-  }
+  };
   return (
     <main className="pl-[100px] pt-[100px] font-semibold">
       <h1 className="text-2xl mb-2 font-black">Schedule Generator</h1>
@@ -865,6 +1036,16 @@ export default function Page() {
             onChange={(e) => handleFileChange(e, setFile3)}
           />
         </div>
+        <h1 className="text-white bg-[#2d3748] px-3 mt-2">
+          Previous Session Timetable(Optional)
+        </h1>
+        <div className="px-12 bg-[#3d4758]">
+          <input
+            type="file"
+            className=""
+            onChange={(e) => handleFileChange(e, setFile4)}
+          />
+        </div>
       </div>
       <button
         onClick={() => {
@@ -874,6 +1055,14 @@ export default function Page() {
         className="bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
       >
         Generate
+      </button>
+      <button
+        onClick={() => {
+          handleLoadSession();
+        }}
+        className="bg-[#3d4758] p-3 mt-3 ml-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+      >
+        Load Previous Session
       </button>
       <button
         onClick={() => {
@@ -892,7 +1081,17 @@ export default function Page() {
       <button
         className="bg-[#3d4758] p-3 mt-3 ml-2 mb-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
         onClick={(e) => {
-          setIsSwapMode(!isSwapMode);
+          // setIsSwapMode(!isSwapMode);
+          if (isSwapMode) {
+            if (isSwapLabMode) {
+              setIsSwapLabMode(false);
+            } else {
+              setIsSwapMode(false);
+            }
+          } else {
+            setIsSwapMode(true);
+            setIsSwapLabMode(true);
+          }
           for (let i = 0; i < selectedElements.length; i++) {
             const element1 = document.getElementById(
               `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
@@ -905,7 +1104,11 @@ export default function Page() {
           setSelectedElements([]);
         }}
       >
-        {isSwapMode ? "Swap Mode" : "Lock Mode"}
+        {isSwapMode
+          ? isSwapLabMode
+            ? "Swap Lab Mode"
+            : "Swap Mode"
+          : "Lock Mode"}
       </button>
       <div className="bg-white h-[3px] w-1/2"></div>
 
@@ -1211,7 +1414,8 @@ export default function Page() {
                           currentClass + " B_Tech " + currentSection
                         ][selectedElements[0][0]][selectedElements[0][1]].split(
                           " "
-                        )[0] + " " +
+                        )[0] +
+                        " " +
                         timetableData[
                           currentClass + " B_Tech " + currentSection
                         ][selectedElements[0][0]][selectedElements[0][1]].split(
@@ -1222,8 +1426,8 @@ export default function Page() {
                         ][selectedElements[0][0]][selectedElements[0][1]].split(
                           " "
                         )[0];
-                        console.log(courseCode)
-                  let prof1
+                  console.log(courseCode);
+                  let prof1;
                   if (courseCode.split(" ").length == 1) {
                     prof1 = classCourses[
                       currentClass + " B_Tech " + currentSection

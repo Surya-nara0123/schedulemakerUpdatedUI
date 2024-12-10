@@ -42,15 +42,6 @@ export default function SideBar() {
               <Grid2x2Plus className="mr-2" />
               Generate Timetables
             </button>
-            <button
-              onClick={() => {
-                window.location.href = "/editSchedule";
-              }}
-              className="flex bg-[#3d4758] p-3 m-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
-            >
-              <CalendarRange className="mr-2" />
-              Edit Timetables
-            </button>
           </div>
         </nav>
       ) : (
