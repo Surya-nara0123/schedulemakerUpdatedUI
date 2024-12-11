@@ -601,7 +601,11 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
     let classes_to_courses_temp = JSON.parse(JSON.stringify(classes_to_courses));
 
     for (let lecture of temp) {
+        console.log(locked_classes);
+        console.log(lecture[0]);
+        if (locked_classes.includes(lecture[0])) continue;
         console.log(lecture);
+        console.log("SAdasd");
         if (lecture.length == 5) {            
             let [clas, course_code, proff, day, slot] = lecture;
             slot = adjustIndex(slot);
@@ -629,6 +633,8 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
             }
         } else if (lecture.length == 8) {
             let [clas, course_code, proff, day, slot1, slot2, lab1, lab2] = lecture;
+            console.log(classes_to_courses_temp[clas]);
+            console.log(classes_to_courses_temp);
             let j = 0;
             while (j < classes_to_courses_temp[clas].length) {
                 let course = classes_to_courses_temp[clas][j];
