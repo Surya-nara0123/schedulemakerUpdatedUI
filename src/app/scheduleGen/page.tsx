@@ -710,6 +710,30 @@ export default function Page() {
     downloadZip(csv, json);
     // downloadCsv(csv, "timetable.csv");
   };
+  const getSamples = async () => {
+    const files = [
+        { name: "class_courses.csv", path: "/class_courses.csv" },
+        { name: "proffs_to_short.csv", path: "/proffs_to_short.csv" },
+        { name: "labs.csv", path: "/labs.csv" },
+    ];
+
+    files.forEach(async (file) => {
+        try {
+            const response = await fetch(file.path);
+            const data = await response.blob();
+            const url = window.URL.createObjectURL(data);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = file.name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error(`Error downloading ${file.name}:`, error);
+        }
+    });
+  };
+
   const saveTimeTable = async () => {
     console.log("timetable", timetableData);
     const data = {
@@ -1077,6 +1101,12 @@ export default function Page() {
         onClick={(e) => genPDFall()}
       >
         Download All CSV
+      </button>
+      <button
+        className="bg-[#3d4758] p-3 mt-3 ml-2 mb-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+        onClick={(e) => getSamples()}
+      >
+        Get Sample CSVs
       </button>
       <button
         className="bg-[#3d4758] p-3 mt-3 ml-2 mb-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
