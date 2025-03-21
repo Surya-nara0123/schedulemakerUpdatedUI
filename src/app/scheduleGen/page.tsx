@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-// import { generatePDF } from "./print";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
 import { X } from "lucide-react";
@@ -327,7 +326,7 @@ export default function Page() {
         // console.log(row)
         if (
           row[0] === "Course" &&
-          row[1] === "Credits" &&
+          row[1] === "Hours" &&
           row[2] === "Type" &&
           row[3] === "Professor"
         ) {
@@ -338,6 +337,14 @@ export default function Page() {
           parseInt(row[1]),
           row[2].trim(),
           row[3].trim(),
+        ]);
+      } else if (row.length === 5) {
+        dictionary[currentSection].push([
+          row[0].trim(),
+          parseInt(row[1]),
+          row[2].trim(),
+          row[3].trim(),
+          row[4].trim()
         ]);
       } else {
         check = false;
@@ -354,11 +361,11 @@ export default function Page() {
     const labs: any = [];
     let check = true;
     data.forEach((row: any) => {
-      if (row.length != 1) {
+      if (row.length != 3) {
         check = false;
         return;
       }
-      labs.push(row[0]);
+      labs.push(row);
     });
     if (!check) {
       return [];
@@ -451,9 +458,7 @@ export default function Page() {
           proffs_names_to_short = JSON.parse(JSON.stringify(thing));
         }
       } else if (Array.isArray(thing)) {
-        if (thing[0].includes("LAB")) {
-          labs = JSON.parse(JSON.stringify(thing));
-        }
+        labs = JSON.parse(JSON.stringify(thing));
       }
     });
     let professors = Object.keys(proffs_names_to_short);

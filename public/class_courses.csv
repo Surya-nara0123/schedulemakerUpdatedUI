@@ -1,193 +1,139 @@
-Course,Credits,Type,Professor
-1st Year B_Tech AIDS Section A
-ENG101,3,T,Proff0
-MTH101,4,T,Proff1
-PHY101,3,T,Proff2
-ENV101,2,T,Proff3
-CSE101,3,T,Proff4
-ECE101,4,LT,Proff5
-CSE102,4,L,Proff6
-PHY102,4,L,Proff7
-1st Year B_Tech AIDS Section B
-ENG101,3,T,Proff0
-MTH101,4,T,Proff8
-PHY101,3,T,Proff2
-ENV101,2,T,Proff3
-CSE101,3,T,Proff9
-ECE101,4,LT,Proff5
-CSE102,4,L,Proff9
-PHY102,4,L,Proff7
-1st Year B_Tech AIDS Section C
-ENG101,3,T,Proff10
-MTH101,4,T,Proff8
-PHY101,3,T,Proff14
-ENV101,2,T,Proff3
-CSE101,3,T,Proff9
-ECE101,4,LT,Proff5
-CSE102,4,L,Proff9
-PHY102,4,L,Proff14
-1st Year B_Tech IoT Section A
-ENG101,3,T,Proff10
-MTH101,3,T,Proff11
-PHY103,3,T,Proff9
-ENV101,2,T,Proff3
-CSE101,3,T,Proff12
-ECE103,3,T,Proff13
-CSE102,4,L,Proff12
-ECE104,4,L,Proff13
-1st Year B_Tech IoT Section B
-ENG101,3,T,Proff10
-MTH101,3,T,Proff8
-PHY103,3,T,Proff9
-ENV101,2,T,Proff3
-CSE101,3,T,Proff6
-ECE103,3,T,Proff13
-CSE102,4,L,Proff6
-ECE104,4,L,Proff13
-1st Year B_Tech Cyber Security
-ENG101,3,T,Proff0
-MTH101,4,T,Proff1
-PHY101,3,T,Proff14
-CSE201,4,T,Proff6
-CSE101,3,T,Proff5
-ECE101,4,LT,Proff12
-CSE102,4,L,Proff5
-PHY102,4,L,Proff14
+Course,Hours,Type,Professor
 2nd Year B_Tech AIDS Section A
 MTH201,4,T,Proff15
 CSE202,3,T,Proff16
-CSE203,5,LT,Proff4
+CSE203,5,LT,Proff4,2
 CSE204,3,T,Proff17
 CSE205,2,T,Proff18
 PSY201,2,T,Proff19
-CSE206,4,L,Proff16
-CSE207,4,L,Proff18
+CSE206,4,L,Proff16,3
+CSE207,4,L,Proff18,2
 2nd Year B_Tech AIDS Section B
 MTH201,4,T,Proff20
 CSE202,3,T,Proff16
-CSE203,5,LT,Proff4
+CSE203,5,LT,Proff4,2
 CSE204,3,T,Proff17
 CSE205,2,T,Proff18
 PSY201,2,T,Proff19
-CSE206,4,L,Proff16
-CSE207,4,L,Proff18
+CSE206,4,L,Proff16,2
+CSE207,4,L,Proff18,2
 2nd Year B_Tech AIDS Section C
 MTH201,4,T,Proff20
 CSE202,3,T,Proff16
-CSE203,5,LT,Proff4
+CSE203,5,LT,Proff4,2
 CSE204,3,T,Proff17
 CSE205,2,T,Proff18
 PSY201,2,T,Proff19
-CSE206,4,L,Proff16
-CSE207,4,L,Proff18
+CSE206,4,L,Proff16,2
+CSE207,4,L,Proff18,2
 2nd Year B_Tech IoT Section A
 MTH201,4,T,Proff20
 CSE211,3,T,Proff21
 CSE202,3,T,Proff22
 CSE208,3,T,Proff23
 CSE212,3,T,Proff24
-CSE206,4,L,Proff21
-CSE210,4,L,Proff23
+CSE206,4,L,Proff21,2
+CSE210,4,L,Proff23,2
 2nd Year B_Tech IoT Section B
 MTH201,4,T,Proff15
 CSE211,3,T,Proff21
 CSE202,3,T,Proff22
 CSE208,3,T,Proff23
 CSE212,3,T,Proff24
-CSE206,4,L,Proff21
-CSE210,4,L,Proff23
+CSE206,4,L,Proff21,2
+CSE210,4,L,Proff23,2
 2nd Year B_Tech Cyber Security
 MTH201,3,T,Proff25
 CSE202,3,T,Proff22
 CSE208,3,T,Proff27
-CSE203,5,LT,Proff26
+CSE203,5,LT,Proff26,2
 CSE209,2,T,Proff28
 PSY201,2,T,Proff19
-CSE206,4,L,Proff22
-CSE210,4,L,Proff27
+CSE206,4,L,Proff22,2
+CSE210,4,L,Proff27,2
 3rd Year B_Tech AIDS Section A
 MTH301, 4, T, Proff29
 CSE301, 3, T, Proff30
-CSE302, 5, LT, Proff31
+CSE302, 5, LT, Proff31,2
 CSE303, 3, T, Proff32
 CSE304, 2, T, Proff33
 PSY301, 2, T, Proff34
-CSE306, 4, L, Proff30
-CSE307, 4, L, Proff33
+CSE306, 4, L, Proff30,2
+CSE307, 4, L, Proff33,2
 3rd Year B_Tech AIDS Section B
 MTH301, 4, T, Proff29
 CSE301, 3, T, Proff30
-CSE302, 5, LT, Proff31
+CSE302, 5, LT, Proff31,2
 CSE303, 3, T, Proff32
 CSE304, 2, T, Proff33
 PSY301, 2, T, Proff34
-CSE306, 4, L, Proff30
-CSE307, 4, L, Proff33
+CSE306, 4, L, Proff30,2
+CSE307, 4, L, Proff33,2
 3rd Year B_Tech IoT Section A
 MTH301, 4, T, Proff29
 CSE311, 3, T, Proff35
 CSE312, 3, T, Proff36
 CSE308, 3, T, Proff37
 CSE313, 3, T, Proff38
-CSE306, 4, L, Proff35
-CSE310, 4, L, Proff37
+CSE306, 4, L, Proff35,2
+CSE310, 4, L, Proff37,2
 3rd Year B_Tech IoT Section B
 MTH301, 4, T, Proff29
 CSE311, 3, T, Proff35
 CSE312, 3, T, Proff36
 CSE308, 3, T, Proff37
 CSE313, 3, T, Proff38
-CSE306, 4, L, Proff35
-CSE310, 4, L, Proff37
+CSE306, 4, L, Proff35,2
+CSE310, 4, L, Proff37,2
 3rd Year B_Tech Cyber Security
 MTH301, 3, T, Proff39
 CSE312, 3, T, Proff36
 CSE308, 3, T, Proff40
-CSE303, 5, LT, Proff41
+CSE303, 5, LT, Proff41,2
 CSE309, 2, T, Proff42
 PSY301, 2, T, Proff34
-CSE306, 4, L, Proff36
-CSE310, 4, L, Proff40
+CSE306, 4, L, Proff36,2
+CSE310, 4, L, Proff40,2
 4th Year B_Tech AIDS Section A
 MTH401, 4, T, Proff43
 CSE401, 3, T, Proff44
-CSE402, 5, LT, Proff45
+CSE402, 5, LT, Proff45,2
 CSE403, 3, T, Proff46
 CSE404, 2, T, Proff47
 PSY401, 2, T, Proff48
-CSE406, 4, L, Proff44
-CSE407, 4, L, Proff47
+CSE406, 4, L, Proff44,2
+CSE407, 4, L, Proff47,2
 4th Year B_Tech AIDS Section B
 MTH401, 4, T, Proff43
 CSE401, 3, T, Proff44
-CSE402, 5, LT, Proff45
+CSE402, 5, LT, Proff45,2
 CSE403, 3, T, Proff46
 CSE404, 2, T, Proff47
 PSY401, 2, T, Proff48
-CSE406, 4, L, Proff44
-CSE407, 4, L, Proff47
+CSE406, 4, L, Proff44,2
+CSE407, 4, L, Proff47,2
 4th Year B_Tech IoT Section A
 MTH401, 4, T, Proff43
 CSE411, 3, T, Proff49
 CSE412, 3, T, Proff50
 CSE408, 3, T, Proff51
 CSE413, 3, T, Proff52
-CSE406, 4, L, Proff49
-CSE410, 4, L, Proff51
+CSE406, 4, L, Proff49,2
+CSE410, 4, L, Proff51,2
 4th Year B_Tech IoT Section B
 MTH401, 4, T, Proff43
 CSE411, 3, T, Proff49
 CSE412, 3, T, Proff50
 CSE408, 3, T, Proff51
 CSE413, 3, T, Proff52
-CSE406, 4, L, Proff49
-CSE410, 4, L, Proff51
+CSE406, 4, L, Proff49,2
+CSE410, 4, L, Proff51,2
 4th Year B_Tech Cyber Security
 MTH401, 3, T, Proff53
 CSE412, 3, T, Proff50
 CSE408, 3, T, Proff54
-CSE403, 5, LT, Proff55
+CSE403, 5, LT, Proff55,2
 CSE409, 2, T, Proff56
 PSY401, 2, T, Proff48
-CSE406, 4, L, Proff50
-CSE410, 4, L, Proff54
+CSE406, 4, L, Proff50,2
+CSE410, 4, L, Proff54,2
