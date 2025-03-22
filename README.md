@@ -1,3 +1,5 @@
+### This is a project we started in our first year, we very much regret the choices we made for most of the code in here, but it works so gonna roll with it. 
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
