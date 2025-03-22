@@ -1,4 +1,58 @@
 Course,Hours,Type,Professor
+1st Year B_Tech AIDS Section A
+ENG101,3,T,Proff0
+MTH101,4,T,Proff1
+PHY101,3,T,Proff2
+ENV101,2,T,Proff3
+CSE101,3,T,Proff4
+ECE101,4,LT,Proff5
+CSE102,4,L,Proff6
+PHY102,4,L,Proff7
+1st Year B_Tech AIDS Section B
+ENG101,3,T,Proff0
+MTH101,4,T,Proff8
+PHY101,3,T,Proff2
+ENV101,2,T,Proff3
+CSE101,3,T,Proff9
+ECE101,4,LT,Proff5
+CSE102,4,L,Proff9
+PHY102,4,L,Proff7
+1st Year B_Tech AIDS Section C
+ENG101,3,T,Proff10
+MTH101,4,T,Proff8
+PHY101,3,T,Proff14
+ENV101,2,T,Proff3
+CSE101,3,T,Proff9
+ECE101,4,LT,Proff5
+CSE102,4,L,Proff9
+PHY102,4,L,Proff14
+1st Year B_Tech IoT Section A
+ENG101,3,T,Proff10
+MTH101,3,T,Proff11
+PHY103,3,T,Proff9
+ENV101,2,T,Proff3
+CSE101,3,T,Proff12
+ECE103,3,T,Proff13
+CSE102,4,L,Proff12
+ECE104,4,L,Proff13
+1st Year B_Tech IoT Section B
+ENG101,3,T,Proff10
+MTH101,3,T,Proff8
+PHY103,3,T,Proff9
+ENV101,2,T,Proff3
+CSE101,3,T,Proff6
+ECE103,3,T,Proff13
+CSE102,4,L,Proff6
+ECE104,4,L,Proff13
+1st Year B_Tech Cyber Security
+ENG101,3,T,Proff0
+MTH101,4,T,Proff1
+PHY101,3,T,Proff14
+CSE201,4,T,Proff6
+CSE101,3,T,Proff5
+ECE101,4,LT,Proff12
+CSE102,4,L,Proff5
+PHY102,4,L,Proff14
 2nd Year B_Tech AIDS Section A
 MTH201,4,T,Proff15
 CSE202,3,T,Proff16

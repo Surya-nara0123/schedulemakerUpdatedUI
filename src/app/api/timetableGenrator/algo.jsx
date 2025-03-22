@@ -91,11 +91,8 @@ function getLabs(labsArray, count) {
     // Group labs by academic block and floor
     const groupedLabs = {};
     
-    console.log(labsArray);
-    console.log(labMap);
     labsArray.forEach(lab => {
       const [block, floor] = labMap[lab];
-      console.log(lab)
       
       if (!groupedLabs[block]) {
         groupedLabs[block] = {};
@@ -134,7 +131,6 @@ function getLabs(labsArray, count) {
 function is_assigned_courses(classes_to_courses) {
     for (let course of Object.values(classes_to_courses)) {
         if (course.length != 0) {
-            console.log(course)
             return false;
         }
     }
@@ -282,7 +278,6 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                     }
                 }
                 let labs = getLabs(possible_labs[choice], lab_count);
-                console.log(labs, course_details, day, slot);
                 for (let i = 0; i < course_details[1]; i++) {
                     timetable_classes[clas][day][slot + i] = [choice, course_details[3]]
                     timetable_professors[course_details[3]][day][slot + i] = [choice, clas]
@@ -662,11 +657,7 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
     let classes_to_courses_temp = JSON.parse(JSON.stringify(classes_to_courses));
 
     for (let lecture of temp) {
-        console.log(locked_classes);
-        console.log(lecture[0]);
         if (locked_classes.includes(lecture[0])) continue;
-        console.log(lecture);
-        console.log("SAdasd");
         if (lecture.length == 5) {            
             let [clas, course_code, proff, day, slot] = lecture;
             slot = adjustIndex(slot);
@@ -694,13 +685,9 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
             }
         } else if (lecture.length == 8) {
             let [clas, course_code, proff, day, slot1, slot2, lab1, lab2] = lecture;
-            console.log(classes_to_courses_temp[clas]);
-            console.log(classes_to_courses_temp);
             let j = 0;
             while (j < classes_to_courses_temp[clas].length) {
                 let course = classes_to_courses_temp[clas][j];
-                console.log(course);
-                console.log(course[0], course[3]);
                 if (course[0] == course_code && course[3] == proff) {
                     let i = slot1;
                     console.log(timetable_labs_ini[lab1][day][i], timetable_labs_ini[lab2][day][i], is_free_professor(timetable_professors_ini, proff, day, i, clas), timetable_classes_ini[clas][day][i])
@@ -720,7 +707,6 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
                 }
             }
         }
-        console.log("SAdas");
     }
 
     for (let i of initial_proffs) {
@@ -850,10 +836,25 @@ function verify_everything(classes_to_courses, timetable_classes, timetable_prof
                     timetable_professors[temp[1]][day][slot] = "";
                     timetable_labs[temp[2]][day][slot] = "";
                 } else if (temp.length >= 4) {
-                    console.log("Dsfhidfiu21?");
-                    console.log(temp);
+                    if (temp.length === 6 && temp[0].includes("PHY102") && temp[1].includes("CSE102")) {
+                        if (timetable_labs[temp[4]][day][slot][0] != temp[0] || timetable_labs[temp[4]][day][slot][1] != clas || timetable_labs[temp[4]][day][slot][2] != temp[2] ||
+                            timetable_labs[temp[5]][day][slot][0] != temp[1] || timetable_labs[temp[5]][day][slot][1] != clas || timetable_labs[temp[5]][day][slot][2] != temp[3] ||
+                            timetable_professors[temp[2]][day][slot][0] != temp[0] || timetable_professors[temp[2]][day][slot][1] != clas || timetable_professors[temp[2]][day][slot][2] != temp[4] ||
+                            timetable_professors[temp[3]][day][slot][0] != temp[1] || timetable_professors[temp[3]][day][slot][1] != clas || timetable_professors[temp[3]][day][slot][2] != temp[5]) {
+                            console.log(`Class ${clas}, Day ${day}, Slot ${slot}: Lab or professor mismatch for ${temp}`);
+                            console.log(`Lab slot content 1: ${timetable_labs[temp[4]][day][slot]}`);
+                            console.log(`Lab slot content 2: ${timetable_labs[temp[5]][day][slot]}`);
+                            console.log(`Professor slot content 1: ${timetable_professors[temp[2]][day][slot]}`);
+                            console.log(`Professor slot content 2: ${timetable_professors[temp[3]][day][slot]}`);
+                            return false;
+                        }
+                        timetable_professors[temp[2]][day][slot] = "";
+                        timetable_professors[temp[3]][day][slot] = "";
+                        timetable_labs[temp[4]][day][slot] = "";
+                        timetable_labs[temp[5]][day][slot] = "";
+                        continue;
+                    }
                     for (let i = 2; i < temp.length; i++) {
-                        console.log(temp[i])
                         if (
                             timetable_labs[temp[i]][day][slot][0] != temp[0] ||
                             timetable_labs[temp[i]][day][slot][1] != clas ||
@@ -941,9 +942,7 @@ function get_replacements(classes_to_courses, timetable_professors, locked_class
 
 function get_timetables(class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs) {
     // Initialises courses and timetables
-    console.log(labs)
     constructLabMap(labs)
-    console.log(labMap)
     let [classes_to_courses, original] = initialise_class_courses(class_courses, locked_classes);
     let [timetable_classes_ini, timetable_professors_ini, timetable_labs_ini, proff_to_year, classes_to_courses_temp] = initialise_timetables(classes_to_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs);
 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
 import { X } from "lucide-react";
@@ -257,6 +257,7 @@ export default function Page() {
   const [result, setResult] = useState(null);
   const [parameter, setParameter] = useState<Array<any>>([]);
   const [profData, setProfData] = useState<{ [key: string]: any[] }>({});
+  const [labData, setLabData] = useState<{ [key: string]: any[] }>({});
   const [lockedClasses, setLockedClasses] = useState<Array<String>>([]);
   const [timetableClasses, setTimetableClasses] = useState({});
   const [timetableProfessors, setTimetableProfessors] = useState({});
@@ -272,6 +273,23 @@ export default function Page() {
   const [classCourses, setClassCourses] = useState<{ [key: string]: any[] }>(
     {}
   );
+  useEffect(() => {
+    if (timetableClasses && timetableProfessors && timetableLabs) {
+      const classtt = JSON.parse(JSON.stringify(timetableClasses));
+      const profftt = JSON.parse(JSON.stringify(timetableProfessors));
+      const labstt = JSON.parse(JSON.stringify(timetableLabs));
+      format_timetables(
+        classtt,
+        profftt,
+        labstt,
+        proffsToYear,
+        proffToShort
+      );
+      setTimetableData(JSON.parse(JSON.stringify(classtt)));
+      setProfData(JSON.parse(JSON.stringify(profftt)));
+      setLabData(JSON.parse(JSON.stringify(labstt)));
+    }
+  }, [timetableClasses, timetableProfessors]);
 
   const handleLoadSession = async () => {
     // check if file4 is uploaded
@@ -295,9 +313,7 @@ export default function Page() {
       setProffShorts(data.proffToShort);
       setProffsYear(data.proffsToYear);
       setTimetableLabs(data.timetableLabs);
-      setTimetableData(data.timetableData);
       setTimetableClasses(data.timetableClasses);
-      setProfData(data.profData);
       setTimetableProfessors(data.timetableProfessors);
     };
 
@@ -523,7 +539,6 @@ export default function Page() {
     }
     setResult(tables);
     setTimetableProfessors(JSON.parse(JSON.stringify(tables[1])));
-    console.log(timetableProfessors);
     setTimetableClasses(JSON.parse(JSON.stringify(tables[0])));
     setTimetableLabs(JSON.parse(JSON.stringify(tables[3])));
     setProffShorts(JSON.parse(JSON.stringify(proffs_names_to_short)));
@@ -537,14 +552,6 @@ export default function Page() {
     );
     let a = tables[0];
     let b = tables[1];
-
-    console.log("a: ", a);
-    console.log("b: ", b);
-
-    setProfData(b);
-    setTimetableData(a);
-    console.log(timetableData);
-
     setIsGenerated(true);
   };
 
@@ -926,22 +933,19 @@ export default function Page() {
     let ptemp1 = JSON.parse(JSON.stringify(profftt[proff1][indexa][index1a]));
     let ptemp2 = JSON.parse(JSON.stringify(profftt[proff2][indexb][index1b]));
 
+    console.log(proff1, proff2)
     classtt[currClass][indexa][index1a] = temp2;
     classtt[currClass][indexb][index1b] = temp1;
     profftt[proff1][indexa][index1a] = "";
-    profftt[proff2][indexb][index1b] = "";
     profftt[proff1][indexb][index1b] = ptemp1;
+    profftt[proff2][indexb][index1b] = "";
     profftt[proff2][indexa][index1a] = ptemp2;
+    console.log(profftt[proff1][indexb][index1b]);
+    console.log(profftt[proff1][indexa][index1a]);
+    console.log(profftt[proff2][indexb][index1b]);
+    console.log(profftt[proff2][indexa][index1a]);
     setTimetableClasses(JSON.parse(JSON.stringify(classtt)));
     setTimetableProfessors(JSON.parse(JSON.stringify(profftt)));
-    format_timetables(
-      classtt,
-      profftt,
-      JSON.parse(JSON.stringify(timetableLabs)),
-      proffsToYear,
-      proffToShort
-    );
-    setTimetableData(classtt);
   };
   // swapArra format: [course, proff, day, start, end, lab2, lab2]
   // swapArrb format:  [[course, proff, day, slot], [course, proff, day, slot], [course, proff, day, slot]...]
@@ -1025,14 +1029,6 @@ export default function Page() {
     setTimetableClasses(timetable_classes);
     setTimetableLabs(timetable_lab);
     setTimetableProfessors(timetable_professors);
-    format_timetables(
-      timetable_classes,
-      timetable_professors,
-      timetable_lab,
-      proffsToYear,
-      proffToShort
-    );
-    setTimetableData(timetable_classes);
   };
   return (
     <main className="pl-[100px] pt-[100px] font-semibold">
@@ -1187,47 +1183,30 @@ export default function Page() {
         </>
       )}
 
-      <div className="flex mt-12 gap-1 select-none  ">
-        {mode === "student" ? (
-          <div className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-white border-2">
-            Student
-          </div>
-        ) : (
-          <div
-            onClick={() => {
-              setMode("student");
-            }}
-            className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-black border-2"
-          >
-            Student
-          </div>
-        )}
-        {mode === "professor" ? (
-          <div className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-white border-2">
-            Professor
-          </div>
-        ) : (
-          <div
-            onClick={() => {
-              for (let i = 0; i < selectedElements.length; i++) {
-                const element1 = document.getElementById(
-                  `${selectedElements[i][0]}${selectedElements[i][1] + 1}`
-                );
-                element1!.className = element1!.className.replace(
-                  "#ffffff",
-                  "#3d4758"
-                );
-              }
-              setSelectedElements([]);
-
-              setMode("professor");
-            }}
-            className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-black border-2"
-          >
-            Professor
-          </div>
-        )}
+      <div className="flex mt-12 gap-1 select-none">
+        <div 
+          onClick={() => setMode("student")} 
+          className={`flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] 
+          ${mode === "student" ? "border-white border-2" : "border-black border-2"}`}
+        >
+          Student
+        </div>
+        <div 
+          onClick={() => setMode("professor")} 
+          className={`flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] 
+          ${mode === "professor" ? "border-white border-2" : "border-black border-2"}`}
+        >
+          Professor
+        </div>
+        <div 
+          onClick={() => setMode("labs")} 
+          className={`flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] 
+          ${mode === "labs" ? "border-white border-2" : "border-black border-2"}`}
+        >
+          Labs
+        </div>
       </div>
+
 
       {mode == "student" ? (
         <>
@@ -1350,7 +1329,7 @@ export default function Page() {
             )}
           </div>
         </>
-      ) : (
+      ) : (mode == "professor") ? (
         <div className="flex mt-6 gap-[1px] w-[1300px] overflow-y-hidden overflow-x-auto overflow-scroll whitespace-nowrap scroll-smooth">
           {Object.keys(profData).map((prof1: any, index: number) => {
             return (
@@ -1373,7 +1352,39 @@ export default function Page() {
             );
           })}
         </div>
-      )}
+      ) : (
+        <div className="bg-[#2d3748] w-[1300px] overflow-visible">
+          <div className="flex mt-12 gap-1 select-none p-3">
+            {timings.map((timing, index) => (
+              <div key={index} className="bg-[#1d2738] w-[113px] h-[50px] border-black border-2 flex items-center justify-center">
+                {timing}
+              </div>
+            ))}
+          </div>
+          <div className="px-3 gap-3">
+            {Object.keys(labData).map((lab, index) => (
+              <div key={index}>
+                <h2 className="text-lg font-bold text-white mt-4">{lab}</h2>
+                {labData[lab].map((row: any, rowIndex: number) => (
+                  <div key={rowIndex} className="flex gap-1 mb-1 select-none">
+                    <div className="bg-[#1d2738] w-[113px] h-[70px] border-black border-2 flex items-center justify-center">
+                      {days[rowIndex]}
+                    </div>
+                    <div className="flex gap-1">
+                      {row.map((col: string, colIndex: number) => (
+                        <div key={`${rowIndex}${colIndex + 1}`} className="bg-[#3d4758] w-[112.5px] h-[70px] border-black border-2 flex items-center justify-center text-xs font-semibold text-center">
+                          {col}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        )
+      }
 
       {mode == "student" ? (
         <div className="bg-[#2d3748] w-[1300px] overflow-visible">
@@ -1724,3 +1735,4 @@ export default function Page() {
     </main>
   );
 }
+
