@@ -8,6 +8,7 @@ Math.seedrandom = function (seed) {
 };
 
 let labMap = {}
+let labRestrictions = {}
 
 function adjustIndex(index) {
     if (index > 8) {
@@ -651,6 +652,14 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
         }
     }
 
+    for (const lab in labRestrictions) {
+        if (timetable_labs_ini.hasOwnProperty(lab)) {
+        labRestrictions[lab].forEach(([day, slot]) => {
+            timetable_labs_ini[lab][day][slot] = "Blocked";
+          });
+        }
+      }
+
     let temp = JSON.parse(JSON.stringify(initial_lectures));
     temp.push(["2nd Year B_Tech AIDS Section A", "CS2805", "Dr.Debajyoti Biswas", 0, 0, 2, "CSELAB17", "CSELAB13"]);
 
@@ -902,7 +911,7 @@ function verify_everything(classes_to_courses, timetable_classes, timetable_prof
     for (let lab of Object.keys(timetable_labs)) {
         for (let day = 0; day < 5; day++) {
             for (let slot = 0; slot < 8; slot++) {
-                if (timetable_labs[lab][day][slot] != "") {
+                if (timetable_labs[lab][day][slot] != "" && timetable_labs[lab][day][slot] != "Blocked") {
                     console.log(`Lab ${lab}, Day ${day}, Slot ${slot}: Non-empty slot`);
                     console.log(`Slot content: ${timetable_labs[lab][day][slot]}`);
                     return false;
@@ -1025,8 +1034,10 @@ function get_timetables(class_courses, professors, proff_to_short, labs, initial
     return {}
 }
 
-export function randomize(class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs) {
+export function randomize(class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs, labRestrictionsTemp) {
     try {
+        console.log(labRestrictionsTemp);
+        labRestrictions = JSON.parse(JSON.stringify(labRestrictionsTemp));
         const result = get_timetables(class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs);
         return result;
     } catch (error) {

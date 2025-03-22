@@ -254,6 +254,7 @@ export default function Page() {
   const [file2, setFile2] = useState(null);
   const [file3, setFile3] = useState(null);
   const [file4, setFile4] = useState(null);
+  const [file5, setFile5] = useState(null);
   const [result, setResult] = useState(null);
   const [parameter, setParameter] = useState<Array<any>>([]);
   const [profData, setProfData] = useState<{ [key: string]: any[] }>({});
@@ -261,6 +262,7 @@ export default function Page() {
   const [lockedClasses, setLockedClasses] = useState<Array<String>>([]);
   const [timetableClasses, setTimetableClasses] = useState({});
   const [timetableProfessors, setTimetableProfessors] = useState({});
+  const [labRestrictions, setLabRestrictions] = useState({});
   const [proffToShort, setProffShorts] = useState({});
   const [proffsToYear, setProffsYear] = useState({});
   const [timetableLabs, setTimetableLabs] = useState({});
@@ -293,7 +295,7 @@ export default function Page() {
 
   const handleLoadSession = async () => {
     // check if file4 is uploaded
-    if (!(file4 && file1 && file2 && file3)) {
+    if (!(file4 && file1 && file2 && file3 && file5)) {
       alert("Please upload the previous session timetable.");
       return;
     }
@@ -481,14 +483,35 @@ export default function Page() {
     return { class_courses, professors, proffs_names_to_short, labs };
   };
 
+  const parseJSONFile = (file: any): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (e: any) => {
+        try {
+          const parsedData = JSON.parse(e.target.result);
+          setLabRestrictions(parsedData);
+          console.log("Parsed Lab Restrictions:", parsedData);
+          resolve(parsedData);
+        } catch (error) {
+          console.error("Error parsing JSON file:", error);
+          reject(error);
+        }
+      };
+  
+      reader.readAsText(file);
+    });
+  };  
+
   const printOutput = async () => {
-    if (!(file1 && file2 && file3)) {
-      alert("Please upload all 4 CSV files.");
+    if (!(file1 && file2 && file3 && file5)) {
+      alert("Please upload all 3 CSV files and lab Restriction JSON file.");
       return;
     }
 
     const processFiles = [file1, file2, file3];
     const results = await parseCSVFiles(processFiles);
+    const labRest = await parseJSONFile(file5);
     console.log(results);
 
     if (!results) {
@@ -510,6 +533,7 @@ export default function Page() {
       timetableProfessors,
       timetableClasses,
       timetableLabs,
+      labRest,
     ]);
     const response = await fetch("/api/timetableGenrator", {
       method: "POST",
@@ -526,6 +550,7 @@ export default function Page() {
         timetableProfessors,
         timetableClasses,
         timetableLabs,
+        labRest,
       ]),
     });
     const body = await response.json();
@@ -1059,6 +1084,16 @@ export default function Page() {
             type="file"
             className=""
             onChange={(e) => handleFileChange(e, setFile3)}
+          />
+        </div>
+        <h1 className="text-white bg-[#2d3748] px-3 mt-2">
+          Blocked Labs
+        </h1>
+        <div className="px-12 bg-[#3d4758]">
+          <input
+            type="file"
+            className=""
+            onChange={(e) => handleFileChange(e, setFile5)}
           />
         </div>
         <h1 className="text-white bg-[#2d3748] px-3 mt-2">

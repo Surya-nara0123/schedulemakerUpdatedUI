@@ -17,9 +17,10 @@ export async function POST(request: NextRequest) {
         const timetableProfessors = body[6];
         const timetableClasses = body[7];
         const timetableLabs = body[8];
+        const labsRest = body[9];
 
         // console.log(class_courses, professors, proffs_names_to_short, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs);
-        const result = randomize(class_courses, professors, proffs_names_to_short, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs, [["Mr.Prawin Raj", [2, 3], [0, 1, 2, 3, 4, 6, 7]]]);
+        const result = randomize(class_courses, professors, proffs_names_to_short, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs, [["Mr.Prawin Raj", [2, 3], [0, 1, 2, 3, 4, 6, 7]]], labsRest);
         // console.log(result);
         return NextResponse.json({ result }, {
             status: 200,
