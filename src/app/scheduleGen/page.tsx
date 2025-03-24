@@ -952,7 +952,7 @@ export default function Page() {
       proff1 != proff2
     ) {
       console.log(proff2 + " is not free due to ", timetableProfessors[proff2][indexa][index1a]);
-      alert(proff2 + " is not free due to ", timetableProfessors[proff2][indexa][index1a]);
+      alert(proff2 + " is not free.");
       return;
     }
 
