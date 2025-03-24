@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
-import { X } from "lucide-react";
+import { Key, X } from "lucide-react";
 import JSZip from "jszip";
 
 type timetableData = Array<Array<Array<string>>>;
@@ -262,7 +262,7 @@ export default function Page() {
   const [labData, setLabData] = useState<{ [key: string]: any[] }>({});
   const [lockedClasses, setLockedClasses] = useState<Array<String>>([]);
   const [timetableClasses, setTimetableClasses] = useState({});
-  const [timetableProfessors, setTimetableProfessors] = useState({});
+  const [timetableProfessors, setTimetableProfessors] = useState<{[key: string]: any[]}>({});
   const [labRestrictions, setLabRestrictions] = useState({});
   const [proffToShort, setProffShorts] = useState({});
   const [proffsToYear, setProffsYear] = useState({});
@@ -937,8 +937,8 @@ export default function Page() {
       ) &&
       proff1 != proff2
     ) {
-      console.log(proff1 + " is not free due to ", timetableProfessors[proff1][indexb][index1b]!);
-      alert(proff1 + " is not free due to ", timetableProfessors[proff1][indexb][index1b]!);
+      console.log(proff1 + " is not free due to ", timetableProfessors[proff1][indexb][index1b]);
+      alert(proff1 + " is not free due to " + timetableProfessors[proff1][indexb][index1b]);
       return;
     }
     if (
