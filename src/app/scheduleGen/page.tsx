@@ -937,8 +937,8 @@ export default function Page() {
       ) &&
       proff1 != proff2
     ) {
-      // console.log(proff1 + " is not free due to ", timetableProfessors[proff1][indexb][index1b]);
-      alert(proff1 + " is not free due to ", timetableProfessors[proff1][indexb][index1b]);
+      console.log(proff1 + " is not free due to ", !timetableProfessors[proff1][indexb][index1b]);
+      alert(proff1 + " is not free due to ", !timetableProfessors[proff1][indexb][index1b]);
       return;
     }
     if (
