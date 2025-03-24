@@ -255,6 +255,7 @@ export default function Page() {
   const [file3, setFile3] = useState(null);
   const [file4, setFile4] = useState(null);
   const [file5, setFile5] = useState(null);
+  const [file6, setFile6] = useState(null);
   const [result, setResult] = useState(null);
   const [parameter, setParameter] = useState<Array<any>>([]);
   const [profData, setProfData] = useState<{ [key: string]: any[] }>({});
@@ -295,7 +296,7 @@ export default function Page() {
 
   const handleLoadSession = async () => {
     // check if file4 is uploaded
-    if (!(file4 && file1 && file2 && file3 && file5)) {
+    if (!(file4 && file1 && file2 && file3)) {
       alert("Please upload the previous session timetable.");
       return;
     }
@@ -491,7 +492,6 @@ export default function Page() {
         try {
           const parsedData = JSON.parse(e.target.result);
           setLabRestrictions(parsedData);
-          console.log("Parsed Lab Restrictions:", parsedData);
           resolve(parsedData);
         } catch (error) {
           console.error("Error parsing JSON file:", error);
@@ -504,14 +504,15 @@ export default function Page() {
   };  
 
   const printOutput = async () => {
-    if (!(file1 && file2 && file3 && file5)) {
-      alert("Please upload all 3 CSV files and lab Restriction JSON file.");
+    if (!(file1 && file2 && file3)) {
+      alert("Please upload all 3 CSV files and optional lab and Professor Restrictions JSON files.");
       return;
     }
 
     const processFiles = [file1, file2, file3];
     const results = await parseCSVFiles(processFiles);
     const labRest = await parseJSONFile(file5);
+    const proffRest = await parseJSONFile(file6);
     console.log(results);
 
     if (!results) {
@@ -534,6 +535,7 @@ export default function Page() {
       timetableClasses,
       timetableLabs,
       labRest,
+      proffRest,
     ]);
     const response = await fetch("/api/timetableGenrator", {
       method: "POST",
@@ -551,6 +553,7 @@ export default function Page() {
         timetableClasses,
         timetableLabs,
         labRest,
+        proffRest,
       ]),
     });
     const body = await response.json();
@@ -934,8 +937,8 @@ export default function Page() {
       ) &&
       proff1 != proff2
     ) {
-      console.log(proff1 + " is not free");
-      alert(proff1 + " is not free");
+      console.log(proff1 + " is not free due to ", timetableProfessors[proff1][indexb][index1b]);
+      alert(proff1 + " is not free due to ", timetableProfessors[proff1][indexb][index1b]);
       return;
     }
     if (
@@ -948,8 +951,8 @@ export default function Page() {
       ) &&
       proff1 != proff2
     ) {
-      console.log(proff2 + " is not free");
-      alert(proff2 + " is not free");
+      console.log(proff2 + " is not free due to ", timetableProfessors[proff2][indexa][index1a]);
+      alert(proff2 + " is not free due to ", timetableProfessors[proff2][indexa][index1a]);
       return;
     }
 
@@ -1060,7 +1063,9 @@ export default function Page() {
       <h1 className="text-2xl mb-2 font-black">Schedule Generator</h1>
       <div className="bg-white h-[2px] w-1/2"></div>
       <div className="border border-[#3d4758] p-2 min-w-[300px] max-w-[600px] mt-3 mb-3">
-        <h1 className="text-white bg-[#2d3748] px-3">Class to Courses</h1>
+        <h1 className="text-white bg-[#2d3748] px-3">
+          Class to Courses
+        </h1>
         <div className="px-12 bg-[#3d4758]">
           <input
             type="file"
@@ -1068,7 +1073,9 @@ export default function Page() {
             onChange={(e) => handleFileChange(e, setFile1)}
           />
         </div>
-        <h1 className="text-white bg-[#2d3748] px-3 mt-2">Labs</h1>
+        <h1 className="text-white bg-[#2d3748] px-3 mt-2">
+          Labs
+          </h1>
         <div className="px-12 bg-[#3d4758]">
           <input
             type="file"
@@ -1094,6 +1101,16 @@ export default function Page() {
             type="file"
             className=""
             onChange={(e) => handleFileChange(e, setFile5)}
+          />
+        </div>
+        <h1 className="text-white bg-[#2d3748] px-3 mt-2">
+          Blocked Proff Slots
+        </h1>
+        <div className="px-12 bg-[#3d4758]">
+          <input
+            type="file"
+            className=""
+            onChange={(e) => handleFileChange(e, setFile6)}
           />
         </div>
         <h1 className="text-white bg-[#2d3748] px-3 mt-2">

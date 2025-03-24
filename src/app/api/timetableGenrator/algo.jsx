@@ -9,6 +9,7 @@ Math.seedrandom = function (seed) {
 
 let labMap = {}
 let labRestrictions = {}
+let proffRestrictions = {}
 
 function adjustIndex(index) {
     if (index > 8) {
@@ -58,6 +59,11 @@ function constructLabMap(labArray) {
     labArray.forEach(([labName, block, floor]) => {
         labMap[labName] = [block, floor];
     });
+}
+
+function constructRestrictions(lr, pr) {
+    labRestrictions = lr;
+    proffRestrictions = pr;
 }
 
 //Assumes Lab names start with CS, ECE, PHY etc. Uses that to return a list of labs for that course which are free for slots between slot1 and slot2 on that day 
@@ -654,11 +660,19 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
 
     for (const lab in labRestrictions) {
         if (timetable_labs_ini.hasOwnProperty(lab)) {
-        labRestrictions[lab].forEach(([day, slot]) => {
-            timetable_labs_ini[lab][day][slot] = "Blocked";
-          });
+            labRestrictions[lab].forEach(([day, slot]) => {
+                timetable_labs_ini[lab][day][slot] = "Blocked";
+            });
         }
-      }
+    }
+
+    for (const proff in proffRestrictions) {
+        if (timetable_professors_ini.hasOwnProperty(proff)) {
+            proffRestrictions[proff].forEach(([day, slot]) => {
+                if (timetable_professors_ini[proff][day][slot] != "Lunch") timetable_professors_ini[proff][day][slot] = "Blocked";
+            });
+        }
+    }
 
     let temp = JSON.parse(JSON.stringify(initial_lectures));
     temp.push(["2nd Year B_Tech AIDS Section A", "CS2805", "Dr.Debajyoti Biswas", 0, 0, 2, "CSELAB17", "CSELAB13"]);
@@ -690,29 +704,6 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
                     }
                 } else {
                     i++;
-                }
-            }
-        } else if (lecture.length == 8) {
-            let [clas, course_code, proff, day, slot1, slot2, lab1, lab2] = lecture;
-            let j = 0;
-            while (j < classes_to_courses_temp[clas].length) {
-                let course = classes_to_courses_temp[clas][j];
-                if (course[0] == course_code && course[3] == proff) {
-                    let i = slot1;
-                    console.log(timetable_labs_ini[lab1][day][i], timetable_labs_ini[lab2][day][i], is_free_professor(timetable_professors_ini, proff, day, i, clas), timetable_classes_ini[clas][day][i])
-                    for (; i <= slot2; i++) {
-                        if (timetable_labs_ini[lab1][day][i] != "" || timetable_labs_ini[lab2][day][i] != "" || !is_free_professor(timetable_professors_ini, proff, day, i, clas) || timetable_classes_ini[clas][day][i] != "") break;
-                    }
-                    if (i != slot2+1) continue;
-                    for (i = slot1; i <= slot2; i++) {
-                        timetable_classes_ini[clas][day][i] = [course_code, proff, lab1, lab2];
-                        timetable_professors_ini[proff][day][i] = [course_code, clas, lab1, lab2];
-                        timetable_labs_ini[lab1][day][i] = [course_code, clas, proff];
-                        timetable_labs_ini[lab2][day][i] = [course_code, clas, proff];
-                    }
-                    classes_to_courses_temp[clas].splice(classes_to_courses_temp[clas].indexOf(course), 1);
-                } else {
-                    j++;
                 }
             }
         }
@@ -899,7 +890,7 @@ function verify_everything(classes_to_courses, timetable_classes, timetable_prof
     for (let proff of Object.keys(timetable_professors)) {
         for (let day = 0; day < 5; day++) {
             for (let slot = 0; slot < 8; slot++) {
-                if (timetable_professors[proff][day][slot] != "" && timetable_professors[proff][day][slot] != "Lunch") {
+                if (timetable_professors[proff][day][slot] != "" && timetable_professors[proff][day][slot] != "Lunch" && timetable_professors[proff][day][slot] != "Blocked") {
                     console.log(`Professor ${proff}, Day ${day}, Slot ${slot}: Non-empty slot`);
                     console.log(`Slot content: ${timetable_professors[proff][day][slot]}`);
                     return false;
@@ -951,7 +942,6 @@ function get_replacements(classes_to_courses, timetable_professors, locked_class
 
 function get_timetables(class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs) {
     // Initialises courses and timetables
-    constructLabMap(labs)
     let [classes_to_courses, original] = initialise_class_courses(class_courses, locked_classes);
     let [timetable_classes_ini, timetable_professors_ini, timetable_labs_ini, proff_to_year, classes_to_courses_temp] = initialise_timetables(classes_to_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs);
 
@@ -1034,10 +1024,10 @@ function get_timetables(class_courses, professors, proff_to_short, labs, initial
     return {}
 }
 
-export function randomize(class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs, labRestrictionsTemp) {
+export function randomize(class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs, labRestrictionsTemp, proffRestrictionsTemp) {
     try {
-        console.log(labRestrictionsTemp);
-        labRestrictions = JSON.parse(JSON.stringify(labRestrictionsTemp));
+        constructLabMap(labs);
+        constructRestrictions(labRestrictionsTemp, proffRestrictionsTemp);
         const result = get_timetables(class_courses, professors, proff_to_short, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, initial_proffs);
         return result;
     } catch (error) {
