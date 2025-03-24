@@ -961,7 +961,6 @@ export default function Page() {
     let ptemp1 = JSON.parse(JSON.stringify(profftt[proff1][indexa][index1a]));
     let ptemp2 = JSON.parse(JSON.stringify(profftt[proff2][indexb][index1b]));
 
-    console.log(proff1, proff2)
     classtt[currClass][indexa][index1a] = temp2;
     classtt[currClass][indexb][index1b] = temp1;
     profftt[proff1][indexa][index1a] = "";
