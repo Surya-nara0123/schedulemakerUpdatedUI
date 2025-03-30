@@ -24,6 +24,24 @@ const timings = [
   "2.40-3.30",
 ];
 
+const timings1 = [
+  "days",
+  "8.10-9.00",
+  "9.00-9.50",
+  "9.50-10.10",
+  "10.10-11.00",
+  "11.00-11.50",
+  "11.50-12.40",
+  "12.40-1.40",
+  "1.40-2.30",
+  "2.30-2.40",
+  "2.40-3.30",
+];
+
+const slots = [
+  "slots",1,2,3,4,5,6,7,8
+];
+
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 function isFreeProfessor(
@@ -167,77 +185,77 @@ function format_timetables(
     }
   }
 }
-function free_labs(
-  timetable_labs: any,
-  course_code: string,
-  day: number,
-  slot1: number,
-  slot2: number
-) {
-  const usable = [];
+// function free_labs(
+//   timetable_labs: any,
+//   course_code: string,
+//   day: number,
+//   slot1: number,
+//   slot2: number
+// ) {
+//   const usable = [];
 
-  for (const lab of Object.keys(timetable_labs)) {
-    if (lab.startsWith(course_code.slice(0, 2))) {
-      usable.push(lab);
-    }
-  }
+//   for (const lab of Object.keys(timetable_labs)) {
+//     if (lab.startsWith(course_code.slice(0, 2))) {
+//       usable.push(lab);
+//     }
+//   }
 
-  const temp = [...usable];
-  let possibles = [];
-  temp.sort();
-  for (let i = 0; i < temp.length; i += 2) {
-    let j = slot1;
-    for (; j <= slot2; j++) {
-      if (timetable_labs[temp[i]][day][slot1] != "") break;
-      if (timetable_labs[temp[i + 1]][day][slot1] != "") break;
-    }
-    if (j == slot2 + 1) possibles.push([temp[i], temp[i + 1]]);
-  }
+//   const temp = [...usable];
+//   let possibles = [];
+//   temp.sort();
+//   for (let i = 0; i < temp.length; i += 2) {
+//     let j = slot1;
+//     for (; j <= slot2; j++) {
+//       if (timetable_labs[temp[i]][day][slot1] != "") break;
+//       if (timetable_labs[temp[i + 1]][day][slot1] != "") break;
+//     }
+//     if (j == slot2 + 1) possibles.push([temp[i], temp[i + 1]]);
+//   }
 
-  return possibles;
-}
-function allocateProfessors(
-  timetable_professors: any,
-  proffs: any,
-  day: number,
-  slot1: number,
-  slot2: number,
-  clas: string
-) {
-  const results: any[][] = [];
-  const numPeriods = slot2 - slot1 + 1;
-  const allocation = Array(numPeriods).fill(-1);
+//   return possibles;
+// }
+// function allocateProfessors(
+//   timetable_professors: any,
+//   proffs: any,
+//   day: number,
+//   slot1: number,
+//   slot2: number,
+//   clas: string
+// ) {
+//   const results: any[][] = [];
+//   const numPeriods = slot2 - slot1 + 1;
+//   const allocation = Array(numPeriods).fill(-1);
 
-  function backtrack(period: number) {
-    if (period === numPeriods) {
-      results.push([...allocation]);
-      return;
-    }
-    for (let p = 0; p < numPeriods; p++) {
-      if (
-        isFreeProfessor(
-          timetable_professors,
-          proffs[p],
-          day,
-          slot1 + period,
-          clas
-        )
-      ) {
-        if (allocation.includes(p)) continue;
-        allocation[period] = p;
-        backtrack(period + 1);
-        allocation[period] = -1;
-      }
-    }
-  }
+//   function backtrack(period: number) {
+//     if (period === numPeriods) {
+//       results.push([...allocation]);
+//       return;
+//     }
+//     for (let p = 0; p < numPeriods; p++) {
+//       if (
+//         isFreeProfessor(
+//           timetable_professors,
+//           proffs[p],
+//           day,
+//           slot1 + period,
+//           clas
+//         )
+//       ) {
+//         if (allocation.includes(p)) continue;
+//         allocation[period] = p;
+//         backtrack(period + 1);
+//         allocation[period] = -1;
+//       }
+//     }
+//   }
 
-  backtrack(0);
-  return results;
-}
-function getRandomElement(list: Array<any>) {
-  const randomIndex = Math.floor(Math.random() * list.length);
-  return list[randomIndex];
-}
+//   backtrack(0);
+//   return results;
+// }
+// function getRandomElement(list: Array<any>) {
+//   const randomIndex = Math.floor(Math.random() * list.length);
+//   return list[randomIndex];
+// }
 
 export default function Page() {
   const [mode, setMode] = useState("student");
@@ -262,7 +280,9 @@ export default function Page() {
   const [labData, setLabData] = useState<{ [key: string]: any[] }>({});
   const [lockedClasses, setLockedClasses] = useState<Array<String>>([]);
   const [timetableClasses, setTimetableClasses] = useState({});
-  const [timetableProfessors, setTimetableProfessors] = useState<{[key: string]: any[]}>({});
+  const [timetableProfessors, setTimetableProfessors] = useState<{
+    [key: string]: any[];
+  }>({});
   const [labRestrictions, setLabRestrictions] = useState({});
   const [proffToShort, setProffShorts] = useState({});
   const [proffsToYear, setProffsYear] = useState({});
@@ -270,27 +290,20 @@ export default function Page() {
   const [currentSection, setCurrentSection] = useState("AIDS Section A");
   const [currentClass, setCurrentClass] = useState("2nd Year");
   const [isSwapMode, setIsSwapMode] = useState(true);
-  const [isSwapLabMode, setIsSwapLabMode] = useState(false);
-  const [swapArra, setSwapArra] = useState([]);
-  const [swapArrb, setSwapArrb] = useState([]);
   const [classCourses, setClassCourses] = useState<{ [key: string]: any[] }>(
     {}
   );
+  const [currentLab, setCurrentLab] = useState("");
   useEffect(() => {
     if (timetableClasses && timetableProfessors && timetableLabs) {
       const classtt = JSON.parse(JSON.stringify(timetableClasses));
       const profftt = JSON.parse(JSON.stringify(timetableProfessors));
       const labstt = JSON.parse(JSON.stringify(timetableLabs));
-      format_timetables(
-        classtt,
-        profftt,
-        labstt,
-        proffsToYear,
-        proffToShort
-      );
+      format_timetables(classtt, profftt, labstt, proffsToYear, proffToShort);
       setTimetableData(JSON.parse(JSON.stringify(classtt)));
       setProfData(JSON.parse(JSON.stringify(profftt)));
       setLabData(JSON.parse(JSON.stringify(labstt)));
+      setCurrentLab(Object.keys(JSON.parse(JSON.stringify(labstt)))[0]);
     }
   }, [timetableClasses, timetableProfessors]);
 
@@ -363,7 +376,7 @@ export default function Page() {
           parseInt(row[1]),
           row[2].trim(),
           row[3].trim(),
-          row[4].trim()
+          row[4].trim(),
         ]);
       } else {
         check = false;
@@ -487,7 +500,7 @@ export default function Page() {
   const parseJSONFile = (file: any): Promise<any> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-  
+
       reader.onload = (e: any) => {
         try {
           const parsedData = JSON.parse(e.target.result);
@@ -498,14 +511,16 @@ export default function Page() {
           reject(error);
         }
       };
-  
+
       reader.readAsText(file);
     });
-  };  
+  };
 
   const printOutput = async () => {
     if (!(file1 && file2 && file3)) {
-      alert("Please upload all 3 CSV files and optional lab and Professor Restrictions JSON files.");
+      alert(
+        "Please upload all 3 CSV files and optional lab and Professor Restrictions JSON files."
+      );
       return;
     }
 
@@ -619,32 +634,86 @@ export default function Page() {
     return proffDetails;
   };
 
-  const genCSV = async (classTitle: string) => {
-    const timetable = timetableData[classTitle];
-    if (!timetable) {
-      alert(`No timetable found for ${classTitle}`);
-      return;
+  const genCSV = async (classTitle: string, type: number) => {
+    if(type == 0){
+      const timetable = timetableData[classTitle];
+      if (!timetable) {
+        alert(`No timetable found for ${classTitle}`);
+        return;
+      }
+
+      const headers = Object.keys(timetable[0]);
+      let csv = classTitle + "\n";
+      csv += headers.join(",") + "\n";
+
+      timetable.forEach((row: { [s: string]: unknown } | ArrayLike<unknown>) => {
+        csv +=
+          Object.values(row)
+            .map((value) => {
+              if (typeof value === "string") {
+                const value1 = value.replace(/"/g, '""');
+                if (value1.search(/("|,|\n)/g) >= 0) value = `"${value1}"`;
+              }
+              return value;
+            })
+            .join(",") + "\n";
+      });
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      saveAs(blob, classTitle + ".csv");
+    } else if(type == 1){
+      const timetable = profData[classTitle];
+      if (!timetable) {
+        alert(`No timetable found for ${classTitle}`);
+        return;
+      }
+
+      const headers = Object.keys(timetable[0]);
+      let csv = classTitle + "\n";
+      csv += headers.join(",") + "\n";
+
+      timetable.forEach((row: { [s: string]: unknown } | ArrayLike<unknown>) => {
+        csv +=
+          Object.values(row)
+            .map((value) => {
+              if (typeof value === "string") {
+                const value1 = value.replace(/"/g, '""');
+                if (value1.search(/("|,|\n)/g) >= 0) value = `"${value1}"`;
+              }
+              return value;
+            })
+            .join(",") + "\n";
+      });
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      saveAs(blob, classTitle + ".csv");
+    } else if(type == 2){
+      const timetable = labData[classTitle];
+      if (!timetable) {
+        alert(`No timetable found for ${classTitle}`);
+        return;
+      }
+
+      const headers = Object.keys(timetable[0]);
+      let csv = classTitle + "\n";
+      csv += headers.join(",") + "\n";
+
+      timetable.forEach((row: { [s: string]: unknown } | ArrayLike<unknown>) => {
+        csv +=
+          Object.values(row)
+            .map((value) => {
+              if (typeof value === "string") {
+                const value1 = value.replace(/"/g, '""');
+                if (value1.search(/("|,|\n)/g) >= 0) value = `"${value1}"`;
+              }
+              return value;
+            })
+            .join(",") + "\n";
+      });
+
+      const blob = new Blob([csv], { type: "text/csv" });
+      saveAs(blob, classTitle + ".csv");
     }
-
-    const headers = Object.keys(timetable[0]);
-    let csv = classTitle + "\n";
-    csv += headers.join(",") + "\n";
-
-    timetable.forEach((row: { [s: string]: unknown } | ArrayLike<unknown>) => {
-      csv +=
-        Object.values(row)
-          .map((value) => {
-            if (typeof value === "string") {
-              const value1 = value.replace(/"/g, '""');
-              if (value1.search(/("|,|\n)/g) >= 0) value = `"${value1}"`;
-            }
-            return value;
-          })
-          .join(",") + "\n";
-    });
-
-    const blob = new Blob([csv], { type: "text/csv" });
-    saveAs(blob, classTitle + ".csv");
   };
 
   const genPDFall = async () => {
@@ -752,25 +821,25 @@ export default function Page() {
   };
   const getSamples = async () => {
     const files = [
-        { name: "class_courses.csv", path: "/class_courses.csv" },
-        { name: "proffs_to_short.csv", path: "/proffs_to_short.csv" },
-        { name: "labs.csv", path: "/labs.csv" },
+      { name: "class_courses.csv", path: "/class_courses.csv" },
+      { name: "proffs_to_short.csv", path: "/proffs_to_short.csv" },
+      { name: "labs.csv", path: "/labs.csv" },
     ];
 
     files.forEach(async (file) => {
-        try {
-            const response = await fetch(file.path);
-            const data = await response.blob();
-            const url = window.URL.createObjectURL(data);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = file.name;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        } catch (error) {
-            console.error(`Error downloading ${file.name}:`, error);
-        }
+      try {
+        const response = await fetch(file.path);
+        const data = await response.blob();
+        const url = window.URL.createObjectURL(data);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (error) {
+        console.error(`Error downloading ${file.name}:`, error);
+      }
     });
   };
 
@@ -811,7 +880,6 @@ export default function Page() {
     if (mode == "student") {
       const element = document.getElementById(`${index}${index1 + 1}`);
       if (isSwapMode) {
-        if (!isSwapLabMode) {
           if (element?.className.includes("#3d4758")) {
             // console.log(selectedElements);
             if (
@@ -853,18 +921,6 @@ export default function Page() {
               )
             );
           }
-        } else {
-          if (element?.className.includes("#3d4758")) {
-            // console.log(selectedElements);
-            if (
-              !timetableData[currentClass + " B_Tech " + currentSection][index][
-                index1
-              ].includes("LAB")
-            ) {
-              return;
-            }
-          }
-        }
       } else {
         if (element?.className.includes("#3d4758")) {
           // console.log(selectedElements);
@@ -937,8 +993,15 @@ export default function Page() {
       ) &&
       proff1 != proff2
     ) {
-      console.log(proff1 + " is not free due to ", timetableProfessors[proff1][indexb][index1b]);
-      alert(proff1 + " is not free due to " + timetableProfessors[proff1][indexb][index1b]);
+      console.log(
+        proff1 + " is not free due to ",
+        timetableProfessors[proff1][indexb][index1b]
+      );
+      alert(
+        proff1 +
+          " is not free due to " +
+          timetableProfessors[proff1][indexb][index1b]
+      );
       return;
     }
     if (
@@ -951,7 +1014,10 @@ export default function Page() {
       ) &&
       proff1 != proff2
     ) {
-      console.log(proff2 + " is not free due to ", timetableProfessors[proff2][indexa][index1a]);
+      console.log(
+        proff2 + " is not free due to ",
+        timetableProfessors[proff2][indexa][index1a]
+      );
       alert(proff2 + " is not free.");
       return;
     }
@@ -976,95 +1042,13 @@ export default function Page() {
   };
   // swapArra format: [course, proff, day, start, end, lab2, lab2]
   // swapArrb format:  [[course, proff, day, slot], [course, proff, day, slot], [course, proff, day, slot]...]
-  const handleLabSwap = () => {
-    if (swapArra[3] - swapArra[4] != swapArrb.length) return;
-    let proffs_array: any[] = [swapArrb[0][1]];
-    for (let i = 1; i < swapArrb.length; i++) {
-      if (swapArrb[i][3] != swapArrb[i - 1][3] + 1) return;
-      proffs_array.push(swapArrb[i][1]);
-    }
-    const [labCourse, labProff, day, slot1, end1, initialLab1, initialLab2] =
-      swapArra;
-    const clas = currentClass;
-    const numPeriods = swapArrb.length;
-    const slot2 = swapArrb[0][3];
-    const possibleProffAllocs = allocateProfessors(
-      timetableProfessors,
-      proffs_array,
-      day,
-      slot1,
-      slot2,
-      clas
-    );
-    if (possibleProffAllocs.length == 0) {
-      console.log(
-        "No possble configuration of theory classes proffesors possible to allocate classes"
-      );
-      return;
-    }
-    for (let slot = slot2; slot < slot2 + numPeriods; slot++) {
-      if (!isFreeProfessor(timetableProfessors, labProff, day, slot, clas)) {
-        console.log("Professor: ", labProff, " is not Free!");
-        return;
-      }
-    }
-    const freeLabs = free_labs(
-      timetableLabs,
-      labCourse,
-      day,
-      slot1,
-      slot1 + numPeriods - 1
-    );
-    if (freeLabs.length == 0) {
-      console.log("No Free Labs");
-      return;
-    }
-    const chosenAlloc = getRandomElement(possibleProffAllocs);
-    const [chosenLab1, chosenLab2] = getRandomElement(freeLabs);
-    let timetable_lab = JSON.parse(JSON.stringify(timetableLabs));
-    let timetable_classes = JSON.parse(JSON.stringify(timetableClasses));
-    let timetable_professors = JSON.parse(JSON.stringify(timetableProfessors));
-    for (let i = 0; i < numPeriods; i++) {
-      timetable_lab[initialLab1][day][slot1 + i] = "";
-      timetable_lab[initialLab2][day][slot1 + i] = "";
-      timetable_lab[chosenLab1][day][slot2 + i] = [labCourse, clas, labProff];
-      timetable_lab[chosenLab2][day][slot2 + i] = [labCourse, clas, labProff];
-      let pos = chosenAlloc[i];
-      timetable_classes[clas][day][slot1 + i] = [
-        swapArrb[pos][0],
-        swapArrb[pos][1],
-      ];
-      timetable_classes[clas][day][slot2 + i] = [
-        labCourse,
-        labProff,
-        chosenLab1,
-        chosenLab2,
-      ];
-      timetable_professors[labProff][day][slot1 + i] = "";
-      timetable_professors[labProff][day][slot2 + i] = [
-        labCourse,
-        clas,
-        chosenLab1,
-        chosenLab2,
-      ];
-      timetable_professors[swapArrb[pos][1]][day][slot1 + i] = [
-        swapArrb[pos][0],
-        clas,
-      ];
-      timetable_professors[swapArrb[pos][1]][day][slot2 + i] = "";
-    }
-    setTimetableClasses(timetable_classes);
-    setTimetableLabs(timetable_lab);
-    setTimetableProfessors(timetable_professors);
-  };
+
   return (
     <main className="pl-[100px] pt-[100px] font-semibold">
       <h1 className="text-2xl mb-2 font-black">Schedule Generator</h1>
       <div className="bg-white h-[2px] w-1/2"></div>
       <div className="border border-[#3d4758] p-2 min-w-[300px] max-w-[600px] mt-3 mb-3">
-        <h1 className="text-white bg-[#2d3748] px-3">
-          Class to Courses
-        </h1>
+        <h1 className="text-white bg-[#2d3748] px-3">Class to Courses</h1>
         <div className="px-12 bg-[#3d4758]">
           <input
             type="file"
@@ -1072,9 +1056,7 @@ export default function Page() {
             onChange={(e) => handleFileChange(e, setFile1)}
           />
         </div>
-        <h1 className="text-white bg-[#2d3748] px-3 mt-2">
-          Labs
-          </h1>
+        <h1 className="text-white bg-[#2d3748] px-3 mt-2">Labs</h1>
         <div className="px-12 bg-[#3d4758]">
           <input
             type="file"
@@ -1092,9 +1074,7 @@ export default function Page() {
             onChange={(e) => handleFileChange(e, setFile3)}
           />
         </div>
-        <h1 className="text-white bg-[#2d3748] px-3 mt-2">
-          Blocked Labs
-        </h1>
+        <h1 className="text-white bg-[#2d3748] px-3 mt-2">Blocked Labs</h1>
         <div className="px-12 bg-[#3d4758]">
           <input
             type="file"
@@ -1165,14 +1145,9 @@ export default function Page() {
         onClick={(e) => {
           // setIsSwapMode(!isSwapMode);
           if (isSwapMode) {
-            if (isSwapLabMode) {
-              setIsSwapLabMode(false);
-            } else {
-              setIsSwapMode(false);
-            }
+            setIsSwapMode(false);
           } else {
             setIsSwapMode(true);
-            setIsSwapLabMode(true);
           }
           for (let i = 0; i < selectedElements.length; i++) {
             const element1 = document.getElementById(
@@ -1186,11 +1161,7 @@ export default function Page() {
           setSelectedElements([]);
         }}
       >
-        {isSwapMode
-          ? isSwapLabMode
-            ? "Swap Lab Mode"
-            : "Swap Mode"
-          : "Lock Mode"}
+        {isSwapMode ? "Swap Mode" : "Lock Mode"}
       </button>
       <div className="bg-white h-[3px] w-1/2"></div>
 
@@ -1235,47 +1206,70 @@ export default function Page() {
       )}
 
       <div className="flex mt-12 gap-1 select-none">
-        <div 
-          onClick={() => setMode("student")} 
+        <div
+          onClick={() => setMode("student")}
           className={`flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] 
-          ${mode === "student" ? "border-white border-2" : "border-black border-2"}`}
+          ${
+            mode === "student"
+              ? "border-white border-2"
+              : "border-black border-2"
+          }`}
         >
           Student
         </div>
-        <div 
-          onClick={() => setMode("professor")} 
+        <div
+          onClick={() => setMode("professor")}
           className={`flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] 
-          ${mode === "professor" ? "border-white border-2" : "border-black border-2"}`}
+          ${
+            mode === "professor"
+              ? "border-white border-2"
+              : "border-black border-2"
+          }`}
         >
           Professor
         </div>
-        <div 
-          onClick={() => setMode("labs")} 
+        <div
+          onClick={() => setMode("labs")}
           className={`flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] 
-          ${mode === "labs" ? "border-white border-2" : "border-black border-2"}`}
+          ${
+            mode === "labs" ? "border-white border-2" : "border-black border-2"
+          }`}
         >
           Labs
         </div>
       </div>
 
-
       {mode == "student" ? (
         <>
           <div className="flex mt-6 gap-1 select-none  ">
-            {currentClass === "2nd Year" ? (
+            {currentClass === "1st Year" ? (
               <div className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-white border-2">
-                2<sup>nd</sup> Year
+                1<sup>st</sup> Year
               </div>
             ) : (
               <div
-                onClick={() => {
-                  setCurrentClass("2nd Year");
-                }}
-                className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-black border-2"
+              onClick={() => {
+                setCurrentClass("1st Year");
+              }}
+              className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-black border-2"
               >
-                2<sup>nd</sup> Year
+                1<sup>st</sup> Year
               </div>
             )}
+            {currentClass === "2nd Year" ? (
+                <div className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-white border-2">
+                  2<sup>nd</sup> Year
+                </div>
+              ) : (
+                <div
+                  onClick={() => {
+                    setCurrentClass("2nd Year");
+                  }}
+                  className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-black border-2"
+                >
+                  2<sup>nd</sup> Year
+                </div>
+              )}
             {currentClass === "3rd Year" ? (
               <div className="flex font-bold items-center justify-center bg-[#2d3748] w-[100px] h-[50px] border-white border-2">
                 3<sup>rd</sup> Year
@@ -1380,7 +1374,7 @@ export default function Page() {
             )}
           </div>
         </>
-      ) : (mode == "professor") ? (
+      ) : mode == "professor" ? (
         <div className="flex mt-6 gap-[1px] w-[1300px] overflow-y-hidden overflow-x-auto overflow-scroll whitespace-nowrap scroll-smooth">
           {Object.keys(profData).map((prof1: any, index: number) => {
             return (
@@ -1404,43 +1398,43 @@ export default function Page() {
           })}
         </div>
       ) : (
-        <div className="bg-[#2d3748] w-[1300px] overflow-visible">
-          <div className="flex mt-12 gap-1 select-none p-3">
-            {timings.map((timing, index) => (
-              <div key={index} className="bg-[#1d2738] w-[113px] h-[50px] border-black border-2 flex items-center justify-center">
-                {timing}
-              </div>
-            ))}
-          </div>
-          <div className="px-3 gap-3">
-            {Object.keys(labData).map((lab, index) => (
-              <div key={index}>
-                <h2 className="text-lg font-bold text-white mt-4">{lab}</h2>
-                {labData[lab].map((row: any, rowIndex: number) => (
-                  <div key={rowIndex} className="flex gap-1 mb-1 select-none">
-                    <div className="bg-[#1d2738] w-[113px] h-[70px] border-black border-2 flex items-center justify-center">
-                      {days[rowIndex]}
-                    </div>
-                    <div className="flex gap-1">
-                      {row.map((col: string, colIndex: number) => (
-                        <div key={`${rowIndex}${colIndex + 1}`} className="bg-[#3d4758] w-[112.5px] h-[70px] border-black border-2 flex items-center justify-center text-xs font-semibold text-center">
-                          {col}
-                        </div>
-                      ))}
-                    </div>
+        <div className="flex mt-6 gap-[1px] w-[1300px] overflow-y-hidden overflow-x-auto overflow-scroll whitespace-nowrap scroll-smooth">
+          {Object.keys(labData).map((lab: any, index: number) => {
+            return (
+              <div className="flex gap-1 select-none  ">
+                {currentLab === lab ? (
+                  <div className="flex font-bold items-center justify-center px-4 bg-[#2d3748] min-w-[140px] h-[50px] border-white border-2">
+                    {lab}
                   </div>
-                ))}
+                ) : (
+                  <div
+                    onClick={() => {
+                      setCurrentLab(lab);
+                    }}
+                    className="flex font-bold items-center justify-center px-4 bg-[#2d3748] min-w-[140px] h-[50px] border-black border-2"
+                  >
+                    {lab}
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
-        )
-      }
+      )}
 
       {mode == "student" ? (
         <div className="bg-[#2d3748] w-[1300px] overflow-visible">
           <div className="flex mt-12 gap-1 select-none p-3">
-            {timings.map((timing, index) => {
+            {currentClass === "1st Year" ? timings1.map((timing, index) => {
+              return (
+                <div
+                  key={index}
+                  className="bg-[#1d2738] w-[113px] h-[50px] border-black border-2 flex items-center justify-center"
+                >
+                  {timing}
+                </div>
+              );
+            }): timings.map((timing, index) => {
               return (
                 <div
                   key={index}
@@ -1609,7 +1603,7 @@ export default function Page() {
             )}
             <button
               onClick={() => {
-                genCSV(currentClass + " B_Tech " + currentSection);
+                genCSV(currentClass + " B_Tech " + currentSection, 0);
               }}
               className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
             >
@@ -1617,7 +1611,8 @@ export default function Page() {
             </button>
           </div>
         </div>
-      ) : (
+      ) : 
+      mode == "professor" ? (
         <div className="bg-[#2d3748] w-[1300px] overflow-visible">
           <div className="flex mt-12 gap-1 select-none p-3">
             {timings.map((timing, index) => {
@@ -1671,119 +1666,63 @@ export default function Page() {
             })}
           </div>
           <div className="w-full flex p-3">
-            {isSwapMode ? (
-              <button
-                onClick={(e) => {
-                  if (selectedElements.length === 2) {
-                    console.log(selectedElements);
-                    handleSwap(
-                      selectedElements[0][0],
-                      selectedElements[0][1],
-                      selectedElements[1][0],
-                      selectedElements[1][1]
-                    );
-                  }
-                }}
-                className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
-              >
-                Swap
-              </button>
-            ) : (
-              <button
-                onClick={(e) => {
-                  if (selectedElements.length != 1) return;
-                  const courseCode =
-                    timetableData[currentClass + " B_Tech " + currentSection][
-                      selectedElements[0][0]
-                    ][selectedElements[0][1]].split(" ")[0];
-                  const prof1 = classCourses[
-                    currentClass + " B_Tech " + currentSection
-                  ].find((el: any) => el[0] === courseCode);
-                  console.log(prof1);
-                  const element = [
-                    currentClass + " B_Tech " + currentSection,
-                    courseCode,
-                    courseCode == "Self-Learning" ? "Self-Learning" : prof1[3],
-                    selectedElements[0][0],
-                    selectedElements[0][1],
-                  ];
-                  console.log(element);
-                  if (selectedElements.length === 1) {
-                    const checkExist = () => {
-                      for (let i = 0; i < parameter.length; i++) {
-                        if (parameter[i].toString() == element.toString()) {
-                          return true;
-                        }
-                      }
-                      return false;
-                    };
-                    if (!checkExist()) {
-                      setParameter([...parameter, element]);
-                    }
-                    console.log(parameter);
-                  }
-                }}
-                className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
-              >
-                Lock Slot
-              </button>
-            )}
-            {!lockedClasses.includes(
-              currentClass + " B_Tech " + currentSection
-            ) ? (
-              <button
-                onClick={() => {
-                  if (
-                    !lockedClasses.includes(
-                      currentClass + " B_Tech " + currentSection
-                    )
-                  ) {
-                    setLockedClasses(() => [
-                      ...lockedClasses,
-                      currentClass + " B_Tech " + currentSection,
-                    ]);
-                  }
-                  console.log(lockedClasses);
-                }}
-                className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
-              >
-                Freeze
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  if (
-                    lockedClasses.includes(
-                      currentClass + " B_Tech " + currentSection
-                    )
-                  ) {
-                    setLockedClasses(() => {
-                      return lockedClasses.filter((el) => {
-                        return (
-                          el !== currentClass + " B_Tech " + currentSection
-                        );
-                      });
-                    });
-                  }
-                  console.log(lockedClasses);
-                }}
-                className="ml-2 bg-[#282828] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
-              >
-                Unfreeze
-              </button>
-            )}
             <button
               onClick={() => {
-                genCSV(currentClass + " B_Tech " + currentSection);
+                genCSV(prof, 1);
               }}
-              className="ml-2 bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+              className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
             >
               Download CSV
             </button>
           </div>
         </div>
+      ): (
+        <div className="bg-[#2d3748] w-[1300px] overflow-visible">
+          <div className="flex mt-12 gap-1 select-none p-3 justify-center">
+            {slots.map((timing, index) => (
+              <div
+                key={index}
+                className="bg-[#1d2738] w-[113px] h-[50px] border-black border-2 flex items-center justify-center"
+              >
+                {timing}
+              </div>
+            ))}
+          </div>
+          <div className="px-3 gap-3 ml-auto flex justify-center">
+              <div>
+                {labData[currentLab]?.map((row: any, rowIndex: number) => (
+                  <div key={rowIndex} className="flex gap-1 mb-1 select-none">
+                    <div className="bg-[#1d2738] w-[113px] h-[70px] border-black border-2 flex items-center justify-center">
+                      {days[rowIndex]}
+                    </div>
+                    <div className="flex gap-1">
+                      {row.map((col: string, colIndex: number) => (
+                        <div
+                          key={`${rowIndex}${colIndex + 1}`}
+                          className="bg-[#3d4758] w-[112.5px] h-[70px] border-black border-2 flex items-center justify-center text-xs font-semibold text-center"
+                        >
+                          {col != "Blocked" ? col : null}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            
+          </div>
+          <div className="w-full flex p-3">
+
+          <button
+              onClick={() => {
+                genCSV(currentLab, 2);
+              }}
+              className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
+            >
+              Download CSV
+            </button>
+        </div>
+        </div>
       )}
     </main>
   );
 }
-
