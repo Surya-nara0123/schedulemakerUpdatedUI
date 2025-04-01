@@ -824,6 +824,8 @@ export default function Page() {
       { name: "class_courses.csv", path: "/class_courses.csv" },
       { name: "proffs_to_short.csv", path: "/proffs_to_short.csv" },
       { name: "labs.csv", path: "/labs.csv" },
+      { name: "lab_blocking.json", path: "/lab_timings.json" },
+      { name: "professor_blocking.json", path: "/proff_timmings.json" },
     ];
 
     files.forEach(async (file) => {
@@ -1144,7 +1146,7 @@ export default function Page() {
         className="bg-[#3d4758] p-3 mt-3 ml-2 mb-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
         onClick={(e) => getSamples()}
       >
-        Get Sample CSVs
+        Get Sample Files
       </button>
       <button
         className="bg-[#3d4758] p-3 mt-3 ml-2 mb-2 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"
