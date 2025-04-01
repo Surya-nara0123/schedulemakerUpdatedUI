@@ -997,10 +997,13 @@ export default function Page() {
         proff1 + " is not free due to ",
         timetableProfessors[proff1][indexb][index1b]
       );
+      let blocking = timetableProfessors[proff1][indexb][index1b]
+      if (Array.isArray(blocking)) {
+        blocking = blocking.join(" ");
+      }
       alert(
         proff1 +
-          " is not free due to " +
-          timetableProfessors[proff1][indexb][index1b]
+          " is not free due to " + blocking
       );
       return;
     }
@@ -1014,11 +1017,14 @@ export default function Page() {
       ) &&
       proff1 != proff2
     ) {
+      let blocking = timetableProfessors[proff2][indexa][index1a]
+      if (Array.isArray(blocking)) {
+        blocking = blocking.join(" ");
+      }
       console.log(
         proff2 + " is not free due to ",
-        timetableProfessors[proff2][indexa][index1a]
       );
-      alert(proff2 + " is not free.");
+      alert(proff2 + " is not free due to " + blocking);
       return;
     }
 
@@ -1487,6 +1493,8 @@ export default function Page() {
                       selectedElements[1][0],
                       selectedElements[1][1]
                     );
+                  } else {
+                    alert("Needed amount of classes not selected!");
                   }
                 }}
                 className="ml-auto bg-[#3d4758] p-3 mt-3 rounded border-[#2d3748] border-r-[#071122] border-b-[#071122] border-2 active:border-black active:border-l-[#071122] active:border-t-[#071122]"

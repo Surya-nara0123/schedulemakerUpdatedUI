@@ -182,7 +182,7 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                 }
 
                 // To spread out the labs
-                if (make_random() % 10 != 0) {
+                if (make_random() % 5 != 0) {
                     continue;
                 }
 
@@ -256,24 +256,6 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                         }
                     }
                 }
-                // Condition for ECE courses as there is only 1 ECE lab
-                if (choice.includes("ECE")) {
-                    let lab = possible_labs[choice][make_random() % possible_labs[choice].length];
-                    let course_details = [];
-                    for (let lab_course of lab_classes[clas]) {
-                        if (lab_course[0] == choice) {
-                            course_details = lab_course;
-                            break;
-                        }
-                    }
-                    for (let i = 0; i < course_details[1]; i++) {
-                        timetable_classes[clas][day][slot + i] = [choice, course_details[3], lab]
-                        timetable_professors[course_details[3]][day][slot + i] = [choice, clas, lab]
-                        timetable_labs[lab][day][slot + i] = [choice, clas, course_details[3]]
-                    }
-                    lab_classes[clas].splice(lab_classes[clas].indexOf(course_details), 1)
-                    continue
-                }
                 
                 let lab_count = -1;
                 let course_details = []
@@ -313,7 +295,7 @@ function theory_insert(theory_classes, timetable_classes, timetable_professors) 
                 }
                 let possibles = []
                 for (let course of theory_classes[clas]) {
-                    if (is_free_professor(timetable_professors, course[3], day, slot, clas)) {
+                    if (is_free_professor(timetable_professors, course[3], day, slot, clas) && (course[3] != "self-proff" || slot > 4)) {
                         possibles.push(course);
                     }
                 }
@@ -825,16 +807,6 @@ function verify_everything(classes_to_courses, timetable_classes, timetable_prof
                         }
                     }
                     continue;
-                } else if (temp[0].includes("ECE")) {
-                    if (timetable_labs[temp[2]][day][slot][0] != temp[0] || timetable_labs[temp[2]][day][slot][1] != clas || timetable_labs[temp[2]][day][slot][2] != temp[1] ||
-                        timetable_professors[temp[1]][day][slot][0] != temp[0] || timetable_professors[temp[1]][day][slot][1] != clas || timetable_professors[temp[1]][day][slot][2] != temp[2]) {
-                        console.log(`Class ${clas}, Day ${day}, Slot ${slot}: Lab or professor mismatch for ECE ${temp}`);
-                        console.log(`Lab slot content: ${timetable_labs[temp[2]][day][slot]}`);
-                        console.log(`Professor slot content: ${timetable_professors[temp[1]][day][slot]}`);
-                        return false;
-                    }
-                    timetable_professors[temp[1]][day][slot] = "";
-                    timetable_labs[temp[2]][day][slot] = "";
                 } else if (temp.length >= 4) {
                     if (temp.length === 6 && temp[0].includes("PHY102") && temp[1].includes("CSE102")) {
                         if (timetable_labs[temp[4]][day][slot][0] != temp[0] || timetable_labs[temp[4]][day][slot][1] != clas || timetable_labs[temp[4]][day][slot][2] != temp[2] ||
