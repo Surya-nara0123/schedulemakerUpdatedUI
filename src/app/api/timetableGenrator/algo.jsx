@@ -19,7 +19,8 @@ function adjustIndex(index) {
       index -= 1;
     }
     return index;
-  }
+}
+
 function make_random() {
     const currentTimeNs = Date.now() * 1000000;
     Math.seedrandom(currentTimeNs);
@@ -38,19 +39,19 @@ function shuffle_array(array) {
 
 //Checks if a professor is free on a specific day and slot
 function is_free_professor(timetable_professors, proff, day, slot, clas) {
-    if (timetable_professors[proff][day][slot] === "") {
+    if (timetable_professors[proff][day][slot] == "") {
         let clas_count = 0
         let period_count = 0;
         for (let i = 0; i < slot; i++) {
             if (typeof timetable_professors[proff][day][i] === typeof "Lunch") {
                 continue;
             }
-            if (timetable_professors[proff][day][i][1] === clas) {
+            if (timetable_professors[proff][day][i][1] == clas) {
                 clas_count += 1;
             }
             period_count += 1;
         }
-        return clas_count < 3 && period_count < 6;
+        return (clas_count < 1 && period_count < 6);
     }
     return false
 }
@@ -284,215 +285,169 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
     }
 }
 
-function theory_insert(theory_classes, timetable_classes, timetable_professors) {
-    let classes = Object.keys(theory_classes);
-    shuffle_array(classes);
-    for (let clas of classes) {
-        for (let day = 0; day < 5; day++) {
-            for (let slot = 0; slot < 8; slot++) {
-                if (timetable_classes[clas][day][slot] != "") {
-                    continue;
-                }
-                let possibles = []
-                for (let course of theory_classes[clas]) {
-                    if (is_free_professor(timetable_professors, course[3], day, slot, clas) && (course[3] != "self-proff" || slot > 4)) {
-                        possibles.push(course);
-                    }
-                }
-                if (possibles.length === 0) {
-                    continue;
-                }
-                let choice = possibles[make_random() % possibles.length];
-                if (choice[0].includes("Self-Learning")) {
-                    let self_count = 0;
-                    for (let i = 0; i < slot; i++) {
-                        if (typeof timetable_classes[clas][day][i] == typeof "Lunch") {
-                            continue;
-                        }
-                        if (timetable_classes[clas][day][i][0].includes("Self-Learning")) {
-                            self_count += 1;
-                        }
-                    }
-                    // to avoid many self learnings on the same day
-                    if (self_count >= 3) {
-                        let found_replacement = false;
-                        for (let course of possibles) {
-                            if (!course[0].includes("Self-Learning")) {
-                                while (choice[0].includes("Self-Learning")) {
-                                    choice = possibles[make_random() % possibles.length];
-                                }
-                                timetable_classes[clas][day][slot] = [choice[0], choice[3]];
-                                timetable_professors[choice[3]][day][slot] = [choice[0], clas];
-                                found_replacement = true;
-                                break
-                            }
-                        }
-                        if (!found_replacement) {
-                            timetable_classes[clas][day][slot] = [choice[0], choice[3]];
-                        }
-                    } else {
-                        timetable_classes[clas][day][slot] = [choice[0], choice[3]];
-                    }
-                } else {
-                    timetable_classes[clas][day][slot] = [choice[0], choice[3]];
-                    timetable_professors[choice[3]][day][slot] = [choice[0], clas];
-                }
-                for (let theory_course of theory_classes[clas]) {
-                    if (theory_course[0] == choice[0]) {
-                        theory_course[1] -= 1
-                        if (theory_course[1] == 0) {
-                            theory_classes[clas].splice(theory_classes[clas].indexOf(theory_course), 1)
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-    }
-}
+function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetable_professors) {
+    // Create a deep copy of inputs to avoid modifying originals during backtracking
+    const classes = JSON.parse(JSON.stringify(theory_classes));
+    const classTimetable = JSON.parse(JSON.stringify(timetable_classes));
+    const profTimetable = JSON.parse(JSON.stringify(timetable_professors));
+    
+    // Get all classes that need scheduling
+    const classNames = Object.keys(classes);
+    let cache = new Set()
 
-function class_swap(timetable_classes, clas, day, slot) {
-    for (let i = 0; i < 5; i++) {
-        for (let j = 0; j < 8; j++) {
-            if (timetable_classes[clas][i][j] === "") {
-                timetable_classes[clas][i][j] = timetable_classes[clas][day][slot];
-                return;
-            }
+    // Calculate total periods for each class
+    const totalPeriodsNeeded = {};
+    for (const className of classNames) {
+      totalPeriodsNeeded[className] = 40; // Total periods per week (5 days * 8 slots)
+      
+      for (let day = 0; day < 5; day++) {
+        for (let slot = 0; slot < 8; slot++) {
+          if (classTimetable[className][day][slot] === "Lunch") {
+            // Count lunch periods
+            totalPeriodsNeeded[className]--;
+          } else if (classTimetable[className][day][slot] != "") {
+            // Count already assigned periods
+            totalPeriodsNeeded[className]--;
+          }
         }
+      }
+      
+      // Calculate how many periods are already accounted for by courses
+      let assignedPeriods = 0;
+      for (const course of classes[className]) {
+        assignedPeriods += course[1];
+      }
+      
+      // Remaining periods are the difference
+      totalPeriodsNeeded[className] -= assignedPeriods;
     }
-}
+    
+    // Helper function to recursively assign classes
+    function backtrack(classIndex, day, slot) {
+      // If we've processed all classes, we're done
+      if (classIndex >= classNames.length) {
+        return true;
+      }
+      
+      const currentClass = classNames[classIndex];
+      
+      // If we've gone through all slots for this class, try next class
+      if (day >= 5) {
+        return backtrack(classIndex + 1, 0, 0);
+      }
+      
+      // If we've gone through all slots in this day, move to next day
+      if (slot >= 8) {
+        return backtrack(classIndex, day + 1, 0);
+      }
+      
+      // If slot is already filled or it's lunch, move to next slot
+      if (classTimetable[currentClass][day][slot] !== "") {
+        return backtrack(classIndex, day, slot + 1);
+      }
 
-// Most of the time all classes are not assigned so we do some swapping to assign them. This swaps left over classes with self learnings.
-function theory_update_1(theory_classes, timetable_classes, timetable_professors) {
-    for (let clas of Object.keys(theory_classes)) {
-        if (theory_classes[clas].length === 0) {
-            continue;
-        }
-        for (let day = 0; day < 5; day++) {
-            for (let slot = 0; slot < 8; slot++) {
-                if (theory_classes[clas].length === 0) {
-                    continue;
-                }
-                if (typeof timetable_classes[clas][day][slot] === typeof "Lunch") {
-                    continue;
-                }
-                if (timetable_classes[clas][day][slot][0].includes("Self-Learning")) {
-                    let possibles = [];
-                    for (let course of theory_classes[clas]) {
-                        if (is_free_professor(timetable_professors, course[3], day, slot, clas)) {
-                            possibles.push(course);
-                        }
-                    }
-                    if (possibles.length === 0) {
-                        continue
-                    }
-                    class_swap(timetable_classes, clas, day, slot);
-                    let choice = possibles[make_random() % possibles.length];
-                    timetable_classes[clas][day][slot] = [choice[0], choice[3]];
-                    timetable_professors[choice[3]][day][slot] = [choice[0], clas];let i = 0;
-                    while (i < theory_classes[clas].length) {
-                        let course = theory_classes[clas][i];
-                        if (course[0] == choice[0]) {
-                            course[1] -= 1;
-                            if (course[1] === 0) {
-                                theory_classes[clas].splice(i, 1);
-                            } else {
-                                i++;
-                            }
-                            break;
-                        } else {
-                            i++;
-                        }
-                    }                    
-                }
+      const cacheKey = currentClass + day + slot + JSON.stringify(classes[currentClass]);
+      if (cache.has(cacheKey)) {
+        return false;
+      }
+      
+      // Special handling for the last two slots of the day
+      if (slot === 6) {
+        // Check if last slot (7) is empty - if so, we need to decide whether to use self-learning for both
+        if (classTimetable[currentClass][day][7] === "") {
+          // Try using self-learning for both slots 6 and 7
+          if (totalPeriodsNeeded[currentClass] >= 2) {
+            classTimetable[currentClass][day][6] = [`Self-Learning`, "self_proff"];
+            classTimetable[currentClass][day][7] = [`Self-Learning`, "self_proff"];
+            
+            totalPeriodsNeeded[currentClass] -= 2;
+            
+            if (backtrack(classIndex, day + 1, 0)) {
+              return true;
             }
+            
+            // Undo if that didn't work
+            classTimetable[currentClass][day][6] = "";
+            classTimetable[currentClass][day][7] = "";
+            totalPeriodsNeeded[currentClass] += 2;
+          }
         }
-        let temp = JSON.parse(JSON.stringify(theory_classes))
-        for (let course of temp[clas]) {
-            if (!course[0].includes("Self-Learning")) {
-                continue;
-            }
-            let check = false;
-            for (let day = 0; day < 5; day++) {
-                for (let slot = 0; slot < 8; slot++) {
-                    if (timetable_classes[clas][day][slot] === "" && !check) {
-                        timetable_classes[clas][day][slot] = [course[0], course[3]];
-                        theory_classes[clas].splice(theory_classes[clas].indexOf(course), 1)
-                        check = true;
-                    }
-                }
-            }
+      }
+      
+      // Try to assign a course to this slot
+      const possibleCourses = [];
+      for (let i = 0; i < classes[currentClass].length; i++) {
+        const course = classes[currentClass][i];
+        if (course[1] > 0 && is_free_professor(profTimetable, course[3], day, slot, currentClass)) {
+            possibleCourses.push(i);
         }
-    }
-}
+      }
 
-// Finds empty periods and puts the class of a professor whos free, and has all their classes assigned, there and any replaces a leftover class to one of their other classes in for that class
-function theory_update_2(theory_classes, all_theory_classes, timetable_classes, timetable_professors, initial_proffs, initial_lectures, locked_classes) {
-    let proffs_fixed = [];
-    for (let i of initial_proffs) {
-        proffs_fixed.push(i[0]);
-    }
-    for (let clas of Object.keys(theory_classes)) {
-        if (theory_classes[clas].length === 0) {
-            continue;
+      
+      shuffle_array(possibleCourses);
+      
+      // Try each possible course
+      for (const courseIndex of possibleCourses) {
+        const course = classes[currentClass][courseIndex];
+        
+        // Assign the course
+        classTimetable[currentClass][day][slot] = [course[0], course[3]];
+        profTimetable[course[3]][day][slot] = [course[0], currentClass];
+        
+        // Update remaining classes
+        course[1]--;
+        
+        // Recursively try to assign the rest
+        if (backtrack(classIndex, day, slot + 1)) {
+          return true;
         }
-        for (let day = 0; day < 5; day++) {
-            for (let slot = 0; slot < 8; slot++) {
-                if (timetable_classes[clas][day][slot] === "") {
-                    let possibles = []
-                    for (let course of all_theory_classes[clas]) {
-                        if (course[0].includes("Self-Learning") || course[2] === "L") {
-                            continue;
-                        }
-                        if (is_free_professor(timetable_professors, course[3], day, slot, clas) && !proffs_fixed.includes(course[3])) {
-                            possibles.push(course)
-                        }
-                    }
-                    if (possibles.length === 0) {
-                        continue;
-                    }
-                    let replaceable = []
-                    for (let poss of possibles) {
-                        for (let i = 0; i < 5; i++) {
-                            for (let j = 0; j < 8; j++) {
-                                if (timetable_professors[poss[3]][i][j].length === 2 && timetable_professors[poss[3]][i][j][1] == clas) {
-                                    for (let course of theory_classes[clas]) {
-                                        if (is_free_professor(timetable_professors, course[3], i, j, clas) && !initial_lectures.includes([clas, course[0], course[3], i, j])) {
-                                            replaceable.push([poss, course, i, j])
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (replaceable.length === 0) {
-                        continue;
-                    }
-                    let choice = replaceable[make_random() % replaceable.length]
-                    timetable_classes[clas][day][slot] = [choice[0][0], choice[0][3]]
-                    timetable_classes[clas][choice[2]][choice[3]] = [choice[1][0], choice[1][3]]
-                    timetable_professors[choice[0][3]][day][slot] = [choice[0][0], clas]
-                    timetable_professors[choice[0][3]][choice[2]][choice[3]] = ""
-                    timetable_professors[choice[1][3]][day][slot] = [choice[1][0], clas]
-                    let i = 0;
-                    while (i < theory_classes[clas].length) {
-                        let course = theory_classes[clas][i];
-                        if (course[0] == choice[0]) {
-                            course[1] -= 1;
-                            if (course[1] === 0) {
-                                theory_classes[clas].splice(i, 1); 
-                            } else {
-                                i++;
-                            }
-                            break;
-                        } else {
-                            i++;
-                        }
-                    }
-                }
-            }
+        
+        // Backtrack - undo the assignment
+        classTimetable[currentClass][day][slot] = "";
+        profTimetable[course[3]][day][slot] = "";
+        
+        course[1]++;
+      }
+      
+      // If no course worked and we still have self-learning slots available, use self-learning
+      // Avoid putting self-learning early in the day unless necessary
+      
+      if (totalPeriodsNeeded[currentClass] > 0) {
+        // Create a self-learning period
+        const selfLearningCourse = [`Self-Learning`, "self_proff"];
+        
+        // Assign the self-learning
+        classTimetable[currentClass][day][slot] = [selfLearningCourse[0], selfLearningCourse[3]];
+        
+        // Decrease total periods needed
+        totalPeriodsNeeded[currentClass]--;
+        
+        // Try to continue with rest of scheduling
+        if (backtrack(classIndex, day, slot + 1)) {
+          return true;
         }
+        
+        // If that didn't work, undo
+        classTimetable[currentClass][day][slot] = "";
+        totalPeriodsNeeded[currentClass]++;
+      }
+      
+      // If no course worked, return false
+      cache.add(cacheKey);
+      return false;
     }
+    
+    // Start backtracking from the first class, day, and slot
+    const result = backtrack(0, 0, 0);
+    
+    // If successful, update the original timetables
+    if (result) {
+      Object.assign(theory_classes, classes);
+      Object.assign(timetable_classes, classTimetable);
+      Object.assign(timetable_professors, profTimetable);
+    }
+    
+    return result;
 }
 
 // Adds theory classes for labs and splits Lab and Theory classes like Digital Design and OS. Also removes courses for classes in locked_Classes
@@ -517,19 +472,8 @@ function initialise_class_courses(class_courses, locked_classes) {
         }
     }
 
-    let temp_2 = JSON.parse(JSON.stringify(result));
-
-    for (let [clas, courses] of Object.entries(temp_2)) {
-        let sum1 = 0;
-        for (let course of courses) {
-            sum1 += course[1];
-        }
-        let total_self_learning = 35 - sum1;
-        while (total_self_learning != 0) {
-            result[clas].push(["Self-Learning " + total_self_learning, 1, "T", "self_proff"]);
-            total_self_learning -= 1;
-        }
-    }
+    // No longer adding self-learning courses here
+    // Instead, they will be dynamically added in the backtracking algorithm
 
     let temp = JSON.parse(JSON.stringify(result));
     // Remove keys that are in locked_classes
@@ -607,7 +551,6 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
         } else if (proff_to_year[proff] === "cross") {
             for (let day = 0; day < timetable_professors_ini[proff].length; day++) {
                 timetable_professors_ini[proff][day][4] = "Lunch"
-                timetable_professors_ini[proff][day][5] = "Lunch"
             }
         } else {
             for (let day = 0; day < timetable_professors_ini[proff].length; day++) {
@@ -778,17 +721,13 @@ function verify_everything(classes_to_courses, timetable_classes, timetable_prof
 
                 if (temp.length === 2) {
                     if (temp[0].includes("Self-Learning")) {
-                        self_count += 1;
-                        if (self_count > 3) {
-                            console.log(`Class ${clas}, Day ${day}, Slot ${slot}: Too many self-learning periods`);
-                            return false;
-                        }
-                        for (let i = 0; i < classes_to_courses[clas].length; i++) {
-                            if (classes_to_courses[clas][i][0] === temp[0]) {
-                                classes_to_courses[clas].splice(i, 1);
-                                break;
-                            }
-                        }
+                        // self_count += 1;
+                        // if (self_count > 3) {
+                        //     console.log(`Class ${clas}, Day ${day}, Slot ${slot}: Too many self-learning periods`);
+                        //     // Not failing on this - it's a soft constraint now
+                        //     // return false;
+                        // }
+                        // Self-learning periods are generated dynamically now, no need to check classes_to_courses
                         continue;
                     }
                     if (timetable_professors[temp[1]][day][slot][0] != temp[0] || timetable_professors[temp[1]][day][slot][1] != clas) {
@@ -925,7 +864,6 @@ function get_timetables(class_courses, professors, proff_to_short, labs, initial
     // Fallbacks and all are used to avoid infinite while loops
     while (!check && fallback < 200) {
         let classes_to_courses1 = JSON.parse(JSON.stringify(classes_to_courses));
-        let classes_to_courses2 = JSON.parse(JSON.stringify(classes_to_courses));
 
         let timetable_classes = JSON.parse(JSON.stringify(timetable_classes_ini));
         let timetable_professors = JSON.parse(JSON.stringify(timetable_professors_ini));
@@ -949,7 +887,6 @@ function get_timetables(class_courses, professors, proff_to_short, labs, initial
         let failsafe = 0
         // Keeps on looping and assigns lab classes
         while (!is_assigned_courses(lab_classes) && failsafe < 10) {
-            console.log(failsafe);
             lab_insert(lab_classes, timetable_classes, timetable_professors, timetable_labs, class_phy_cprog_lab);
             failsafe += 1;
         }
@@ -957,32 +894,18 @@ function get_timetables(class_courses, professors, proff_to_short, labs, initial
             continue;
         }
 
-        let theory_temp = {}
-        let timetable_classes_temp = {}
-        let timetable_professors_temp = {}
-        failsafe = 0
-        // Keeps looping to add all theory classes
-        while (true && failsafe < 20) {
-            theory_temp = JSON.parse(JSON.stringify(theory_classes));
-            timetable_classes_temp = JSON.parse(JSON.stringify(timetable_classes));
-            timetable_professors_temp = JSON.parse(JSON.stringify(timetable_professors));
-            theory_insert(theory_temp, timetable_classes_temp, timetable_professors_temp);
-            theory_update_1(theory_temp, timetable_classes_temp, timetable_professors_temp, locked_classes);
-            theory_update_2(theory_temp, theory_classes, timetable_classes_temp, timetable_professors_temp, initial_proffs, initial_lectures, locked_classes);
-            if (is_assigned_courses(theory_temp)) {
-                break;
-            }
-            failsafe += 1
+        let theorySuccess = insertTheoryClassesRecursive(theory_classes, timetable_classes, timetable_professors);
+        
+        // If theory assignment failed, restart the outer loop
+        if (!theorySuccess) {
+            fallback += 1;
+            continue;
         }
-        timetable_classes = JSON.parse(JSON.stringify(timetable_classes_temp));
-        timetable_professors = JSON.parse(JSON.stringify(timetable_professors_temp));
-        theory_classes = JSON.parse(JSON.stringify(theory_temp));
 
-        let timetable_professors_copy = JSON.parse(JSON.stringify(timetable_professors_temp));
+        let timetable_professors_copy = JSON.parse(JSON.stringify(timetable_professors));
         let timetable_labs_copy = JSON.parse(JSON.stringify(timetable_labs));
         let origina_temp = JSON.parse(JSON.stringify(original));
         check = verify_everything(origina_temp, timetable_classes, timetable_professors_copy, timetable_labs_copy);
-        console.log(check);
         if (check) {
             try {
                 let proff_replacements = get_replacements(original, timetable_professors, locked_classes);

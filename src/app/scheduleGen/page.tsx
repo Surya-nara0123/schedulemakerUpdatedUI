@@ -68,15 +68,6 @@ function isFreeProfessor(
   }
   return false;
 }
-function adjustIndex(index: number) {
-  if (index > 8) {
-    index -= 1;
-  }
-  if (index > 3) {
-    index -= 1;
-  }
-  return index;
-}
 function format_timetables(
   timetable_classes: any,
   timetable_professors: any,
@@ -293,6 +284,24 @@ export default function Page() {
   const [classCourses, setClassCourses] = useState<{ [key: string]: any[] }>(
     {}
   );
+  function adjustIndex(index: number) {
+    if (currentClass == "1st Year") {
+      if (index > 8) {
+        index -= 1;
+      }
+      if (index > 2) {
+        index -= 1;
+      }
+      return index;
+    }
+    if (index > 8) {
+      index -= 1;
+    }
+    if (index > 3) {
+      index -= 1;
+    }
+    return index;
+  }
   const [currentLab, setCurrentLab] = useState("");
   useEffect(() => {
     if (timetableClasses && timetableProfessors && timetableLabs) {
