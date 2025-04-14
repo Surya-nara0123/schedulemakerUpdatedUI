@@ -322,11 +322,9 @@ export default function Page() {
       alert("Please upload the previous session timetable.");
       return;
     }
-    // printOutput(false);
     console.log("file4", file4);
 
     // read the json file (file4)
-    // assign classCourses,proffToShort,proffsToYear,timetableLabs,timetableData,timetableClasses,profData,timetableProfessors
     const reader = new FileReader();
 
     reader.onload = async (e: any) => {
@@ -340,6 +338,18 @@ export default function Page() {
       setTimetableLabs(data.timetableLabs);
       setTimetableClasses(data.timetableClasses);
       setTimetableProfessors(data.timetableProfessors);
+      
+      // Set the formatted timetable data
+      format_timetables(
+        data.timetableClasses,
+        data.timetableProfessors,
+        data.timetableLabs,
+        data.proffsToYear,
+        data.proffToShort
+      );
+      
+      // Set isGenerated to true to show the timetable UI
+      setIsGenerated(true);
     };
 
     reader.readAsText(file4);
