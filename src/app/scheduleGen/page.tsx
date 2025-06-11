@@ -364,40 +364,35 @@ export default function Page() {
     let check = true;
 
     data.forEach((row) => {
-      let count = 0;
-      for (let i = 0; i < row.length; i++) {
-        if (row[i] != "") {
-          count++;
-        }
-      }
-      if (count === 1) {
+      if (row.length === 1) {
         currentSection = row[0].trim();
         dictionary[currentSection] = [];
       } else if (row.length === 4) {
         // console.log(row)
         if (
-          row[0] === "Course" &&
-          row[1] === "Hours" &&
-          row[2] === "Type" &&
+          row[0] === "Type" &&
+          row[1] === "Course" &&
+          row[2] === "Hours" &&
           row[3] === "Professor"
         ) {
           return;
         }
         dictionary[currentSection].push([
           row[0].trim(),
-          parseInt(row[1]),
-          row[2].trim(),
+          row[1].trim(),
+          parseInt(row[2]),
           row[3].trim(),
         ]);
-      } else if (row.length === 5) {
+      } else if (row[0][0] == "L") {
         dictionary[currentSection].push([
-          row[0].trim(),
-          parseInt(row[1]),
-          row[2].trim(),
+          row[0].trim(),          
+          row[1].trim(),
+          parseInt(row[2]),
           row[3].trim(),
-          row[4].trim(),
+          parseInt(row[4]),
         ]);
       } else {
+        console.log("Here: ", row)
         check = false;
         return;
       }
@@ -579,7 +574,6 @@ export default function Page() {
       body: JSON.stringify([
         class_courses,
         professors,
-        proffs_names_to_short,
         labs,
         parameter,
         lockedClasses,
