@@ -383,7 +383,7 @@ export default function Page() {
           parseInt(row[2]),
           row[3].trim(),
         ]);
-      } else if (row[0][0] == "L") {
+      } else if (row[0] === "L" || row[0] === "LT") {
         dictionary[currentSection].push([
           row[0].trim(),          
           row[1].trim(),
@@ -391,8 +391,18 @@ export default function Page() {
           row[3].trim(),
           parseInt(row[4]),
         ]);
+      } else if (row[0] === "E") {
+        // Handle elective theory courses
+        // Format: E,3,CS101,Proff1,CS102,Proff2
+        let temp = JSON.parse(JSON.stringify(row))
+        temp[2] = parseInt(temp[2])
+        dictionary[currentSection].push(temp)
+      } else if (row[0] === "EL") {
+        // Handle elective lab courses
+        // Format: EL,3,CS201,Proff2,1,CS202,Proff3,1
+        dictionary[currentSection].push(row);
       } else {
-        console.log("Here: ", row)
+        console.log("Invalid row format:", row);
         check = false;
         return;
       }

@@ -163,6 +163,10 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                     continue;
                 }
 
+                if (make_random() % 5) {
+                    continue;
+                }
+
                 //gets all possible labs and courses and puts them into a dictionary with course as key and labs as value
                 let possible_labs = {}
                 for (let lab_course of lab_classes[clas]) {
@@ -170,7 +174,7 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                     for (let i = 0; i < lab_course[2]; i++) {
                         if ((slot + i) >= 8 || timetable_classes[clas][day][slot + i] != "" || !is_free_professor(timetable_professors, lab_course[3], day, slot + i, clas)) {
                             check = false;
-                            break
+                            break;
                         }
                     }
                     if (!check) {
@@ -183,11 +187,6 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                     possible_labs[lab_course[1]] = temp;
                 }
                 if (Object.keys(possible_labs).length === 0) {
-                    continue
-                }
-
-                // To spread out the labs
-                if (make_random() % 5 != 0) {
                     continue;
                 }
 
@@ -252,18 +251,19 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
       // Calculate how many periods are already accounted for by courses
       let assignedPeriods = 0;
       for (const course of classes[className]) {
-        assignedPeriods += course[2];
+        assignedPeriods += course[2]
       }
       
       // Remaining periods are the difference
       totalPeriodsNeeded[className] -= assignedPeriods;
     }
     
-    printObject(totalPeriodsNeeded)
     // Helper function to recursively assign classes
     function backtrack(classIndex, day, slot) {
       // If we've processed all classes, we're done
       if (classIndex >= classNames.length) {
+        console.log("ggwp");
+        printObject(classTimetable);
         return true;
       }
       
@@ -288,6 +288,8 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
       if (cache.has(cacheKey)) {
         return false;
       }
+
+      console.log(classIndex, day, slot);
       
       // Special handling for the last two slots of the day
       if (slot === 6) {
@@ -314,13 +316,25 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
       
       // Try to assign a course to this slot
       const possibleCourses = [];
+      
       for (let i = 0; i < classes[currentClass].length; i++) {
         const course = classes[currentClass][i];
-        if (course[2] > 0 && is_free_professor(profTimetable, course[3], day, slot, currentClass)) {
-            possibleCourses.push(i);
+        if (course[0] == "T" && course[2] > 0 && is_free_professor(profTimetable, course[3], day, slot, currentClass)) {
+            possibleCourses.push(i)
+        } else if (course[0] == "E") {
+            let count = (course.length - 3)/2
+            let check = true
+            for (let i = 0; i < count; i++) {
+                if (!is_free_professor(profTimetable, course[i*2 + 4], day, slot, currentClass)) {
+                    check = false;
+                    break;
+                }
+            }
+            if (check) {
+                possibleCourses.push(i)
+            }
         }
       }
-
       
       shuffle_array(possibleCourses);
       
@@ -329,9 +343,17 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
         const course = classes[currentClass][courseIndex];
         
         // Assign the course
-        classTimetable[currentClass][day][slot] = [course[1], course[3]];
-        profTimetable[course[3]][day][slot] = [course[1], currentClass];
-        
+        if (course[0] == "T") {
+            classTimetable[currentClass][day][slot] = [course[1], course[3]];
+            profTimetable[course[3]][day][slot] = [course[1], currentClass];
+        } else {
+            classTimetable[currentClass][day][slot] = [course[1], course[4]];
+            let count = (course.length - 3)/2;
+            for (let i = 0; i < count; i++) {
+                profTimetable[course[i*2 + 4]][day][slot] = [course[1], currentClass];
+            }
+        }
+
         // Update remaining classes
         course[2]--;
         
@@ -342,14 +364,19 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
         
         // Backtrack - undo the assignment
         classTimetable[currentClass][day][slot] = "";
-        profTimetable[course[3]][day][slot] = "";
+        if (course[0] == "E") {
+            let count = (course.length - 3)/2;
+            for (let i = 0; i < count; i++) {
+                profTimetable[course[i*2 + 4]][day][slot] = "";
+            }
+        } else {
+            profTimetable[course[3]][day][slot] = "";
+        }
         
         course[2]++;
       }
       
       // If no course worked and we still have self-learning slots available, use self-learning
-      // Avoid putting self-learning early in the day unless necessary
-      
       if (totalPeriodsNeeded[currentClass] > 0) {
         // Create a self-learning period
         const selfLearningCourse = ["Self-Learning", "self_proff"];
@@ -377,6 +404,7 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
     
     // Start backtracking from the first class, day, and slot
     const result = backtrack(0, 0, 0);
+    console.log(result)
     
     // If successful, update the original timetables
     if (result) {
@@ -388,32 +416,11 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
     return result;
 }
 
-// Adds theory classes for labs and splits Lab and Theory classes like Digital Design and OS. Also removes courses for classes in locked_Classes
+// removes courses for classes in locked_Classes
 function initialise_class_courses(class_courses, locked_classes) {
-    let result = JSON.parse(JSON.stringify(class_courses));
+    let result = JSON.parse(JSON.stringify(class_courses))
+    let temp = JSON.parse(JSON.stringify(class_courses));
 
-    for (let [clas, courses] of Object.entries(result)) {
-        for (let i = 0; i < courses.length; i++) {
-            let course = courses[i];
-            if (course[0] === "LT") {
-                let temp_1 = ["T", course[1] + " T", parseInt(course[2]) - 2, course[3]];
-                course[2] = 2;
-                course[0] = "L";
-                course[4] = parseInt(course[4]);
-                result[clas].push(temp_1);
-            } else if (course[0] === "L") {
-                course[2] = parseInt(course[2]) - 1;
-                course[4] = parseInt(course[4]);
-                let temp_1 = ["T", course[1] + " T", 1, course[3]];
-                result[clas].push(temp_1);
-            }
-        }
-    }
-
-    // No longer adding self-learning courses here
-    // Instead, they will be dynamically added in the backtracking algorithm
-
-    let temp = JSON.parse(JSON.stringify(result));
     // Remove keys that are in locked_classes
     for (let locked_class of locked_classes) {
         if (result.hasOwnProperty(locked_class)) {
@@ -455,17 +462,27 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
     let proff_to_year = {}
     for (let [clas, courses] of Object.entries(classes_to_courses)) {
         for (let course of courses) {
-            if (proff_to_year[course[3]]) {
-                if (proff_to_year[course[3]] != clas.slice(0, 1)) {
-                    proff_to_year[course[3]] = "cross"
+            if (course[0] == "T" || course[0] == "L") {
+                if (proff_to_year[course[3]]) {
+                    if (proff_to_year[course[3]] != clas.slice(0, 1)) {
+                        proff_to_year[course[3]] = "cross"
+                    }
+                } else {
+                    proff_to_year[course[3]] = clas.slice(0, 1)
                 }
             } else {
-                proff_to_year[course[3]] = clas.slice(0, 1)
+                let count = (course.length - 3)/2;
+                for (let i = 0; i < count; i++) {
+                    if (proff_to_year[course[i*2 + 4]] && proff_to_year[course[i*2 +4]] != clas.slice(0,1)) {
+                        proff_to_year[course[i*2 + 4]] = "cross";
+                    } else {
+                        proff_to_year[course[i*2 + 4]] = clas.slice(0,1);
+                    }
+                }
             }
         }
     }
 
-    //Adds lunch periods
     for (let clas of Object.keys(timetable_classes_ini)) {
         if (clas.slice(0, 1) === "1") {
             for (let day = 0; day < timetable_classes_ini[clas].length; day++) {
@@ -588,8 +605,24 @@ function get_replacements(classes_to_courses, timetable_professors, locked_class
                 }
                 let replacements = []
                 for (let course of classes_to_courses[clas]) {
-                    if (is_free_professor(timetable_professors, course[3], day, slot, clas)) {
-                        replacements.push(course[3])
+                    if (course[0] == "T" || course[0] == "L") {
+                        if (is_free_professor(timetable_professors, course[3], day, slot, clas)) {
+                            replacements.push(course[3])
+                        }
+                    } else if (course[0] == "E") {
+                        let check = true;
+                        let count = (course.length - 3)/2;
+                        for (let i = 0; i < count; i++) {
+                            if (!is_free_professor(timetable_professors, course[i*2 + 4], day, slot, clas)) {
+                                check = false;
+                                break;
+                            }
+                        }
+                        if (check) {
+                            for (let i = 0; i < count; i++) {
+                                replacements.push(course[i*2 + 4]);
+                            }
+                        }
                     }
                 }
                 proff_replacements[prof][day.toString() + slot.toString()] = replacements;
@@ -610,7 +643,7 @@ function get_timetables(class_courses, professors, labs, initial_lectures, locke
     let fallback = 0;
 
     // Fallbacks and all are used to avoid infinite while loops
-    while (!check && fallback < 10) {
+    while (!check && fallback < 100) {
         let classes_to_courses1 = JSON.parse(JSON.stringify(classes_to_courses));
 
         let timetable_classes = JSON.parse(JSON.stringify(timetable_classes_ini));
@@ -619,15 +652,14 @@ function get_timetables(class_courses, professors, labs, initial_lectures, locke
 
         let lab_classes = {};
         for (let [clas, courses] of Object.entries(classes_to_courses1)) {
-            let lab_course = courses.filter(course => course[0] === "L");
+            let lab_course = courses.filter(course => course[0] === "L" || course[0] == "EL");
             lab_classes[clas] = JSON.parse(JSON.stringify(lab_course));
             // Makes a dictionary of courses with lab courses only
         }
 
         let theory_classes = {};
         for (let [clas, courses] of Object.entries(classes_to_courses1)) {
-            theory_classes[clas] = courses.filter(course => course[0] === "T");
-            // Makes a dictionary of courses with theory courses only
+            theory_classes[clas] = courses.filter(course => course[0] === "T" || course[0] == "E");
         }
         
         let failsafe = 0
@@ -641,14 +673,12 @@ function get_timetables(class_courses, professors, labs, initial_lectures, locke
             continue;
         }
 
-        printObject(theory_classes)
-        printObject(timetable_classes)
         let theorySuccess = insertTheoryClassesRecursive(theory_classes, timetable_classes, timetable_professors);
         
         // If theory assignment failed, restart the outer loop
         if (!theorySuccess) {
             fallback += 1;
-            return {}
+            continue
         }
 
         try {
