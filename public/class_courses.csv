@@ -3,7 +3,9 @@ Type,Course,Hours,Professor
 T,ENG101,3,Proff0
 T,MTH101,4,Proff1
 T,PHY101,3,Proff2
-L,ECE102,3,Proff5,1
+T,ECE101 T,1,Proff5
+E,Elective 1,3,CS201,Proff3,CS202,Proff4
+L,ECE101,3,Proff5,1
 L,CSE102,3,Proff9,1
 L,PHY102,3,Proff7,1
 1st Year B_Tech AIDS Section B

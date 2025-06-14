@@ -262,8 +262,6 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
     function backtrack(classIndex, day, slot) {
       // If we've processed all classes, we're done
       if (classIndex >= classNames.length) {
-        console.log("ggwp");
-        printObject(classTimetable);
         return true;
       }
       
@@ -289,8 +287,6 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
         return false;
       }
 
-      console.log(classIndex, day, slot);
-      
       // Special handling for the last two slots of the day
       if (slot === 6) {
         // Check if last slot (7) is empty - if so, we need to decide whether to use self-learning for both
@@ -347,9 +343,10 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
             classTimetable[currentClass][day][slot] = [course[1], course[3]];
             profTimetable[course[3]][day][slot] = [course[1], currentClass];
         } else {
-            classTimetable[currentClass][day][slot] = [course[1], course[4]];
+            classTimetable[currentClass][day][slot] = [course[1], "E"];
             let count = (course.length - 3)/2;
             for (let i = 0; i < count; i++) {
+                classTimetable[currentClass][day][slot].push(course[i*2 + 4])
                 profTimetable[course[i*2 + 4]][day][slot] = [course[1], currentClass];
             }
         }
@@ -404,7 +401,6 @@ function insertTheoryClassesRecursive(theory_classes, timetable_classes, timetab
     
     // Start backtracking from the first class, day, and slot
     const result = backtrack(0, 0, 0);
-    console.log(result)
     
     // If successful, update the original timetables
     if (result) {
