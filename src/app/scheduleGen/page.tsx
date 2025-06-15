@@ -126,7 +126,7 @@ function format_timetables(
             for (let i of timetable_classes[clas][day][slot]) {
               if (proff_to_short[i]) {
                 result += proff_to_short[i];
-              } else {
+              } else if (i != "E") {
                 result += i;
               }
               result += " ";
@@ -364,40 +364,45 @@ export default function Page() {
     let check = true;
 
     data.forEach((row) => {
-      let count = 0;
-      for (let i = 0; i < row.length; i++) {
-        if (row[i] != "") {
-          count++;
-        }
-      }
-      if (count === 1) {
+      if (row.length === 1) {
         currentSection = row[0].trim();
         dictionary[currentSection] = [];
       } else if (row.length === 4) {
         // console.log(row)
         if (
-          row[0] === "Course" &&
-          row[1] === "Hours" &&
-          row[2] === "Type" &&
+          row[0] === "Type" &&
+          row[1] === "Course" &&
+          row[2] === "Hours" &&
           row[3] === "Professor"
         ) {
           return;
         }
         dictionary[currentSection].push([
           row[0].trim(),
-          parseInt(row[1]),
-          row[2].trim(),
+          row[1].trim(),
+          parseInt(row[2]),
           row[3].trim(),
         ]);
-      } else if (row.length === 5) {
+      } else if (row[0] === "L" || row[0] === "LT") {
         dictionary[currentSection].push([
-          row[0].trim(),
-          parseInt(row[1]),
-          row[2].trim(),
+          row[0].trim(),          
+          row[1].trim(),
+          parseInt(row[2]),
           row[3].trim(),
-          row[4].trim(),
+          parseInt(row[4]),
         ]);
+      } else if (row[0] === "E") {
+        // Handle elective theory courses
+        // Format: E,3,CS101,Proff1,CS102,Proff2
+        let temp = JSON.parse(JSON.stringify(row))
+        temp[2] = parseInt(temp[2])
+        dictionary[currentSection].push(temp)
+      } else if (row[0] === "EL") {
+        // Handle elective lab courses
+        // Format: EL,3,CS201,Proff2,1,CS202,Proff3,1
+        dictionary[currentSection].push(row);
       } else {
+        console.log("Invalid row format:", row);
         check = false;
         return;
       }
@@ -579,7 +584,6 @@ export default function Page() {
       body: JSON.stringify([
         class_courses,
         professors,
-        proffs_names_to_short,
         labs,
         parameter,
         lockedClasses,
@@ -991,79 +995,115 @@ export default function Page() {
   ) => {
     index1a = adjustIndex(index1a);
     index1b = adjustIndex(index1b);
-
+    
     let classtt = JSON.parse(JSON.stringify(timetableClasses));
     let profftt = JSON.parse(JSON.stringify(timetableProfessors));
     let currClass = currentClass + " B_Tech " + currentSection;
-    let proff1 = classtt[currClass][indexa][index1a][1];
-    let proff2 = classtt[currClass][indexb][index1b][1];
-    console.log(classtt, proff1, proff2);
 
-    if (proff1 == proff2 && proff1 == "self_proff") {
-      console.log("Nice Joke");
-      alert("Take this seriously bro 😑");
-      return;
-    }
-    if (
-      !isFreeProfessor(
-        timetableProfessors,
-        proff1,
-        indexb,
-        index1b,
-        currClass
-      ) &&
-      proff1 != proff2
-    ) {
-      console.log(
-        proff1 + " is not free due to ",
-        timetableProfessors[proff1][indexb][index1b]
-      );
-      let blocking = timetableProfessors[proff1][indexb][index1b]
-      if (Array.isArray(blocking)) {
-        blocking = blocking.join(" ");
+    if (classtt[currClass][indexa][index1a][1] == "E") {
+      let current_class = classtt[currClass][indexa][index1a];
+      let count = current_class.length - 2;
+      for (let i = 0; i < count; i++) {
+        let proff = current_class[2 + i];
+        if (!isFreeProfessor(timetableProfessors, proff, indexb, index1b, currClass)) {
+          console.log(proff + " is not free due to ", timetableProfessors[proff][indexb][index1b]);
+          let blocking = timetableProfessors[proff][indexb][index1b]
+          if (Array.isArray(blocking)) {
+            blocking = blocking.join(" ");
+          }
+          alert(
+            proff + " is not free due to " + blocking
+          );
+          return;
+        }
       }
-      alert(
-        proff1 +
-          " is not free due to " + blocking
-      );
-      return;
-    }
-    if (
-      !isFreeProfessor(
-        timetableProfessors,
-        proff2,
-        indexa,
-        index1a,
-        currClass
-      ) &&
-      proff1 != proff2
-    ) {
-      let blocking = timetableProfessors[proff2][indexa][index1a]
-      if (Array.isArray(blocking)) {
-        blocking = blocking.join(" ");
+    } else {
+      let proff = classtt[currClass][indexa][index1a][1];
+      console.log(proff);
+      if (!isFreeProfessor(timetableProfessors, proff, indexb, index1b, currClass)) {
+        let blocking = timetableProfessors[proff][indexb][index1b];
+        console.log(blocking)
+        console.log(proff + " is not available due to " + blocking);
+        if (Array.isArray(blocking)) {
+          blocking = blocking.join(" ");
+        }
+        alert(proff + " is not free due to " + blocking);
+        return;
       }
-      console.log(
-        proff2 + " is not free due to ",
-      );
-      alert(proff2 + " is not free due to " + blocking);
-      return;
+    }
+    
+    if (classtt[currClass][indexb][index1b][1] == "E") {
+      let current_class = classtt[currClass][indexb][index1b];
+      let count = current_class.length - 2;
+      for (let i = 0; i < count; i++) {
+        let proff = current_class[2 + i];
+        console.log(proff, "Hello");
+        if (!isFreeProfessor(timetableProfessors, proff, indexa, index1a, currClass)) {
+          console.log(proff + " is not free due to ", timetableProfessors[proff][indexa][index1a]);
+          let blocking = timetableProfessors[proff][indexa][index1a]
+          if (Array.isArray(blocking)) {
+            blocking = blocking.join(" ");
+          }
+          alert(
+            proff + " is not free due to " + blocking
+          );
+          return;
+        }
+      }
+    } else {
+      let proff = classtt[currClass][indexb][index1b][1];
+      if (!isFreeProfessor(timetableProfessors, proff, indexa, index1a, currClass)) {
+        let blocking = timetableProfessors[proff][indexa][index1a];
+        console.log(proff + " is not available due to " + blocking);
+        if (Array.isArray(blocking)) {
+          blocking = blocking.join(" ");
+        }
+        alert(proff + " is not free due to " + blocking);
+        return;
+      }
     }
 
     let temp1 = JSON.parse(JSON.stringify(classtt[currClass][indexa][index1a]));
     let temp2 = JSON.parse(JSON.stringify(classtt[currClass][indexb][index1b]));
-    let ptemp1 = JSON.parse(JSON.stringify(profftt[proff1][indexa][index1a]));
-    let ptemp2 = JSON.parse(JSON.stringify(profftt[proff2][indexb][index1b]));
+
+    if (temp1[1] == "E") {
+      let count = temp1.length - 2;
+      for (let i = 0; i < count; i++) {
+        let proff = temp1[2 + i];
+        let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]))
+        let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]))
+        profftt[proff][indexb][index1b] = class1;
+        profftt[proff][indexa][index1a] = class2;
+      }
+    } else {
+      let proff = temp1[1];
+      let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]));
+      let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]));
+      profftt[proff][indexb][index1b] = class1;
+      profftt[proff][indexa][index1a] = class2;
+    }
+
+
+    if (temp2[1] == "E") {
+      let count = temp2.length - 2;
+      for (let i = 0; i < count; i++) {
+        let proff = temp2[2 + i];
+        let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]))
+        let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]))
+        profftt[proff][indexb][index1b] = class1;
+        profftt[proff][indexa][index1a] = class2;
+      }
+    } else {
+      let proff = temp2[1];
+      let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]));
+      let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]));
+      profftt[proff][indexb][index1b] = class1;
+      profftt[proff][indexa][index1a] = class2;
+    }
 
     classtt[currClass][indexa][index1a] = temp2;
     classtt[currClass][indexb][index1b] = temp1;
-    profftt[proff1][indexa][index1a] = "";
-    profftt[proff1][indexb][index1b] = ptemp1;
-    profftt[proff2][indexb][index1b] = "";
-    profftt[proff2][indexa][index1a] = ptemp2;
-    console.log(profftt[proff1][indexb][index1b]);
-    console.log(profftt[proff1][indexa][index1a]);
-    console.log(profftt[proff2][indexb][index1b]);
-    console.log(profftt[proff2][indexa][index1a]);
+
     setTimetableClasses(JSON.parse(JSON.stringify(classtt)));
     setTimetableProfessors(JSON.parse(JSON.stringify(profftt)));
   };

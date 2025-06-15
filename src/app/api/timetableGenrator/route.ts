@@ -10,18 +10,17 @@ export async function POST(request: NextRequest) {
         // console.log(body);
         const class_courses = body[0];
         const professors = body[1];
-        const proffs_names_to_short = body[2];
-        const labs = body[3];
-        const parameter = body[4];
-        const lockedClasses = body[5];
-        const timetableProfessors = body[6];
-        const timetableClasses = body[7];
-        const timetableLabs = body[8];
-        const labsRest = body[9];
-        const proffRest = body[10];
+        const labs = body[2];
+        const parameter = body[3];
+        const lockedClasses = body[4];
+        const timetableProfessors = body[5];
+        const timetableClasses = body[6];
+        const timetableLabs = body[7];
+        const labsRest = body[8];
+        const proffRest = body[9];
 
         // console.log(class_courses, professors, proffs_names_to_short, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs);
-        const result = randomize(class_courses, professors, proffs_names_to_short, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs, [["Mr.Prawin Raj", [2, 3], [0, 1, 2, 3, 4, 6, 7]]], labsRest, proffRest);
+        const result = randomize(class_courses, professors, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs, labsRest, proffRest);
         // console.log(result);
         return NextResponse.json({ result }, {
             status: 200,
