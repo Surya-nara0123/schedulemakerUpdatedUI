@@ -126,7 +126,7 @@ function format_timetables(
             for (let i of timetable_classes[clas][day][slot]) {
               if (proff_to_short[i]) {
                 result += proff_to_short[i];
-              } else if (i != "E") {
+              } else if (i != "E" && i != "EL") {
                 result += i;
               }
               result += " ";

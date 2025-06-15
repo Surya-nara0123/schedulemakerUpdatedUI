@@ -172,19 +172,60 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                 for (let lab_course of lab_classes[clas]) {
                     let check = true;
                     for (let i = 0; i < lab_course[2]; i++) {
-                        if ((slot + i) >= 8 || timetable_classes[clas][day][slot + i] != "" || !is_free_professor(timetable_professors, lab_course[3], day, slot + i, clas)) {
+                        if ((slot + i) >= 8 || timetable_classes[clas][day][slot + i] != "") {
                             check = false;
                             break;
                         }
+                        // Check all professors for the lab course
+                        if (lab_course[0] === "EL") {
+                            // For elective labs, check all professors before NL
+                            let profIndex = 4;
+                            while (profIndex < lab_course.length) {
+                                if (!is_free_professor(timetable_professors, lab_course[profIndex], day, slot + i, clas)) {
+                                    check = false;
+                                    break;
+                                }
+                                profIndex += 3;
+                            }
+                        } else {
+                            // For regular labs, check single professor
+                            if (!is_free_professor(timetable_professors, lab_course[3], day, slot + i, clas)) {
+                                check = false;
+                                break;
+                            }
+                        }
+                        if (!check) break;
                     }
                     if (!check) {
                         continue
                     }
-                    let temp = free_labs(timetable_labs, lab_course[1], day, slot, slot + lab_course[2])
-                    if (temp.length === 0 || temp.length < lab_course[4]) {
-                        continue;
+                    if (lab_course[0] == "L") {
+                        let temp = free_labs(timetable_labs, lab_course[1], day, slot, slot + lab_course[2])
+                        if (temp.length === 0 || temp.length < lab_course[4]) {
+                            continue;
+                        }
+                        possible_labs[lab_course[1]] = temp;
+                    } else {
+                        let course_index = 3;
+                        let temp = [];
+                        let fail = false;
+                        while (course_index < lab_course.length) {
+                            if (lab_course[course_index + 2] == "NL") {
+                                break;
+                            }
+                            let gotten_free = free_labs(timetable_labs, lab_course[course_index], day, slot, slot + lab_course[2]);
+                            if (gotten_free.length >= lab_course[course_index+2]) {
+                                temp.push(gotten_free);
+                            } else {
+                                fail = true;
+                                break;
+                            }
+                            course_index += 3;
+                        }
+                        if (!fail) {
+                            possible_labs[lab_course[1]] = temp;
+                        }
                     }
-                    possible_labs[lab_course[1]] = temp;
                 }
                 if (Object.keys(possible_labs).length === 0) {
                     continue;
@@ -192,29 +233,66 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
 
                 let options = Object.keys(possible_labs);
                 let choice = options[make_random() % options.length];                
-                let lab_count = -1;
                 let course_details = []
 
                 for (let lab_course of lab_classes[clas]) {
                     if (lab_course[1] == choice) {
                         course_details = lab_course;
-                        lab_count = course_details[4]
                         break
                     }
                 }
-                for (let i = 0; i < course_details[2]; i++) {
-                    timetable_classes[clas][day][slot + i] = [choice, course_details[3]]
-                    timetable_professors[course_details[3]][day][slot + i] = [choice, clas]
-                }
 
-                let labs = getLabs(possible_labs[choice], lab_count);
-                for (let lab of labs) {
+                // Handle elective lab courses
+                if (course_details[0] === "EL") {
+                    // For elective labs, we need to handle multiple professors and courses
+                    let course_index = 3;
+                    let lab_index = 0;
+                    
+                    while (course_index < course_details.length) {
+                        // Get labs for this course
+                        let labs = [];
+                        if (course_details[course_index+2] != "NL"){
+                            labs = getLabs(possible_labs[choice][lab_index], course_details[course_index + 2]);
+                        }
+                        
+                        // Schedule the labs
+                        for (let i = 0; i < course_details[2]; i++) {
+                            if (course_index == 3) {
+                                timetable_classes[clas][day][slot + i] = ["EL", course_details[1]]
+                            }
+                            timetable_classes[clas][day][slot + i].push(course_details[course_index + 1]);
+                            timetable_professors[course_details[course_index + 1]][day][slot + i] = [course_details[course_index], clas];
+                            
+                            if (course_details[course_index + 2] == "NL") {
+                                continue;
+                            }
+                            for (let lab of labs) {
+                                timetable_classes[clas][day][slot + i].push(lab);
+                                timetable_professors[course_details[course_index + 1]][day][slot + i].push(lab);
+                                timetable_labs[lab][day][slot + i] = [course_details[course_index], clas, course_details[course_index + 1]];
+                            }
+                        }
+                        
+                        course_index += 3;
+                        lab_index++;
+                    }
+                } else {
+                    // Handle regular lab courses
                     for (let i = 0; i < course_details[2]; i++) {
-                        timetable_classes[clas][day][slot + i].push(lab)
-                        timetable_professors[course_details[3]][day][slot + i].push(lab)
-                        timetable_labs[lab][day][slot + i] = [choice, clas, course_details[3]]
+                        timetable_classes[clas][day][slot + i] = [choice, course_details[3]]
+                        timetable_professors[course_details[3]][day][slot + i] = [choice, clas]
+                    }
+
+                    let labs = getLabs(possible_labs[choice], course_details[4]);
+                    for (let lab of labs) {
+                        for (let i = 0; i < course_details[2]; i++) {
+                            timetable_classes[clas][day][slot + i].push(lab)
+                            timetable_professors[course_details[3]][day][slot + i].push(lab)
+                            timetable_labs[lab][day][slot + i] = [choice, clas, course_details[3]]
+                        }
                     }
                 }
+                
                 lab_classes[clas].splice(lab_classes[clas].indexOf(course_details), 1)
             }
         }
@@ -466,7 +544,7 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
                 } else {
                     proff_to_year[course[3]] = clas.slice(0, 1)
                 }
-            } else {
+            } else if (course[0] == "E") {
                 let count = (course.length - 3)/2;
                 for (let i = 0; i < count; i++) {
                     if (proff_to_year[course[i*2 + 4]] && proff_to_year[course[i*2 +4]] != clas.slice(0,1)) {
@@ -474,6 +552,16 @@ function initialise_timetables(classes_to_courses, professors, labs, initial_lec
                     } else {
                         proff_to_year[course[i*2 + 4]] = clas.slice(0,1);
                     }
+                }
+            } else {
+                let proff_idx = 4;
+                while (proff_idx < course.length) {
+                    if (proff_to_year[course[proff_idx]] && proff_to_year[course[i*2 +4]] != clas.slice(0,1)) {
+                        proff_to_year[course[proff_idx]] = "cross";
+                    } else {
+                        proff_to_year[course[proff_idx]] = clas.slice(0,1);
+                    }
+                    proff_idx += 3
                 }
             }
         }
