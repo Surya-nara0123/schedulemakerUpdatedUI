@@ -250,7 +250,10 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                     
                     while (course_index < course_details.length) {
                         // Get labs for this course
-                        let labs = getLabs(possible_labs[choice][lab_index], course_details[course_index + 2]);
+                        let labs = [];
+                        if (course_details[course_index+2] != "NL"){
+                            labs = getLabs(possible_labs[choice][lab_index], course_details[course_index + 2]);
+                        }
                         
                         // Schedule the labs
                         for (let i = 0; i < course_details[2]; i++) {
@@ -260,6 +263,9 @@ function lab_insert(lab_classes, timetable_classes, timetable_professors, timeta
                             timetable_classes[clas][day][slot + i].push(course_details[course_index + 1]);
                             timetable_professors[course_details[course_index + 1]][day][slot + i] = [course_details[course_index], clas];
                             
+                            if (course_details[course_index + 2] == "NL") {
+                                continue;
+                            }
                             for (let lab of labs) {
                                 timetable_classes[clas][day][slot + i].push(lab);
                                 timetable_professors[course_details[course_index + 1]][day][slot + i].push(lab);
