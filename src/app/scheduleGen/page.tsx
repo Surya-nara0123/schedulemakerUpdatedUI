@@ -53,18 +53,7 @@ function isFreeProfessor(
 ) {
   console.log(proff, day, slot, clas);
   if (timetable_professors[proff][day][slot] === "") {
-    let clas_count = 0;
-    let period_count = 0;
-    for (let i = 0; i < slot; i++) {
-      if (typeof timetable_professors[proff][day][i] === typeof "Lunch") {
-        continue;
-      }
-      if (timetable_professors[proff][day][i][1] === clas) {
-        clas_count += 1;
-      }
-      period_count += 1;
-    }
-    return clas_count < 3 && period_count < 6;
+    return true;
   }
   return false;
 }
@@ -121,6 +110,17 @@ function format_timetables(
         } else {
           if (timetable_classes[clas][day][slot][0].includes("Self-Learning")) {
             timetable_classes[clas][day][slot] = "Self-Learning";
+          } else if (timetable_classes[clas][day][slot][0] == "S") {
+            let result = "Combined ";
+            for (let i of timetable_classes[clas][day][slot]) {
+              if (proff_to_short[i]) {
+                result += proff_to_short[i];
+              } else if (i != "E" && i != "EL" && i != "S") {
+                result += i;
+              }
+              result += " ";
+            }
+            timetable_classes[clas][day][slot] = result;
           } else {
             let result = "";
             for (let i of timetable_classes[clas][day][slot]) {
@@ -148,12 +148,22 @@ function format_timetables(
         if (typeof timetable_professors[prof][day][slot] === typeof "string") {
           continue;
         } else {
-          let result = "";
-          for (let i of timetable_professors[prof][day][slot]) {
-            result += i;
-            result += " ";
+          if (timetable_professors[prof][day][slot][0].startsWith("S")) {
+            // Handle combined classes with "S" prefix for professors
+            let result = "";
+            for (let i of timetable_professors[prof][day][slot]) {
+              result += i;
+              result += " ";
+            }
+            timetable_professors[prof][day][slot] = result;
+          } else {
+            let result = "";
+            for (let i of timetable_professors[prof][day][slot]) {
+              result += i;
+              result += " ";
+            }
+            timetable_professors[prof][day][slot] = result;
           }
-          timetable_professors[prof][day][slot] = result;
         }
       }
     }
@@ -265,6 +275,7 @@ export default function Page() {
   const [file4, setFile4] = useState(null);
   const [file5, setFile5] = useState(null);
   const [file6, setFile6] = useState(null);
+  const [file7, setFile7] = useState(null);
   const [result, setResult] = useState(null);
   const [parameter, setParameter] = useState<Array<any>>([]);
   const [profData, setProfData] = useState<{ [key: string]: any[] }>({});
@@ -552,6 +563,7 @@ export default function Page() {
     const results = await parseCSVFiles(processFiles);
     const labRest = await parseJSONFile(file5);
     const proffRest = await parseJSONFile(file6);
+    const combinedClasses = await parseJSONFile(file7);
     console.log(results);
 
     if (!results) {
@@ -575,6 +587,7 @@ export default function Page() {
       timetableLabs,
       labRest,
       proffRest,
+      combinedClasses,
     ]);
     const response = await fetch("/api/timetableGenrator", {
       method: "POST",
@@ -592,6 +605,7 @@ export default function Page() {
         timetableLabs,
         labRest,
         proffRest,
+        combinedClasses,
       ]),
     });
     const body = await response.json();
@@ -742,20 +756,40 @@ export default function Page() {
   const genPDFall = async () => {
     function jsonToCsv(
       jsonObj: { [x: string]: any },
-      josnObj1: { [x: string]: any }
+      josnObj1: { [x: string]: any },
+      labObj: { [x: string]: any }
       // result: { [x: string]: any }[]
     ) {
-      // Extract headers
-      const headers = Object.keys(jsonObj[Object.keys(jsonObj)[0]][0]);
-      const headers1 = Object.keys(jsonObj[Object.keys(jsonObj)[0]][0]);
+      // Check if objects are valid and have data
+      if (!jsonObj || Object.keys(jsonObj).length === 0) {
+        console.warn("jsonObj is empty or null");
+        return "";
+      }
+      
+      if (!josnObj1 || Object.keys(josnObj1).length === 0) {
+        console.warn("josnObj1 is empty or null");
+        return "";
+      }
+
+      // Extract headers with safety checks
+      const firstKey = Object.keys(jsonObj)[0];
+      const firstSection = jsonObj[firstKey];
+      
+      if (!firstSection || !Array.isArray(firstSection) || firstSection.length === 0) {
+        console.warn("First section is invalid");
+        return "";
+      }
+      
+      const headers = Object.keys(firstSection[0]);
+      const headers1 = Object.keys(firstSection[0]);
 
       // Create a CSV string
       let csv = headers.join(",") + "\n";
-      // console.log(josnObj1)
-      // console.log(jsonObj)
 
       // Iterate over each section
       for (const section in jsonObj) {
+        if (!Array.isArray(jsonObj[section])) continue;
+        
         csv += section + "\n";
         jsonObj[section].forEach(
           (row: ArrayLike<unknown> | { [s: string]: unknown }) => {
@@ -776,6 +810,8 @@ export default function Page() {
 
       csv = csv + headers1.join(",") + "\n";
       for (const section in josnObj1) {
+        if (!Array.isArray(josnObj1[section])) continue;
+        
         csv += section + "\n";
         josnObj1[section].forEach(
           (row: ArrayLike<unknown> | { [s: string]: unknown }) => {
@@ -793,6 +829,32 @@ export default function Page() {
           }
         );
       }
+
+      // Add lab timetables with safety checks
+      if (labObj && Object.keys(labObj).length > 0) {
+        csv = csv + "Lab Timetables\n";
+        for (const lab in labObj) {
+          if (!Array.isArray(labObj[lab])) continue;
+          
+          csv += lab + "\n";
+          labObj[lab].forEach(
+            (row: ArrayLike<unknown> | { [s: string]: unknown }) => {
+              csv +=
+                Object.values(row)
+                  .map((value) => {
+                    // Escape commas and quotes
+                    if (typeof value === "string") {
+                      const value1 = value.replace(/"/g, '""');
+                      if (value1.search(/("|,|\n)/g) >= 0) value = `"${value1}"`;
+                    }
+                    return value;
+                  })
+                  .join(",") + "\n";
+            }
+          );
+        }
+      }
+      
       console.log(csv);
       return csv;
     }
@@ -810,7 +872,7 @@ export default function Page() {
       });
       zip.file("timetable.json", jsonBlob);
 
-      // Generate the ZIP and download
+      // Generate the ZIP and download with proper error handling
       zip.generateAsync({ type: "blob" }).then((content: Blob) => {
         const url = URL.createObjectURL(content);
         const a = document.createElement("a");
@@ -819,12 +881,16 @@ export default function Page() {
         a.download = "timetable.zip";
         document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(url);
+      }).catch((error) => {
+        console.error("Error generating ZIP:", error);
+        alert("Error generating download file. Please try again.");
       });
     }
 
     // CSV data
-    const csv = jsonToCsv(timetableData, profData);
+    const csv = jsonToCsv(timetableData, profData, labData);
 
     // JSON data
     const json = {
@@ -836,6 +902,7 @@ export default function Page() {
       timetableClasses,
       profData,
       timetableProfessors,
+      labData,
     };
 
     // Download as a ZIP
@@ -851,21 +918,30 @@ export default function Page() {
       { name: "professor_blocking.json", path: "/proff_timmings.json" },
     ];
 
-    files.forEach(async (file) => {
-      try {
-        const response = await fetch(file.path);
-        const data = await response.blob();
-        const url = window.URL.createObjectURL(data);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = file.name;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      } catch (error) {
-        console.error(`Error downloading ${file.name}:`, error);
-      }
-    });
+    try {
+      // Use Promise.all to handle all downloads properly
+      await Promise.all(files.map(async (file) => {
+        try {
+          const response = await fetch(file.path);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.blob();
+          const url = window.URL.createObjectURL(data);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = file.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error(`Error downloading ${file.name}:`, error);
+        }
+      }));
+    } catch (error) {
+      console.error("Error in getSamples:", error);
+    }
   };
 
   const saveTimeTable = async () => {
@@ -1000,7 +1076,30 @@ export default function Page() {
     let profftt = JSON.parse(JSON.stringify(timetableProfessors));
     let currClass = currentClass + " B_Tech " + currentSection;
 
-    if (classtt[currClass][indexa][index1a][1] == "E") {
+    // Check if timetable data exists
+    if (!classtt[currClass] || !classtt[currClass][indexa] || !classtt[currClass][indexb]) {
+      alert("Invalid timetable data for swapping");
+      return;
+    }
+
+    // Check if first slot is a combined class
+    if (classtt[currClass][indexa][index1a] && classtt[currClass][indexa][index1a][0] == "S") {
+      let current_class = classtt[currClass][indexa][index1a];
+      let professors = current_class.slice(2); // Get professors after "S" and course code
+      for (let proff of professors) {
+        if (!isFreeProfessor(timetableProfessors, proff, indexb, index1b, currClass)) {
+          console.log(proff + " is not free due to ", timetableProfessors[proff][indexb][index1b]);
+          let blocking = timetableProfessors[proff][indexb][index1b]
+          if (Array.isArray(blocking)) {
+            blocking = blocking.join(" ");
+          }
+          alert(
+            proff + " is not free due to " + blocking
+          );
+          return;
+        }
+      }
+    } else if (classtt[currClass][indexa][index1a] && classtt[currClass][indexa][index1a][1] == "E") {
       let current_class = classtt[currClass][indexa][index1a];
       let count = current_class.length - 2;
       for (let i = 0; i < count; i++) {
@@ -1017,7 +1116,7 @@ export default function Page() {
           return;
         }
       }
-    } else {
+    } else if (classtt[currClass][indexa][index1a] && classtt[currClass][indexa][index1a][1]) {
       let proff = classtt[currClass][indexa][index1a][1];
       console.log(proff);
       if (!isFreeProfessor(timetableProfessors, proff, indexb, index1b, currClass)) {
@@ -1032,7 +1131,24 @@ export default function Page() {
       }
     }
     
-    if (classtt[currClass][indexb][index1b][1] == "E") {
+    // Check if second slot is a combined class
+    if (classtt[currClass][indexb][index1b] && classtt[currClass][indexb][index1b][0] == "S") {
+      let current_class = classtt[currClass][indexb][index1b];
+      let professors = current_class.slice(2); // Get professors after "S" and course code
+      for (let proff of professors) {
+        if (!isFreeProfessor(timetableProfessors, proff, indexa, index1a, currClass)) {
+          console.log(proff + " is not free due to ", timetableProfessors[proff][indexa][index1a]);
+          let blocking = timetableProfessors[proff][indexa][index1a]
+          if (Array.isArray(blocking)) {
+            blocking = blocking.join(" ");
+          }
+          alert(
+            proff + " is not free due to " + blocking
+          );
+          return;
+        }
+      }
+    } else if (classtt[currClass][indexb][index1b] && classtt[currClass][indexb][index1b][1] == "E") {
       let current_class = classtt[currClass][indexb][index1b];
       let count = current_class.length - 2;
       for (let i = 0; i < count; i++) {
@@ -1050,7 +1166,7 @@ export default function Page() {
           return;
         }
       }
-    } else {
+    } else if (classtt[currClass][indexb][index1b] && classtt[currClass][indexb][index1b][1]) {
       let proff = classtt[currClass][indexb][index1b][1];
       if (!isFreeProfessor(timetableProfessors, proff, indexa, index1a, currClass)) {
         let blocking = timetableProfessors[proff][indexa][index1a];
@@ -1066,7 +1182,16 @@ export default function Page() {
     let temp1 = JSON.parse(JSON.stringify(classtt[currClass][indexa][index1a]));
     let temp2 = JSON.parse(JSON.stringify(classtt[currClass][indexb][index1b]));
 
-    if (temp1[1] == "E") {
+    // Handle swapping for first slot
+    if (temp1 && temp1[0] == "S") {
+      let professors = temp1.slice(2); // Get professors after "S" and course code
+      for (let proff of professors) {
+        let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]))
+        let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]))
+        profftt[proff][indexb][index1b] = class1;
+        profftt[proff][indexa][index1a] = class2;
+      }
+    } else if (temp1 && temp1[1] == "E") {
       let count = temp1.length - 2;
       for (let i = 0; i < count; i++) {
         let proff = temp1[2 + i];
@@ -1075,7 +1200,7 @@ export default function Page() {
         profftt[proff][indexb][index1b] = class1;
         profftt[proff][indexa][index1a] = class2;
       }
-    } else {
+    } else if (temp1 && temp1[1]) {
       let proff = temp1[1];
       let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]));
       let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]));
@@ -1083,8 +1208,16 @@ export default function Page() {
       profftt[proff][indexa][index1a] = class2;
     }
 
-
-    if (temp2[1] == "E") {
+    // Handle swapping for second slot
+    if (temp2 && temp2[0] == "S") {
+      let professors = temp2.slice(2); // Get professors after "S" and course code
+      for (let proff of professors) {
+        let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]))
+        let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]))
+        profftt[proff][indexb][index1b] = class1;
+        profftt[proff][indexa][index1a] = class2;
+      }
+    } else if (temp2 && temp2[1] == "E") {
       let count = temp2.length - 2;
       for (let i = 0; i < count; i++) {
         let proff = temp2[2 + i];
@@ -1093,7 +1226,7 @@ export default function Page() {
         profftt[proff][indexb][index1b] = class1;
         profftt[proff][indexa][index1a] = class2;
       }
-    } else {
+    } else if (temp2 && temp2[1]) {
       let proff = temp2[1];
       let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]));
       let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]));
@@ -1157,6 +1290,16 @@ export default function Page() {
             type="file"
             className=""
             onChange={(e) => handleFileChange(e, setFile6)}
+          />
+        </div>
+        <h1 className="text-white bg-[#2d3748] px-3 mt-2">
+          Combined Classes (Optional)
+        </h1>
+        <div className="px-12 bg-[#3d4758]">
+          <input
+            type="file"
+            className=""
+            onChange={(e) => handleFileChange(e, setFile7)}
           />
         </div>
         <h1 className="text-white bg-[#2d3748] px-3 mt-2">

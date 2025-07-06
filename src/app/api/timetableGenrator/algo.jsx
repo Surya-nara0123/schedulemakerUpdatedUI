@@ -683,6 +683,9 @@ function get_replacements(classes_to_courses, timetable_professors, locked_class
                 if (typeof timetable_professors[prof][day][slot] == typeof "string") {
                     continue
                 }
+                if (timetable_professors[prof][day][slot][0] == "S") {
+                    continue;
+                }
                 let clas = timetable_professors[prof][day][slot][1]
                 if (locked_classes.includes(clas)) {
                     continue;
@@ -716,7 +719,80 @@ function get_replacements(classes_to_courses, timetable_professors, locked_class
     return proff_replacements
 }
 
-function get_timetables(class_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable) {
+function insertCombinedClasses(combinedClasses, timetable_classes, timetable_professors) {
+    // Try to assign combined classes to available slots
+    for (let courseCode in combinedClasses) {
+        let courseData = combinedClasses[courseCode];
+        let classes = courseData.classes;
+        let professors = courseData.professors;
+        let times = courseData.times;
+        
+        // Track which days have been used for this course to avoid back-to-back scheduling
+        let usedDays = new Set();
+        let sessionsAssigned = 0;
+        
+        // Try to assign each session on a different day
+        while (sessionsAssigned < times) {
+            let assigned = false;
+            
+            // Try each day
+            for (let day = 0; day < 5 && !assigned; day++) {
+                // Skip if we've already used this day for this course
+                if (usedDays.has(day)) {
+                    continue;
+                }
+                
+                // Try each slot in this day
+                for (let slot = 0; slot < 8 && !assigned; slot++) {
+                    // Check if all classes are free at this slot
+                    let allClassesFree = true;
+                    for (let className of classes) {
+                        if (timetable_classes[className][day][slot] !== "") {
+                            allClassesFree = false;
+                            break;
+                        }
+                    }
+                    
+                    if (!allClassesFree) continue;
+                    
+                    // Check if all professors are free at this slot
+                    let allProfessorsFree = true;
+                    for (let professor of professors) {
+                        if (timetable_professors[professor][day][slot] !== "") {
+                            allProfessorsFree = false;
+                            break;
+                        }
+                    }
+                    
+                    if (!allProfessorsFree) continue;
+                    
+                    // Assign the combined class to all classes and professors
+                    for (let className of classes) {
+                        timetable_classes[className][day][slot] = ["S", courseCode, ...professors];
+                    }
+                    
+                    for (let professor of professors) {
+                        timetable_professors[professor][day][slot] = ["S", courseCode, ...classes];
+                    }
+                    
+                    // Mark this day as used and increment session count
+                    usedDays.add(day);
+                    sessionsAssigned++;
+                    assigned = true;
+                }
+            }
+            
+            // If we couldn't assign a session on any available day, return false
+            if (!assigned) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+function get_timetables(class_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, combinedClasses) {
     // Initialises courses and timetables
     let [classes_to_courses, original] = initialise_class_courses(class_courses, locked_classes);
     let [timetable_classes_ini, timetable_professors_ini, timetable_labs_ini, proff_to_year, classes_to_courses_temp] = initialise_timetables(classes_to_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable);
@@ -757,6 +833,15 @@ function get_timetables(class_courses, professors, labs, initial_lectures, locke
             continue;
         }
 
+        // Handle combined classes if provided
+        if (combinedClasses && Object.keys(combinedClasses).length > 0) {
+            let combinedSuccess = insertCombinedClasses(combinedClasses, timetable_classes, timetable_professors);
+            if (!combinedSuccess) {
+                fallback += 1;
+                continue;
+            }
+        }
+
         let theorySuccess = insertTheoryClassesRecursive(theory_classes, timetable_classes, timetable_professors);
         
         // If theory assignment failed, restart the outer loop
@@ -776,11 +861,11 @@ function get_timetables(class_courses, professors, labs, initial_lectures, locke
     return {}
 }
 
-export function randomize(class_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, labRestrictionsTemp, proffRestrictionsTemp) {
+export function randomize(class_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, labRestrictionsTemp, proffRestrictionsTemp, combinedClasses) {
     try {
         constructLabMap(labs);
         constructRestrictions(labRestrictionsTemp, proffRestrictionsTemp);
-        const result = get_timetables(class_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable);
+        const result = get_timetables(class_courses, professors, labs, initial_lectures, locked_classes, proffs_initial_timetable, classes_initial_timetable, labs_initial_timetable, combinedClasses);
         return result;
     } catch (error) {
         console.error('Error generating timetables:', error);

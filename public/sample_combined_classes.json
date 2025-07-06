@@ -1,0 +1,12 @@
+{
+  "EN101": {
+    "classes": ["1st Year B_Tech AIDS Section A", "1st Year B_Tech AIDS Section B"],
+    "professors": ["Proff0"],
+    "times": 3
+  },
+  "MATH201": {
+    "classes": ["2nd Year B_Tech AIDS Section A", "2nd Year B_Tech AIDS Section B", "2nd Year B_Tech AIDS Section C"],
+    "professors": ["Proff20"],
+    "times": 3
+  }
+} 
