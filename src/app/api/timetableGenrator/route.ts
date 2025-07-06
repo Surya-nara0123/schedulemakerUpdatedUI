@@ -18,9 +18,10 @@ export async function POST(request: NextRequest) {
         const timetableLabs = body[7];
         const labsRest = body[8];
         const proffRest = body[9];
+        const combinedClasses = body[10];
 
         // console.log(class_courses, professors, proffs_names_to_short, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs);
-        const result = randomize(class_courses, professors, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs, labsRest, proffRest);
+        const result = randomize(class_courses, professors, labs, parameter, lockedClasses, timetableProfessors, timetableClasses, timetableLabs, labsRest, proffRest, combinedClasses);
         // console.log(result);
         return NextResponse.json({ result }, {
             status: 200,
