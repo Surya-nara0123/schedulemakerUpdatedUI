@@ -916,6 +916,7 @@ export default function Page() {
       { name: "labs.csv", path: "/labs.csv" },
       { name: "lab_blocking.json", path: "/lab_timings.json" },
       { name: "professor_blocking.json", path: "/proff_timmings.json" },
+      { name: "combined_classes.json", path: "/combined_classes.json" },
     ];
 
     try {
