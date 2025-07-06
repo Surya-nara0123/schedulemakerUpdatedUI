@@ -258,6 +258,25 @@ function format_timetables(
 //   return list[randomIndex];
 // }
 
+// Place this helper function at the top level, outside of handleSwap
+function getAllProfsForClasses(classes: string[], day: number, slotIdx: number, classtt: any, profftt: any): string[] {
+  const profSet = new Set<string>();
+  for (let className of classes) {
+    const classSlot = classtt[className]?.[day]?.[slotIdx];
+    if (Array.isArray(classSlot)) {
+      for (let i = 0; i < classSlot.length; i++) {
+        const val = classSlot[i];
+        if (typeof val === 'string' && profftt.hasOwnProperty(val)) {
+          profSet.add(val);
+        }
+      }
+    } else if (classSlot && typeof classSlot === 'string' && profftt.hasOwnProperty(classSlot)) {
+      profSet.add(classSlot);
+    }
+  }
+  return Array.from(profSet);
+}
+
 export default function Page() {
   const [mode, setMode] = useState("student");
   const [isGenerated, setIsGenerated] = useState(false);
@@ -1077,13 +1096,117 @@ export default function Page() {
     let profftt = JSON.parse(JSON.stringify(timetableProfessors));
     let currClass = currentClass + " B_Tech " + currentSection;
 
-    // Check if timetable data exists
     if (!classtt[currClass] || !classtt[currClass][indexa] || !classtt[currClass][indexb]) {
       alert("Invalid timetable data for swapping");
       return;
     }
 
-    // Check if first slot is a combined class
+    const slotA = classtt[currClass][indexa][index1a];
+    const slotB = classtt[currClass][indexb][index1b];
+    const isCombinedA = slotA && slotA[0] === "S";
+    const isCombinedB = slotB && slotB[0] === "S";
+
+    // Helper to get all professors from a slot
+    function getProfessors(slot: any) {
+      if (slot && slot[0] === "S") return slot.slice(2);
+      if (slot && slot[1] === "E") return slot.slice(2);
+      if (slot && slot[1]) return [slot[1]];
+      return [];
+    }
+
+    // Helper to get all classes for a combined course at a slot from all professors
+    function getAllClassesForCombined(professors: string[], day: number, slotIdx: number) {
+      const classSet = new Set<string>();
+      for (let prof of professors) {
+        const profSlot = profftt[prof]?.[day]?.[slotIdx];
+        if (profSlot && profSlot[0] === "S") {
+          // For professor timetable, classes start from index 2
+          for (let i = 2; i < profSlot.length; i++) {
+            classSet.add(profSlot[i]);
+          }
+        } else if (profSlot && profSlot[1]) {
+          classSet.add(profSlot[1]);
+        }
+      }
+      return Array.from(classSet);
+    }
+
+    // If either slot is a combined class, use robust logic
+    if (isCombinedA || isCombinedB) {
+      // For slotA
+      const profsA = getProfessors(slotA);
+      const classesA = getAllClassesForCombined(profsA, indexa, index1a);
+      // For slotB
+      const profsB = getProfessors(slotB);
+      const classesB = getAllClassesForCombined(profsB, indexb, index1b);
+      // Union all professors and all classes
+      const allClasses = Array.from(new Set([...classesA, ...classesB]));
+      console.log(allClasses);
+
+      // After getting allClasses, gather all professors from all these classes at both slots
+      const allProfsA = getAllProfsForClasses(allClasses as string[], indexa, index1a, classtt, profftt);
+      const allProfsB = getAllProfsForClasses(allClasses as string[], indexb, index1b, classtt, profftt);
+      const allProfs = Array.from(new Set([...allProfsA, ...allProfsB]));
+      console.log(allProfsA, allProfsB);
+      console.log(allProfs);
+      
+      // 1. Check if all professors are free at the target slot (for both directions)
+      for (let prof of allProfsA) {
+        // For A -> B
+        if (!isFreeProfessor(profftt, prof, indexb, index1b, "")) {
+          alert(`Professor ${prof} is not free at target slot ${indexb} ${index1b}`);
+          return;
+        }
+      }
+      for (let prof of allProfsB) {
+        // For B -> A
+        if (!isFreeProfessor(profftt, prof, indexa, index1a, "")) {
+          alert(`Professor ${prof} is not free at target slot ${indexa} ${index1a}`);
+          return;
+        }
+      }
+      // 2. Check that none of the classes have a LAB at the target slot (for both directions)
+      for (let className of allClasses) {
+        // For A -> B
+        const slotB = classtt[className][indexb][index1b];
+        if (Array.isArray(slotB) && slotB.length > 2) {
+          for (let i = 2; i < slotB.length; i++) {
+            if (typeof slotB[i] === 'string' && slotB[i].toLowerCase().includes('lab')) {
+              alert(`Class ${className} has a LAB at target ${indexb} ${index1b}`);
+              return;
+            }
+          }
+        }
+        // For B -> A
+        const slotA = classtt[className][indexa][index1a];
+        if (Array.isArray(slotA) && slotA.length > 2) {
+          for (let i = 2; i < slotA.length; i++) {
+            if (typeof slotA[i] === 'string' && slotA[i].toLowerCase().includes('lab')) {
+              alert(`Class ${className} has a LAB at target ${indexa} ${index1a}`);
+              return;
+            }
+          }
+        }
+      }
+      // 3. Perform the swap for all classes and all professors
+      for (let className of allClasses) {
+        let temp1 = JSON.parse(JSON.stringify(classtt[className][indexa][index1a]));
+        let temp2 = JSON.parse(JSON.stringify(classtt[className][indexb][index1b]));
+        classtt[className][indexa][index1a] = temp2;
+        classtt[className][indexb][index1b] = temp1;
+      }
+      for (let prof of allProfs) {
+        let temp1 = JSON.parse(JSON.stringify(profftt[prof][indexa][index1a]));
+        let temp2 = JSON.parse(JSON.stringify(profftt[prof][indexb][index1b]));
+        profftt[prof][indexa][index1a] = temp2;
+        profftt[prof][indexb][index1b] = temp1;
+      }
+      setTimetableClasses(JSON.parse(JSON.stringify(classtt)));
+      setTimetableProfessors(JSON.parse(JSON.stringify(profftt)));
+      return;
+    }
+
+    // --- Original logic for non-combined slots ---
     if (classtt[currClass][indexa][index1a] && classtt[currClass][indexa][index1a][0] == "S") {
       let current_class = classtt[currClass][indexa][index1a];
       let professors = current_class.slice(2); // Get professors after "S" and course code
@@ -1132,7 +1255,6 @@ export default function Page() {
       }
     }
     
-    // Check if second slot is a combined class
     if (classtt[currClass][indexb][index1b] && classtt[currClass][indexb][index1b][0] == "S") {
       let current_class = classtt[currClass][indexb][index1b];
       let professors = current_class.slice(2); // Get professors after "S" and course code
@@ -1183,12 +1305,11 @@ export default function Page() {
     let temp1 = JSON.parse(JSON.stringify(classtt[currClass][indexa][index1a]));
     let temp2 = JSON.parse(JSON.stringify(classtt[currClass][indexb][index1b]));
 
-    // Handle swapping for first slot
     if (temp1 && temp1[0] == "S") {
       let professors = temp1.slice(2); // Get professors after "S" and course code
       for (let proff of professors) {
-        let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]))
-        let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]))
+        let class1 = JSON.parse(JSON.stringify(profftt[proff][indexa][index1a]))
+        let class2 = JSON.parse(JSON.stringify(profftt[proff][indexb][index1b]))
         profftt[proff][indexb][index1b] = class1;
         profftt[proff][indexa][index1a] = class2;
       }
@@ -1196,25 +1317,24 @@ export default function Page() {
       let count = temp1.length - 2;
       for (let i = 0; i < count; i++) {
         let proff = temp1[2 + i];
-        let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]))
-        let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]))
+        let class1 = JSON.parse(JSON.stringify(profftt[proff][indexa][index1a]))
+        let class2 = JSON.parse(JSON.stringify(profftt[proff][indexb][index1b]))
         profftt[proff][indexb][index1b] = class1;
         profftt[proff][indexa][index1a] = class2;
       }
     } else if (temp1 && temp1[1]) {
       let proff = temp1[1];
-      let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]));
-      let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]));
+      let class1 = JSON.parse(JSON.stringify(profftt[proff][indexa][index1a]));
+      let class2 = JSON.parse(JSON.stringify(profftt[proff][indexb][index1b]));
       profftt[proff][indexb][index1b] = class1;
       profftt[proff][indexa][index1a] = class2;
     }
 
-    // Handle swapping for second slot
     if (temp2 && temp2[0] == "S") {
       let professors = temp2.slice(2); // Get professors after "S" and course code
       for (let proff of professors) {
-        let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]))
-        let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]))
+        let class1 = JSON.parse(JSON.stringify(profftt[proff][indexa][index1a]))
+        let class2 = JSON.parse(JSON.stringify(profftt[proff][indexb][index1b]))
         profftt[proff][indexb][index1b] = class1;
         profftt[proff][indexa][index1a] = class2;
       }
@@ -1222,15 +1342,15 @@ export default function Page() {
       let count = temp2.length - 2;
       for (let i = 0; i < count; i++) {
         let proff = temp2[2 + i];
-        let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]))
-        let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]))
+        let class1 = JSON.parse(JSON.stringify(profftt[proff][indexa][index1a]))
+        let class2 = JSON.parse(JSON.stringify(profftt[proff][indexb][index1b]))
         profftt[proff][indexb][index1b] = class1;
         profftt[proff][indexa][index1a] = class2;
       }
     } else if (temp2 && temp2[1]) {
       let proff = temp2[1];
-      let class1 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexa][index1a]));
-      let class2 = JSON.parse(JSON.stringify(timetableProfessors[proff][indexb][index1b]));
+      let class1 = JSON.parse(JSON.stringify(profftt[proff][indexa][index1a]));
+      let class2 = JSON.parse(JSON.stringify(profftt[proff][indexb][index1b]));
       profftt[proff][indexb][index1b] = class1;
       profftt[proff][indexa][index1a] = class2;
     }
@@ -1241,8 +1361,6 @@ export default function Page() {
     setTimetableClasses(JSON.parse(JSON.stringify(classtt)));
     setTimetableProfessors(JSON.parse(JSON.stringify(profftt)));
   };
-  // swapArra format: [course, proff, day, start, end, lab2, lab2]
-  // swapArrb format:  [[course, proff, day, slot], [course, proff, day, slot], [course, proff, day, slot]...]
 
   return (
     <main className="pl-[100px] pt-[100px] font-semibold">
